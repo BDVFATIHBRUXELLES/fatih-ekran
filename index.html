@@ -587,9 +587,33 @@ body.tv{background:var(--zemin)}
     clearTimeout(boyutSayac);
     boyutSayac = setTimeout(function () { boyutKutu.style.display = "none"; }, 4000);
   }
+  /* Tam ekran: tarayıcının adres çubuğunu gizler. Tarayıcılar bunu yalnızca bir tuşa ya da
+     tıklamaya karşılık yapar; bu yüzden kumandanın OK tuşuna bağlı. */
+  function tamEkranMi() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+  function tamEkranIste() {
+    var k = document.documentElement, f = k.requestFullscreen || k.webkitRequestFullscreen;
+    if (!f || tamEkranMi()) return;
+    try { var s = f.call(k); if (s && s.catch) s.catch(function () {}); } catch (e) {}
+  }
+  function ipucuGoster() {
+    /* Pencere ekrandan belirgin biçimde kısaysa tarayıcı çubuğu görünüyordur */
+    if (!tvModu || tamEkranMi()) return;
+    var a = gorunenAlan(), eksik = (window.screen && screen.height) ? screen.height - a[1] : 0;
+    if (eksik < 30) return;
+    boyutKutu.textContent = "Adres çubuğunu gizlemek için kumandada OK tuşuna basın";
+    boyutKutu.style.display = "block";
+    clearTimeout(boyutSayac);
+    boyutSayac = setTimeout(function () { boyutKutu.style.display = "none"; }, 12000);
+  }
+  setTimeout(ipucuGoster, 1500);
+  document.addEventListener("click", function () { if (tvModu) tamEkranIste(); });
+  document.addEventListener("fullscreenchange", function () { boyutKutu.style.display = "none"; sigdir(); });
+  document.addEventListener("webkitfullscreenchange", function () { boyutKutu.style.display = "none"; sigdir(); });
+
   document.addEventListener("keydown", function (o) {
     if (!tvModu) return;
     var k = o.key || "", kod = o.keyCode || 0;
+    if (k === "Enter" || kod === 13 || kod === 23) { tamEkranIste(); return; }
     if (k === "ArrowDown" || kod === 40 || k === "-") { boyutAyarla(boyut - 1); if (o.preventDefault) o.preventDefault(); }
     else if (k === "ArrowUp" || kod === 38 || k === "+" || k === "=") { boyutAyarla(boyut + 1); if (o.preventDefault) o.preventDefault(); }
   });
