@@ -17,7 +17,7 @@ Bruxelles Fatih Camii'nin mescit ve çay ocağı ekranları: namaz vakitleri, ge
 | `veri/vakitler.js` | Namaz vakitleri |
 | `medya/` | Videolar, görseller, logo |
 
-Ekranlar `playlist.js` dosyasını 5 dakikada, `vakitler.js` dosyasını saatte bir yeniden okur.
+Ekranlar `playlist.js` dosyasını 2 dakikada, `vakitler.js` dosyasını saatte bir yeniden okur.
 
 ## Bilinen eksikler
 

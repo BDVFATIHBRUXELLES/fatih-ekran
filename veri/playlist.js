@@ -1,6 +1,6 @@
 /*
   Ekranlarda dönecek içerik listesi.
-  Başkan onayından geçen her video buraya bir satır olarak eklenir; ekranlar listeyi 5 dakikada bir yeniden okur.
+  Başkan onayından geçen her video buraya bir satır olarak eklenir; ekranlar listeyi 2 dakikada bir yeniden okur.
 
   tip    : "video" veya "gorsel"
   dosya  : dosyanın yolu

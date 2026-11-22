@@ -79,7 +79,7 @@ body[data-yazi="yumusak"]{
 html,body{height:100%;width:100%;overflow:hidden;position:fixed;left:0;top:0;background:#EEF2F6;font-family:var(--sans);color:var(--yazi)}
 
 body.tv{background:var(--zemin)}
-#boyut-bilgi{position:fixed;left:50%;bottom:6%;transform:translateX(-50%);display:none;z-index:50;padding:14px 26px;border-radius:999px;background:#1B1D52;color:#FFFFFF;font-family:"Montserrat","Segoe UI",Arial,sans-serif;font-size:22px;font-weight:650;white-space:nowrap}
+#boyut-bilgi{position:fixed;left:50%;bottom:6%;transform:translateX(-50%);display:none;z-index:50;padding:14px 26px;border-radius:999px;background:#1B1D52;color:#FFFFFF;font-family:"Montserrat","Segoe UI",Arial,sans-serif;font-size:22px;font-size:min(22px,2.4vw);font-weight:650;line-height:1.25;text-align:center;max-width:92vw}
 
 /* 1920x1080 sahne; her ekrana oranı bozulmadan sığdırılır */
 #sahne{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:var(--zemin)}
@@ -543,14 +543,14 @@ body.tv{background:var(--zemin)}
     s.onload = s.onerror = function () { if (s.parentNode) s.parentNode.removeChild(s); sonCizim = ""; };
     document.head.appendChild(s);
   }
-  setInterval(function () { yenidenYukle("veri/playlist.js"); }, 5 * 60000);
+  setInterval(function () { yenidenYukle("veri/playlist.js"); }, 2 * 60000);
   setInterval(function () { yenidenYukle("veri/vakitler.js"); }, 60 * 60000);
 
   /* ---------- Kendiliğinden güncelleme ----------
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "7";
+  var SURUM = "8";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
