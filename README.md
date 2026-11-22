@@ -12,9 +12,10 @@ Bruxelles Fatih Camii'nin mescit ve çay ocağı ekranları: namaz vakitleri, ge
 
 | Dosya | İçerik |
 |---|---|
-| `veri/ayarlar.js` | Duyurular, renk, yazı karakteri, namaz modu süreleri |
+| `veri/ayarlar.js` | Duyurular, renk, yazı karakteri, namaz modu süreleri, 5 Ek Bina kampanyası (son gün, toplanan oran) |
 | `veri/playlist.js` | Ekranda dönecek videolar ve görseller |
 | `veri/vakitler.js` | Namaz vakitleri |
+| `veri/surum.js` | Sayfanın sürümü; değişince ekranlar kendini yeniler |
 | `medya/` | Videolar, görseller, logo |
 
 Ekranlar `playlist.js` dosyasını 2 dakikada, `vakitler.js` dosyasını saatte bir yeniden okur.
@@ -22,7 +23,6 @@ Ekranlar `playlist.js` dosyasını 2 dakikada, `vakitler.js` dosyasını saatte 
 ## Bilinen eksikler
 
 - `veri/vakitler.js` içindeki vakitler 17.12.2026'ya kadardır ve geçici kaynaktan alınmıştır. Diyanet'in resmî servisine bağlanınca her gün otomatik yenilenecek.
-- Ekranda şu an 22.11.2026 sabah namazı videosu dönüyor.
 - Namaz modu süreleri varsayımdır, cemaat saatlerine göre düzeltilecek.
 
 Bu depo herkese açıktır. Yalnızca yayın onayı verilmiş içerik eklenir; şifre ve kişisel bilgi konmaz.

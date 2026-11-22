@@ -30,9 +30,22 @@ window.FATIH_AYARLAR = {
     yatsi:  { bas: 0, sure: 25 }
   },
 
-  /* Alt bantta sırayla dönen duyurular. */
+  /*
+    5 Ek Bina kampanyası. Kalan gün her gün kendiliğinden hesaplanır.
+    yuzde: toplanan oran. Bu sayı otomatik gelmez; değişince buradan güncellenir.
+    Son gün geçince kampanya kartı ve duyurusu kendiliğinden kalkar.
+  */
+  kampanya: {
+    baslik: "5 Ek Bina",
+    altBaslik: "5 bina, 5 güzel umut",
+    sonGun: "2026-12-31",
+    yuzde: 65
+  },
+
+  /* Alt bantta sırayla dönen duyurular. {gun} ve {yuzde} kampanyadan kendiliğinden dolar. */
   duyuruSuresi: 12,
   duyurular: [
+    "5 Ek Bina kampanyası: tamamlanan %{yuzde}, kalan süre {gun} gün.",
     "Camimiz her gün sabah 05.30'dan itibaren açıktır.",
     "Sabah namazından önce vaaz ve sohbet, namazdan sonra çay ocağında buluşuyoruz.",
     "Çay ocağımız gece 23.00'e kadar açıktır."

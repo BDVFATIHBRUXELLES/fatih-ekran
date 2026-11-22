@@ -99,6 +99,17 @@ body.tv{background:var(--zemin)}
 #video-yedek .ad{font-family:var(--baslik);font-weight:var(--kalin);font-size:var(--b-yedek);line-height:1.08;letter-spacing:var(--harf)}
 #video-yedek .site{margin-top:28px;font-size:36px;font-weight:600;color:var(--yedek-ikincil)}
 
+/* Kampanya kartı: videoların arasında döner, gün sayısı her gün kendiliğinden değişir */
+#kampanya{position:absolute;left:0;top:0;width:100%;height:100%;display:none;flex-direction:column;padding:84px 56px 72px;background:var(--yedek);color:#FFFFFF}
+#kampanya .k-ust{font-size:34px;font-weight:650;color:var(--yedek-ikincil)}
+#kampanya .k-baslik{margin-top:10px;font-family:var(--baslik);font-weight:var(--kalin);font-size:92px;line-height:1;letter-spacing:var(--harf)}
+#kampanya .k-gun{margin-top:auto;font-family:var(--baslik);font-weight:var(--kalin);font-size:300px;line-height:.82;letter-spacing:-.04em;font-feature-settings:"lnum" 1}
+#kampanya .k-gun-yazi{margin-top:22px;font-family:var(--baslik);font-weight:var(--kalin);font-size:70px;line-height:1}
+#kampanya .k-cubuk{margin-top:72px;height:30px;border-radius:999px;background:rgba(255,255,255,.28);overflow:hidden}
+#kampanya .k-dolu{height:100%;border-radius:999px;background:#F5B93F;width:0}
+#kampanya .k-oran{margin-top:20px;font-size:38px;font-weight:700}
+#kampanya .k-son{margin-top:auto;font-size:32px;font-weight:600;color:var(--yedek-ikincil)}
+
 /* Sağ: bilgi paneli */
 #panel{position:absolute;left:608px;top:0;width:1312px;height:1080px}
 
@@ -116,7 +127,7 @@ body.tv{background:var(--zemin)}
 #gun-adi{font-size:42px;font-weight:500;line-height:1.15;color:var(--buyuk)}
 
 #kalan{position:absolute;right:0;top:20px;width:624px;height:374px;padding:54px 0 0 52px;background:var(--kutu);border-radius:36px 0 0 36px}
-#kalan-etiket{font-size:42px;font-weight:700;line-height:1.1;color:var(--yazi)}
+#kalan-etiket{font-size:38px;font-weight:700;line-height:1.1;color:var(--yazi)}
 #kalan-sure{margin-top:36px;font-size:var(--b-sure);font-weight:var(--kalin);line-height:1;letter-spacing:-.02em;color:var(--buyuk)}
 #kalan-not{margin-top:22px;font-size:34px;line-height:1.25;color:var(--yazi);max-width:520px;display:none}
 
@@ -131,7 +142,7 @@ body.tv{background:var(--zemin)}
 
 /* Duyuru bandı */
 #alt{position:absolute;left:0;top:920px;width:100%;height:160px;padding:0 64px;display:flex;align-items:center;justify-content:space-between;background:var(--alt-zemin)}
-#duyuru{font-size:40px;font-weight:650;line-height:1.2;color:var(--alt-yazi);max-width:900px;transition:opacity .6s ease}
+#duyuru{font-size:36px;font-weight:650;line-height:1.25;color:var(--alt-yazi);max-width:990px;transition:opacity .6s ease}
 #site{font-size:34px;font-weight:750;color:var(--alt-site);white-space:nowrap;margin-left:40px}
 
 /* Hangi sürümün yüklü olduğunu uzaktan anlamak için köşede küçük etiket */
@@ -168,6 +179,15 @@ body.tv{background:var(--zemin)}
 <div id="sahne">
   <div id="video-alani">
     <div id="video-yedek"><img class="logo-gorsel" id="yedek-logo" src="medya/logo-beyaz.png" alt=""><div class="ad" id="yedek-ad"></div><div class="site" id="yedek-site"></div></div>
+    <div id="kampanya">
+      <div class="k-ust" id="k-ust"></div>
+      <div class="k-baslik" id="k-baslik"></div>
+      <div class="k-gun" id="k-gun"></div>
+      <div class="k-gun-yazi" id="k-gun-yazi"></div>
+      <div class="k-cubuk"><div class="k-dolu" id="k-dolu"></div></div>
+      <div class="k-oran" id="k-oran"></div>
+      <div class="k-son" id="k-son"></div>
+    </div>
     <video id="vid" muted playsinline preload="auto"></video>
     <img id="gorsel" class="icerik" alt="">
   </div>
@@ -469,18 +489,53 @@ body.tv{background:var(--zemin)}
     el("namaz").className = acik ? "acik" : "";
     el("namaz").setAttribute("aria-hidden", acik ? "false" : "true");
     if (acik) { try { vid.pause(); } catch (e) {} }
-    else if (aktif && aktif.tip !== "gorsel") { var p = vid.play(); if (p && p.catch) p.catch(function () {}); }
+    else if (aktif && aktif.tip !== "gorsel" && aktif.tip !== "kampanya") { var p = vid.play(); if (p && p.catch) p.catch(function () {}); }
+  }
+
+  /* ---------- Kampanya: kalan gün her gün kendiliğinden hesaplanır ---------- */
+  function kampanyaDurumu() {
+    var K = A.kampanya;
+    if (!K || !K.sonGun) return null;
+    var ms = simdi(), bugun = gunAnahtari(ms);
+    var a = bugun.split("-"), b = K.sonGun.split("-");
+    var gun = Math.round((Date.UTC(+b[0], +b[1] - 1, +b[2]) - Date.UTC(+a[0], +a[1] - 1, +a[2])) / 86400000);
+    if (gun < 0) return null; /* son gün geçtiyse kampanya gösterilmez */
+    var yuzde = (typeof K.yuzde === "number" && K.yuzde >= 0 && K.yuzde <= 100) ? K.yuzde : null;
+    return { gun: gun, yuzde: yuzde, K: K };
+  }
+  function kampanyaCiz() {
+    var d = kampanyaDurumu();
+    if (!d) return false;
+    var s = d.K.sonGun.split("-");
+    el("k-ust").textContent = d.K.altBaslik || "";
+    el("k-baslik").textContent = d.K.baslik || "";
+    el("k-gun").textContent = d.gun === 0 ? "" : String(d.gun);
+    el("k-gun-yazi").textContent = d.gun === 0 ? "Bugün son gün" : "gün kaldı";
+    el("k-dolu").style.width = (d.yuzde === null ? 0 : d.yuzde) + "%";
+    el("k-dolu").parentNode.style.display = d.yuzde === null ? "none" : "block";
+    el("k-oran").textContent = d.yuzde === null ? "" : "Tamamlanan: %" + d.yuzde;
+    el("k-son").textContent = "Son gün " + (+s[2]) + " " + AYLAR[+s[1] - 1] + " " + s[0];
+    return true;
+  }
+  function metinDoldur(m) {
+    var d = kampanyaDurumu();
+    if (m.indexOf("{gun}") === -1 && m.indexOf("{yuzde}") === -1) return m;
+    if (!d || (m.indexOf("{yuzde}") !== -1 && d.yuzde === null)) return null; /* kampanya bittiyse bu duyuru atlanır */
+    if (d.gun === 0) m = m.replace("kalan süre {gun} gün", "bugün son gün");
+    return m.replace(/\{gun\}/g, String(d.gun)).replace(/\{yuzde\}/g, String(d.yuzde));
   }
 
   /* ---------- Video ve görsel döngüsü ---------- */
-  var vid = el("vid"), gorsel = el("gorsel"), yedek = el("video-yedek");
+  var vid = el("vid"), gorsel = el("gorsel"), yedek = el("video-yedek"), kampanya = el("kampanya");
   var sira = -1, aktif = null, hataSayisi = 0, gorselSayaci = null;
 
   function gecerliListe() {
     var P = window.FATIH_PLAYLIST || [], bugun = gunAnahtari(simdi()), sonuc = [], i;
     for (i = 0; i < P.length; i++) {
       var o = P[i];
-      if (!o || !o.dosya) continue;
+      if (!o) continue;
+      if (o.tip === "kampanya") { if (!kampanyaDurumu()) continue; }
+      else if (!o.dosya) continue;
       if (o.ekran && o.ekran.indexOf(ekran) === -1) continue;
       if (o.bas && bugun < o.bas) continue;
       if (o.bit && bugun > o.bit) continue;
@@ -488,7 +543,7 @@ body.tv{background:var(--zemin)}
     }
     return sonuc;
   }
-  function yedegiGoster() { vid.style.display = "none"; gorsel.style.display = "none"; yedek.style.display = "flex"; }
+  function yedegiGoster() { vid.style.display = "none"; gorsel.style.display = "none"; kampanya.style.display = "none"; yedek.style.display = "flex"; }
 
   function sonraki() {
     clearTimeout(gorselSayaci);
@@ -496,9 +551,15 @@ body.tv{background:var(--zemin)}
     if (!liste.length) { aktif = null; yedegiGoster(); gorselSayaci = setTimeout(sonraki, 30000); return; }
     sira = (sira + 1) % liste.length;
     aktif = liste[sira];
-    if (aktif.tip === "gorsel") {
+    if (aktif.tip === "kampanya") {
       try { vid.pause(); } catch (e) {}
-      gorsel.onload = function () { hataSayisi = 0; vid.style.display = "none"; yedek.style.display = "none"; gorsel.style.display = "block"; };
+      if (!kampanyaCiz()) { gorselSayaci = setTimeout(sonraki, 500); return; }
+      hataSayisi = 0;
+      vid.style.display = "none"; gorsel.style.display = "none"; yedek.style.display = "none"; kampanya.style.display = "flex";
+      gorselSayaci = setTimeout(sonraki, (aktif.sure || 12) * 1000);
+    } else if (aktif.tip === "gorsel") {
+      try { vid.pause(); } catch (e) {}
+      gorsel.onload = function () { hataSayisi = 0; vid.style.display = "none"; yedek.style.display = "none"; kampanya.style.display = "none"; gorsel.style.display = "block"; };
       gorsel.onerror = hata;
       gorsel.src = aktif.dosya;
       gorselSayaci = setTimeout(sonraki, (aktif.sure || 12) * 1000);
@@ -518,7 +579,7 @@ body.tv{background:var(--zemin)}
   vid.addEventListener("playing", function () {
     hataSayisi = 0;
     vid.className = vid.videoWidth > vid.videoHeight ? "yatay" : "";
-    gorsel.style.display = "none"; yedek.style.display = "none"; vid.style.display = "block";
+    gorsel.style.display = "none"; yedek.style.display = "none"; kampanya.style.display = "none"; vid.style.display = "block";
   });
   vid.addEventListener("ended", sonraki);
   vid.addEventListener("error", hata);
@@ -528,12 +589,11 @@ body.tv{background:var(--zemin)}
   function duyuruGoster() {
     var D = A.duyurular || [], kutu = el("duyuru");
     if (!D.length) { kutu.textContent = ""; return; }
+    var metin = null, deneme = 0;
+    while (metin === null && deneme < D.length) { metin = metinDoldur(String(D[duyuruSira % D.length])); duyuruSira++; deneme++; }
+    if (metin === null) { kutu.textContent = ""; return; }
     kutu.style.opacity = 0;
-    setTimeout(function () {
-      kutu.textContent = D[duyuruSira % D.length];
-      duyuruSira++;
-      kutu.style.opacity = 1;
-    }, 650);
+    setTimeout(function () { kutu.textContent = metin; kutu.style.opacity = 1; }, 650);
   }
 
   /* ---------- Veriyi yenile: liste 5 dakikada, vakitler saatte bir ---------- */
@@ -550,7 +610,7 @@ body.tv{background:var(--zemin)}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "8";
+  var SURUM = "9";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
