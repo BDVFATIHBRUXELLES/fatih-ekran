@@ -541,6 +541,29 @@ body.tv{background:var(--zemin)}
   setInterval(function () { yenidenYukle("veri/playlist.js"); }, 5 * 60000);
   setInterval(function () { yenidenYukle("veri/vakitler.js"); }, 60 * 60000);
 
+  /* ---------- Kendiliğinden güncelleme ----------
+     Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
+     farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
+     Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
+  var SURUM = "6";
+  function surumDenetle() {
+    var s = document.createElement("script");
+    s.src = "veri/surum.js?t=" + Date.now();
+    s.onerror = function () { if (s.parentNode) s.parentNode.removeChild(s); };
+    s.onload = function () {
+      if (s.parentNode) s.parentNode.removeChild(s);
+      var yeni = window.FATIH_SURUM ? String(window.FATIH_SURUM) : "";
+      if (!yeni || yeni === SURUM) return;
+      if (param("s") === yeni) return; /* bu adres zaten denendi: döngüye girme */
+      var q = (location.search || "").replace(/^\?/, "").split("&"), yeniQ = [], i;
+      for (i = 0; i < q.length; i++) if (q[i] && q[i].indexOf("s=") !== 0 && q[i].indexOf("simdi=") !== 0) yeniQ.push(q[i]);
+      yeniQ.push("s=" + encodeURIComponent(yeni));
+      location.replace(location.pathname + "?" + yeniQ.join("&") + (location.hash || ""));
+    };
+    document.head.appendChild(s);
+  }
+  if (location.protocol !== "file:") { setTimeout(surumDenetle, 15000); setInterval(surumDenetle, 2 * 60000); }
+
   /* ---------- Sahneyi ekrana sığdır ---------- */
   var sahne = el("sahne"), cubuk = el("onizleme");
   /* Görüntü boyutu (yüzde). Televizyon kenarları kırpıyorsa kumandanın yukarı/aşağı tuşlarıyla
