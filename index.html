@@ -75,7 +75,10 @@ body[data-yazi="yumusak"]{
   --b-ad:54px; --b-saat:76px; --b-gun:256px; --b-sure:116px; --b-vakit:60px; --b-namaz:184px; --b-yedek:76px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:#EEF2F6;font-family:var(--sans);color:var(--yazi)}
+html,body{height:100%;width:100%;overflow:hidden;position:fixed;left:0;top:0;background:#EEF2F6;font-family:var(--sans);color:var(--yazi)}
+
+body.tv{background:var(--zemin)}
+#boyut-bilgi{position:fixed;left:50%;bottom:6%;transform:translateX(-50%);display:none;z-index:50;padding:14px 26px;border-radius:999px;background:#1B1D52;color:#FFFFFF;font-family:"Montserrat","Segoe UI",Arial,sans-serif;font-size:22px;font-weight:650;white-space:nowrap}
 
 /* 1920x1080 sahne; her ekrana oranı bozulmadan sığdırılır */
 #sahne{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:var(--zemin)}
@@ -199,6 +202,8 @@ html,body{height:100%;overflow:hidden;background:#EEF2F6;font-family:var(--sans)
     <div id="namaz-vakitler"></div>
   </div>
 </div>
+
+<div id="boyut-bilgi"></div>
 
 <div id="onizleme">
   <div class="grup"><button type="button" id="tam-ekran">Tam ekran aç</button></div>
@@ -537,14 +542,57 @@ html,body{height:100%;overflow:hidden;background:#EEF2F6;font-family:var(--sans)
 
   /* ---------- Sahneyi ekrana sığdır ---------- */
   var sahne = el("sahne"), cubuk = el("onizleme");
+  /* Görüntü boyutu (yüzde). Televizyon kenarları kırpıyorsa kumandanın yukarı/aşağı tuşlarıyla
+     küçültülür; ayar o televizyonda saklanır. Adrese ?boyut=92 yazarak da verilebilir. */
+  var boyut = 100;
+  (function () {
+    var b = parseInt(param("boyut"), 10);
+    if (!(b >= 60 && b <= 100)) { try { b = parseInt(localStorage.getItem("fatih-boyut"), 10); } catch (e) { b = NaN; } }
+    if (!(b >= 60 && b <= 100)) b = parseInt(A.boyut, 10);
+    if (b >= 60 && b <= 100) boyut = b;
+  })();
+  function gorunenAlan() {
+    var vv = window.visualViewport, de = document.documentElement;
+    var w = (vv && vv.width) || de.clientWidth || window.innerWidth;
+    var h = (vv && vv.height) || de.clientHeight || window.innerHeight;
+    return [w, h];
+  }
+  var sonAlan = "";
   function sigdir() {
-    var pay = tvModu ? 0 : 64, w = window.innerWidth, h = window.innerHeight - pay;
-    var o = Math.min(w / 1920, h / 1080);
+    var a = gorunenAlan(), pay = tvModu ? 0 : 64, w = a[0], h = a[1] - pay;
+    if (!(w > 0 && h > 0)) return;
+    var o = Math.min(w / 1920, h / 1080) * (tvModu ? boyut / 100 : 1);
+    sonAlan = w + "x" + h + "x" + boyut + "x" + tvModu;
     sahne.style.transform = "scale(" + o + ")";
     sahne.style.left = Math.round((w - 1920 * o) / 2) + "px";
     sahne.style.top = Math.round((h - 1080 * o) / 2) + "px";
+    document.body.className = tvModu ? "tv" : "";
   }
   window.addEventListener("resize", sigdir);
+  window.addEventListener("orientationchange", sigdir);
+  if (window.visualViewport) { try { window.visualViewport.addEventListener("resize", sigdir); } catch (e) {} }
+  /* Bazı televizyon tarayıcıları boyutu geç bildirir: değiştiyse yeniden sığdır */
+  setInterval(function () {
+    var a = gorunenAlan();
+    if (a[0] + "x" + (a[1] - (tvModu ? 0 : 64)) + "x" + boyut + "x" + tvModu !== sonAlan) sigdir();
+  }, 2000);
+
+  var boyutKutu = el("boyut-bilgi"), boyutSayac = null;
+  function boyutAyarla(yeni) {
+    boyut = Math.max(60, Math.min(100, yeni));
+    try { localStorage.setItem("fatih-boyut", String(boyut)); } catch (e) {}
+    sigdir();
+    boyutKutu.textContent = "Görüntü boyutu %" + boyut + " — kumandada yukarı: büyüt, aşağı: küçült";
+    boyutKutu.style.display = "block";
+    clearTimeout(boyutSayac);
+    boyutSayac = setTimeout(function () { boyutKutu.style.display = "none"; }, 4000);
+  }
+  document.addEventListener("keydown", function (o) {
+    if (!tvModu) return;
+    var k = o.key || "", kod = o.keyCode || 0;
+    if (k === "ArrowDown" || kod === 40 || k === "-") { boyutAyarla(boyut - 1); if (o.preventDefault) o.preventDefault(); }
+    else if (k === "ArrowUp" || kod === 38 || k === "+" || k === "=") { boyutAyarla(boyut + 1); if (o.preventDefault) o.preventDefault(); }
+  });
 
   /* ---------- Ön izleme çubuğu ---------- */
   function cubuguGuncelle(simAd) {
