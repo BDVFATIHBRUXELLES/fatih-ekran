@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fatih Ekran — Bruxelles Fatih Camii</title>
+<style>
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:100 900;font-display:swap;
+  src:url(fonts/fraunces-latin-ext.woff2) format("woff2");
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:100 900;font-display:swap;
+  src:url(fonts/fraunces-latin.woff2) format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Bricolage";font-style:normal;font-weight:200 800;font-display:swap;
+  src:url(fonts/bricolage-latin-ext.woff2) format("woff2");
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Bricolage";font-style:normal;font-weight:200 800;font-display:swap;
+  src:url(fonts/bricolage-latin.woff2) format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+@font-face{font-family:"Montserrat";font-style:normal;font-weight:100 900;font-display:swap;
+  src:url(fonts/montserrat-latin-ext.woff2) format("woff2");
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Montserrat";font-style:normal;font-weight:100 900;font-display:swap;
+  src:url(fonts/montserrat-latin.woff2) format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:400 900;font-display:swap;
+  src:url(fonts/playfair-latin-ext.woff2) format("woff2");
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:400 900;font-display:swap;
+  src:url(fonts/playfair-latin.woff2) format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* ---- Renk temaları ---- */
+/* Açık mavi: logonun kubbe mavisi geniş yüzeylerde, lacivert yalnızca yazıda */
+:root{
+  --zemin:#FBFCFE; --yazi:#1B1D52; --buyuk:#1F78D1;
+  --bant:#8CD0F0; --bant-yazi:#1B1D52; --bant-ad:#1B1D52;
+  --secili:#F5B93F; --secili-yazi:#1B1D52;
+  --kutu:#E4F3FB;
+  --namaz-zemin:#E4F3FB; --namaz-yazi:#1B1D52; --namaz-ikincil:#1F78D1; --namaz-vurgu:#1F78D1; --namaz-cizgi:rgba(27,29,82,.22);
+  --yedek:#1F78D1; --yedek-yazi:#FFFFFF; --yedek-ikincil:#D6ECFA;
+}
+body[data-tema="canli"]{
+  --bant:#1F78D1; --bant-yazi:#FFFFFF; --bant-ad:#D6ECFA;
+  --kutu:#DDEFF9;
+  --namaz-zemin:#1F78D1; --namaz-yazi:#FFFFFF; --namaz-ikincil:#D6ECFA; --namaz-vurgu:#FFD479; --namaz-cizgi:rgba(255,255,255,.4);
+}
+body[data-tema="zumrut"]{
+  --zemin:#FAF9F5; --yazi:#0E4A3C; --buyuk:#176B57;
+  --bant:#176B57; --bant-yazi:#FAF9F5; --bant-ad:#DCEDE4;
+  --secili:#D9AE62; --secili-yazi:#0E4A3C;
+  --kutu:#DCEDE4;
+  --namaz-zemin:#0E4A3C; --namaz-yazi:#FAF9F5; --namaz-ikincil:#DCEDE4; --namaz-vurgu:#D9AE62; --namaz-cizgi:rgba(255,255,255,.3);
+  --yedek:#176B57; --yedek-yazi:#FAF9F5; --yedek-ikincil:#DCEDE4;
+}
+
+/* ---- Yazı karakterleri ---- */
+/* Modern: Montserrat, güçlü ve temiz */
+:root{
+  --baslik:"Montserrat","Segoe UI",Roboto,Arial,sans-serif;
+  --sans:"Montserrat","Segoe UI",Roboto,Arial,sans-serif;
+  --kalin:800; --harf:-.02em;
+  --b-ad:52px; --b-saat:68px; --b-gun:230px; --b-sure:104px; --b-vakit:60px; --b-namaz:160px; --b-yedek:62px;
+}
+body[data-yazi="zarif"]{
+  --baslik:"Playfair Display",Georgia,"Times New Roman",serif;
+  --kalin:800; --harf:-.01em;
+  --b-ad:56px; --b-saat:74px; --b-gun:250px; --b-sure:112px; --b-vakit:60px; --b-namaz:180px; --b-yedek:74px;
+}
+body[data-yazi="yumusak"]{
+  --baslik:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Bricolage","Segoe UI",Roboto,Arial,sans-serif;
+  --kalin:750; --harf:-.02em;
+  --b-ad:54px; --b-saat:76px; --b-gun:256px; --b-sure:116px; --b-vakit:60px; --b-namaz:184px; --b-yedek:76px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#EEF2F6;font-family:var(--sans);color:var(--yazi)}
+
+/* 1920x1080 sahne; her ekrana oranı bozulmadan sığdırılır */
+#sahne{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:var(--zemin)}
+
+/* Sabit genişlikli rakamlar: saniye değişirken yazı oynamaz */
+.rakam{font-family:var(--baslik);font-feature-settings:"lnum" 1,"tnum" 1;white-space:nowrap;display:inline-block}
+.rakam .d{display:inline-block;width:var(--dw,.6em);text-align:center}
+.rakam .c{display:inline-block;width:var(--cw,.3em);text-align:center}
+.rakam.oransal{font-feature-settings:"lnum" 1,"pnum" 1}
+
+/* Sol: dikey video alanı */
+#video-alani{position:absolute;left:0;top:0;width:608px;height:1080px;background:var(--yedek);overflow:hidden}
+#video-alani video,#video-alani img.icerik{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;display:none;background:var(--yedek)}
+#video-alani .yatay{object-fit:contain}
+#video-yedek{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:72px 56px;background:var(--yedek);color:var(--yedek-yazi)}
+#video-yedek img{width:300px;height:auto;margin-bottom:48px;display:none}
+#video-yedek .ad{font-family:var(--baslik);font-weight:var(--kalin);font-size:var(--b-yedek);line-height:1.08;letter-spacing:var(--harf)}
+#video-yedek .site{margin-top:28px;font-size:36px;font-weight:600;color:var(--yedek-ikincil)}
+
+/* Sağ: bilgi paneli */
+#panel{position:absolute;left:608px;top:0;width:1312px;height:1080px}
+
+#ust{position:absolute;left:0;top:0;width:100%;height:156px;padding:0 64px 0 52px;display:flex;align-items:center;justify-content:space-between}
+#kimlik{display:flex;align-items:center}
+#logo{height:124px;width:auto;margin-right:24px;display:none}
+#cami-adi{font-family:var(--baslik);font-weight:var(--kalin);font-size:var(--b-ad);letter-spacing:var(--harf);color:var(--yazi);white-space:nowrap}
+#saat{font-size:var(--b-saat);font-weight:700;color:var(--yazi)}
+
+#orta{position:absolute;left:0;top:156px;width:100%;height:434px}
+#takvim{position:absolute;left:64px;top:0;height:100%;display:flex;align-items:center}
+#gun-sayi{font-family:var(--baslik);font-weight:var(--kalin);font-size:var(--b-gun);line-height:.8;letter-spacing:-.04em;color:var(--buyuk);font-feature-settings:"lnum" 1}
+#takvim-yazi{margin-left:30px}
+#ay-yil{font-size:42px;font-weight:750;line-height:1.15;color:var(--yazi)}
+#gun-adi{font-size:42px;font-weight:500;line-height:1.15;color:var(--buyuk)}
+
+#kalan{position:absolute;right:0;top:20px;width:624px;height:374px;padding:54px 0 0 52px;background:var(--kutu);border-radius:36px 0 0 36px}
+#kalan-etiket{font-size:42px;font-weight:700;line-height:1.1;color:var(--yazi)}
+#kalan-sure{margin-top:36px;font-size:var(--b-sure);font-weight:var(--kalin);line-height:1;letter-spacing:-.02em;color:var(--buyuk)}
+#kalan-not{margin-top:22px;font-size:34px;line-height:1.25;color:var(--yazi);max-width:520px;display:none}
+
+/* Vakit şeridi */
+#vakitler{position:absolute;left:0;top:590px;width:100%;height:330px;padding:44px 20px;background:var(--bant);display:flex}
+.vakit{flex:1 1 0;margin:0 4px;padding:34px 0 0;border-radius:26px;text-align:center;color:var(--bant-yazi)}
+.vakit .ad{font-size:36px;font-weight:650;color:var(--bant-ad)}
+.vakit .zaman{margin-top:32px;font-size:var(--b-vakit);font-weight:var(--kalin);line-height:1}
+.vakit.gecti{opacity:.5}
+.vakit.siradaki{background:var(--secili);color:var(--secili-yazi)}
+.vakit.siradaki .ad{color:var(--secili-yazi);font-weight:800}
+
+/* Duyuru bandı */
+#alt{position:absolute;left:0;top:920px;width:100%;height:160px;padding:0 64px;display:flex;align-items:center;justify-content:space-between}
+#duyuru{font-size:40px;font-weight:650;line-height:1.2;color:var(--yazi);max-width:900px;transition:opacity .6s ease}
+#site{font-size:34px;font-weight:750;color:var(--buyuk);white-space:nowrap;margin-left:40px}
+
+/* Namaz modu: video durur, sade tablo kalır */
+#namaz{position:absolute;left:0;top:0;width:1920px;height:1080px;background:var(--namaz-zemin);color:var(--namaz-yazi);opacity:0;visibility:hidden;transition:opacity 1.2s ease,visibility 0s linear 1.2s}
+#namaz.acik{opacity:1;visibility:visible;transition:opacity 1.2s ease}
+#namaz-saat{position:absolute;right:72px;top:62px;font-size:var(--b-saat);font-weight:700;color:var(--namaz-yazi)}
+#namaz-kimlik{position:absolute;left:60px;top:44px;display:flex;align-items:center}
+#namaz-kimlik img{height:124px;width:auto;margin-right:24px;display:none}
+#namaz-cami{font-family:var(--baslik);font-size:var(--b-ad);font-weight:var(--kalin);letter-spacing:var(--harf);color:var(--namaz-yazi)}
+#namaz-baslik{position:absolute;left:0;top:330px;width:100%;text-align:center;font-family:var(--baslik);font-weight:var(--kalin);font-size:var(--b-namaz);line-height:1;letter-spacing:-.02em}
+#namaz-rica{position:absolute;left:0;top:572px;width:100%;text-align:center;font-size:48px;font-weight:600;color:var(--namaz-ikincil)}
+#namaz-vakitler{position:absolute;left:210px;right:210px;bottom:96px;display:flex;border-top:2px solid var(--namaz-cizgi);padding-top:36px}
+#namaz-vakitler .nv{flex:1 1 0;text-align:center}
+#namaz-vakitler .ad{font-size:34px;font-weight:650;color:var(--namaz-ikincil)}
+#namaz-vakitler .zaman{margin-top:10px;font-size:var(--b-vakit);font-weight:var(--kalin)}
+#namaz-vakitler .nv.simdi .ad,#namaz-vakitler .nv.simdi .zaman{color:var(--namaz-vurgu)}
+
+/* Ön izleme çubuğu: televizyonda görünmez */
+#onizleme{position:absolute;left:0;right:0;bottom:0;height:64px;display:none;align-items:center;padding:0 16px;background:#FFFFFF;border-top:1px solid #D5DEE8;color:#1B1D52;font-family:"Montserrat","Segoe UI",Arial,sans-serif;font-size:14px;overflow-x:auto;white-space:nowrap}
+#onizleme .grup{margin-right:22px;display:flex;align-items:center}
+#onizleme .baslik{margin-right:10px;opacity:.7}
+#onizleme button{font:inherit;font-weight:650;color:#1B1D52;background:transparent;border:1.5px solid rgba(27,29,82,.3);border-radius:999px;padding:8px 16px;margin-right:8px;cursor:pointer}
+#onizleme button:focus-visible{outline:3px solid #F5B93F;outline-offset:2px}
+#onizleme button[aria-pressed="true"]{background:#1B1D52;border-color:#1B1D52;color:#FFFFFF}
+
+@media (prefers-reduced-motion:reduce){#duyuru,#namaz,#namaz.acik{transition:none}}
+</style>
+</head>
+<body>
+
+<div id="sahne">
+  <div id="video-alani">
+    <div id="video-yedek"><img class="logo-gorsel" id="yedek-logo" src="medya/logo-beyaz.png" alt=""><div class="ad" id="yedek-ad"></div><div class="site" id="yedek-site"></div></div>
+    <video id="vid" muted playsinline preload="auto"></video>
+    <img id="gorsel" class="icerik" alt="">
+  </div>
+
+  <div id="panel">
+    <div id="ust">
+      <div id="kimlik"><img id="logo" class="logo-gorsel" src="medya/logo.png" alt=""><div id="cami-adi"></div></div>
+      <div id="saat" class="rakam"></div>
+    </div>
+
+    <div id="orta">
+      <div id="takvim">
+        <div id="gun-sayi"></div>
+        <div id="takvim-yazi"><div id="ay-yil"></div><div id="gun-adi"></div></div>
+      </div>
+      <div id="kalan">
+        <div id="kalan-etiket"></div>
+        <div id="kalan-sure" class="rakam"></div>
+        <div id="kalan-not"></div>
+      </div>
+    </div>
+
+    <div id="vakitler"></div>
+
+    <div id="alt">
+      <div id="duyuru"></div>
+      <div id="site"></div>
+    </div>
+  </div>
+
+  <div id="namaz" aria-hidden="true">
+    <div id="namaz-kimlik"><img class="logo-gorsel" id="namaz-logo" src="medya/logo.png" alt=""><div id="namaz-cami"></div></div>
+    <div id="namaz-saat" class="rakam"></div>
+    <div id="namaz-baslik"></div>
+    <div id="namaz-rica">Lütfen telefonunuzu sessize alın.</div>
+    <div id="namaz-vakitler"></div>
+  </div>
+</div>
+
+<div id="onizleme">
+  <div class="grup"><button type="button" id="tam-ekran">Tam ekran aç</button></div>
+  <div class="grup"><span class="baslik">Ekran</span>
+    <button type="button" data-ekran="mescit">Mescit</button>
+    <button type="button" data-ekran="cay">Çay ocağı</button>
+  </div>
+  <div class="grup"><span class="baslik">Renk</span>
+    <button type="button" data-tema="acik">Açık mavi</button>
+    <button type="button" data-tema="canli">Canlı mavi</button>
+    <button type="button" data-tema="zumrut">Zümrüt</button>
+  </div>
+  <div class="grup"><span class="baslik">Yazı</span>
+    <button type="button" data-yazi="modern">Modern</button>
+    <button type="button" data-yazi="zarif">Zarif</button>
+    <button type="button" data-yazi="yumusak">Yumuşak</button>
+  </div>
+  <div class="grup"><span class="baslik">Saat</span>
+    <button type="button" data-sim="gercek">Gerçek saat</button>
+    <button type="button" data-sim="ogle">Öğleye 20 saniye kala</button>
+    <button type="button" data-sim="gece">Yatsıdan sonra</button>
+  </div>
+  <div class="grup"><span class="baslik">Bu çubuk televizyonda görünmez.</span></div>
+</div>
+
+<script src="veri/ayarlar.js" onerror="void 0"></script>
+<script src="veri/vakitler.js" onerror="void 0"></script>
+<script src="veri/playlist.js" onerror="void 0"></script>
+<script>
+(function () {
+  "use strict";
+
+  var A = window.FATIH_AYARLAR || {};
+  var VAKIT_ADLARI = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"];
+  var VAKIT_YONELME = ["İmsaka", "Güneşe", "Öğleye", "İkindiye", "Akşama", "Yatsıya"];
+  var NAMAZ_ADLARI = ["Sabah namazı", null, "Öğle namazı", "İkindi namazı", "Akşam namazı", "Yatsı namazı"];
+  var NAMAZ_ANAHTAR = ["imsak", null, "ogle", "ikindi", "aksam", "yatsi"];
+  var AYLAR = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+  var GUNLER = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+
+  function el(id) { return document.getElementById(id); }
+  function iki(n) { return (n < 10 ? "0" : "") + n; }
+
+  /* ---------- Adres satırından ayarlar ---------- */
+  var adres = (location.search || "").replace("?", "&") + "&" + (location.hash || "").replace("#", "");
+  function param(ad) {
+    var m = new RegExp("(?:^|&)" + ad + "=([^&]*)").exec(adres);
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+  var hash = (location.hash || "").replace("#", "");
+  var tvModu = param("tv") !== null || /^tv(-|$)/.test(hash);
+  var ekran = param("ekran") || hash.replace(/^tv-?/, "") || "mescit";
+  if (!A.ekranlar || !A.ekranlar[ekran]) ekran = "mescit";
+  function ekranAyar() { return (A.ekranlar && A.ekranlar[ekran]) || { sesli: false, namazModu: true }; }
+
+  /* ---------- Saat: her zaman Brüksel saati ---------- */
+  var bicim = null;
+  try {
+    bicim = new Intl.DateTimeFormat("en-GB", {
+      timeZone: A.saatDilimi || "Europe/Brussels", hour12: false,
+      year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit"
+    });
+    if (!bicim.formatToParts) bicim = null;
+  } catch (e) { bicim = null; }
+
+  /* Duvar saati, UTC alanlarına yazılmış bir sayı olarak tutulur; hesaplar saat diliminden etkilenmez. */
+  function gercekDuvar() {
+    var d = new Date();
+    if (bicim) {
+      var o = {}, p = bicim.formatToParts(d), i;
+      for (i = 0; i < p.length; i++) o[p[i].type] = p[i].value;
+      var s = +o.hour; if (s === 24) s = 0;
+      return Date.UTC(+o.year, +o.month - 1, +o.day, s, +o.minute, +o.second) + d.getMilliseconds();
+    }
+    return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds()) + d.getMilliseconds();
+  }
+  var simFark = 0;
+  function simdi() { return gercekDuvar() + simFark; }
+  function simAyarla(duvarMs) { simFark = duvarMs === null ? 0 : duvarMs - gercekDuvar(); sonSaniye = -1; sonCizim = ""; }
+
+  function gunAnahtari(ms) { var d = new Date(ms); return d.getUTCFullYear() + "-" + iki(d.getUTCMonth() + 1) + "-" + iki(d.getUTCDate()); }
+  function vakitMs(anahtar, saat) {
+    var a = anahtar.split("-"), s = saat.split(":");
+    return Date.UTC(+a[0], +a[1] - 1, +a[2], +s[0], +s[1], 0);
+  }
+  function gununVakitleri(anahtar) {
+    var V = window.FATIH_VAKITLER || {}, v = V[anahtar];
+    return (v && v.length === 6) ? v : null;
+  }
+  var simParam = param("simdi");
+  if (simParam) {
+    var sm = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?/.exec(simParam);
+    if (sm) simFark = Date.UTC(+sm[1], +sm[2] - 1, +sm[3], +sm[4], +sm[5], +(sm[6] || 0)) - gercekDuvar();
+  }
+
+  /* ---------- Sabit genişlikli rakam yazımı ---------- */
+  function rakamYaz(hedef, metin) {
+    var c = hedef.children, i;
+    if (c.length !== metin.length) {
+      hedef.textContent = "";
+      for (i = 0; i < metin.length; i++) {
+        var s = document.createElement("span");
+        s.className = metin.charAt(i) === ":" ? "c" : "d";
+        hedef.appendChild(s);
+      }
+      c = hedef.children;
+    }
+    for (i = 0; i < metin.length; i++) if (c[i].textContent !== metin.charAt(i)) c[i].textContent = metin.charAt(i);
+  }
+
+  /* Rakam genişliğini yazı tipinden ölç: her rakam aynı yeri kaplar, aralarında boşluk kalmaz */
+  function rakamOlc() {
+    var t = document.createElement("span"), i, enGenis = 0;
+    t.className = "rakam";
+    t.style.cssText = "position:absolute;left:-9999px;top:0;visibility:hidden;font-size:200px;font-weight:800";
+    document.body.appendChild(t);
+    for (i = 0; i < 10; i++) { t.textContent = String(i); enGenis = Math.max(enGenis, t.getBoundingClientRect().width); }
+    t.textContent = ":";
+    var iki_nokta = t.getBoundingClientRect().width;
+    document.body.removeChild(t);
+    if (enGenis > 0) {
+      document.documentElement.style.setProperty("--dw", (enGenis / 200 * 1.02).toFixed(3) + "em");
+      document.documentElement.style.setProperty("--cw", (iki_nokta / 200 * 1.1).toFixed(3) + "em");
+    }
+  }
+  if (document.fonts) { try { document.fonts.addEventListener("loadingdone", rakamOlc); } catch (e) {} }
+
+  /* ---------- Sabit metinler ---------- */
+  el("cami-adi").textContent = A.camiAdi || "";
+  el("namaz-cami").textContent = A.camiAdi || "";
+  el("yedek-ad").textContent = A.camiAdi || "";
+  el("yedek-site").textContent = A.site || "";
+  el("site").textContent = A.site || "";
+  /* Logo dosyası varsa görünür, yoksa yeri boş kalmaz */
+  (function () {
+    var g = document.querySelectorAll(".logo-gorsel"), i;
+    function bagla(im) {
+      im.onload = function () { im.style.display = "block"; };
+      im.onerror = function () { im.style.display = "none"; };
+      if (im.complete && im.naturalWidth) im.style.display = "block";
+    }
+    for (i = 0; i < g.length; i++) bagla(g[i]);
+  })();
+
+  /* Renk teması ("acik", "canli", "zumrut") ve yazı karakteri ("modern", "zarif", "yumusak") */
+  var TEMALAR = { acik: { namazLogo: "medya/logo.png" }, canli: { namazLogo: "medya/logo-beyaz.png" }, zumrut: { namazLogo: "medya/logo-beyaz.png" } };
+  var YAZILAR = { modern: 1, zarif: 1, yumusak: 1 };
+  var tema = param("tema") || A.tema || "acik";
+  var yazi = param("yazi") || A.yazi || "modern";
+  if (!TEMALAR[tema]) tema = "acik";
+  if (!YAZILAR[yazi]) yazi = "modern";
+  function temaUygula() {
+    document.body.setAttribute("data-tema", tema);
+    document.body.setAttribute("data-yazi", yazi);
+    var nl = el("namaz-logo");
+    if (nl.getAttribute("src") !== TEMALAR[tema].namazLogo) nl.src = TEMALAR[tema].namazLogo;
+    rakamOlc();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(rakamOlc);
+    setTimeout(rakamOlc, 1500);
+  }
+  temaUygula();
+
+  /* ---------- Vakit şeridi ---------- */
+  var sonCizim = "";
+  function vakitleriCiz(v, siradaki, namazdaki) {
+    var imza = (v ? v.join() : "yok") + "|" + siradaki + "|" + namazdaki;
+    if (imza === sonCizim) return;
+    sonCizim = imza;
+    var kap = el("vakitler"), nkap = el("namaz-vakitler"), i;
+    kap.textContent = ""; nkap.textContent = "";
+    for (i = 0; i < 6; i++) {
+      var h = document.createElement("div");
+      h.className = "vakit" + (v && siradaki === i ? " siradaki" : "") + (v && siradaki !== -1 && i < siradaki ? " gecti" : "") + (v && siradaki === -1 ? " gecti" : "");
+      var ad = document.createElement("div"); ad.className = "ad"; ad.textContent = VAKIT_ADLARI[i];
+      var z = document.createElement("div"); z.className = "zaman rakam oransal"; z.textContent = v ? v[i] : "--:--";
+      h.appendChild(ad); h.appendChild(z); kap.appendChild(h);
+
+      var n = document.createElement("div");
+      n.className = "nv" + (namazdaki === i ? " simdi" : "");
+      var nad = document.createElement("div"); nad.className = "ad"; nad.textContent = VAKIT_ADLARI[i];
+      var nz = document.createElement("div"); nz.className = "zaman rakam oransal"; nz.textContent = v ? v[i] : "--:--";
+      n.appendChild(nad); n.appendChild(nz); nkap.appendChild(n);
+    }
+  }
+
+  /* ---------- Her saniye ---------- */
+  var sonSaniye = -1, namazAcik = false;
+  function tik() {
+    var ms = simdi(), sn = Math.floor(ms / 1000);
+    if (sn === sonSaniye) return;
+    sonSaniye = sn;
+    var d = new Date(ms);
+    var saatMetni = iki(d.getUTCHours()) + ":" + iki(d.getUTCMinutes()) + ":" + iki(d.getUTCSeconds());
+    rakamYaz(el("saat"), saatMetni);
+    rakamYaz(el("namaz-saat"), saatMetni.substr(0, 5));
+    el("gun-sayi").textContent = d.getUTCDate();
+    el("ay-yil").textContent = AYLAR[d.getUTCMonth()] + " " + d.getUTCFullYear();
+    el("gun-adi").textContent = GUNLER[d.getUTCDay()];
+
+    var bugun = gunAnahtari(ms), v = gununVakitleri(bugun);
+    var etiket = el("kalan-etiket"), sure = el("kalan-sure"), not = el("kalan-not");
+
+    if (!v) {
+      vakitleriCiz(null, -1, -1);
+      etiket.textContent = "Bugünün vakitleri yüklenemedi";
+      sure.style.display = "none";
+      not.style.display = "block";
+      not.textContent = "İnternet bağlantısını kontrol edin. Vakitler gelince ekran kendiliğinden düzelir.";
+      namazModu(false, -1);
+      return;
+    }
+
+    var i, siradaki = -1, hedef = null, hedefEtiket = "";
+    for (i = 0; i < 6; i++) if (vakitMs(bugun, v[i]) > ms) { siradaki = i; break; }
+    if (siradaki !== -1) {
+      hedef = vakitMs(bugun, v[siradaki]);
+      hedefEtiket = VAKIT_YONELME[siradaki] + " kalan süre";
+    } else {
+      var yarin = gunAnahtari(ms + 86400000), yv = gununVakitleri(yarin);
+      if (yv) { hedef = vakitMs(yarin, yv[0]); hedefEtiket = "Yarınki imsaka kalan süre"; }
+    }
+
+    if (hedef !== null) {
+      var kalan = Math.max(0, Math.ceil((hedef - ms) / 1000));
+      etiket.textContent = hedefEtiket;
+      sure.style.display = "";
+      not.style.display = "none";
+      rakamYaz(sure, iki(Math.floor(kalan / 3600)) + ":" + iki(Math.floor(kalan % 3600 / 60)) + ":" + iki(kalan % 60));
+    } else {
+      etiket.textContent = "Yarının vakitleri bekleniyor";
+      sure.style.display = "none";
+      not.style.display = "block";
+      not.textContent = "Yeni vakitler yüklendiğinde geri sayım kendiliğinden başlar.";
+    }
+
+    /* Namaz modu penceresi içinde miyiz? */
+    var namazdaki = -1;
+    if (ekranAyar().namazModu && A.namazModu) {
+      for (i = 0; i < 6; i++) {
+        var k = NAMAZ_ANAHTAR[i], ay = k ? A.namazModu[k] : null;
+        if (!ay) continue;
+        var bas = vakitMs(bugun, v[i]) + (ay.bas || 0) * 60000;
+        if (ms >= bas && ms < bas + (ay.sure || 0) * 60000) { namazdaki = i; break; }
+      }
+    }
+    vakitleriCiz(v, siradaki, namazdaki);
+    namazModu(namazdaki !== -1, namazdaki);
+
+    /* Gece 03.30'da sayfayı tazele: yeni sürüm varsa kendiliğinden gelir */
+    if (tvModu && !simFark && d.getUTCHours() === 3 && d.getUTCMinutes() === 30 && d.getUTCSeconds() === 0 && performance.now() > 3600000) location.reload();
+  }
+
+  function namazModu(acik, hangi) {
+    if (acik) el("namaz-baslik").textContent = NAMAZ_ADLARI[hangi] || "";
+    if (acik === namazAcik) return;
+    namazAcik = acik;
+    el("namaz").className = acik ? "acik" : "";
+    el("namaz").setAttribute("aria-hidden", acik ? "false" : "true");
+    if (acik) { try { vid.pause(); } catch (e) {} }
+    else if (aktif && aktif.tip !== "gorsel") { var p = vid.play(); if (p && p.catch) p.catch(function () {}); }
+  }
+
+  /* ---------- Video ve görsel döngüsü ---------- */
+  var vid = el("vid"), gorsel = el("gorsel"), yedek = el("video-yedek");
+  var sira = -1, aktif = null, hataSayisi = 0, gorselSayaci = null;
+
+  function gecerliListe() {
+    var P = window.FATIH_PLAYLIST || [], bugun = gunAnahtari(simdi()), sonuc = [], i;
+    for (i = 0; i < P.length; i++) {
+      var o = P[i];
+      if (!o || !o.dosya) continue;
+      if (o.ekran && o.ekran.indexOf(ekran) === -1) continue;
+      if (o.bas && bugun < o.bas) continue;
+      if (o.bit && bugun > o.bit) continue;
+      sonuc.push(o);
+    }
+    return sonuc;
+  }
+  function yedegiGoster() { vid.style.display = "none"; gorsel.style.display = "none"; yedek.style.display = "flex"; }
+
+  function sonraki() {
+    clearTimeout(gorselSayaci);
+    var liste = gecerliListe();
+    if (!liste.length) { aktif = null; yedegiGoster(); gorselSayaci = setTimeout(sonraki, 30000); return; }
+    sira = (sira + 1) % liste.length;
+    aktif = liste[sira];
+    if (aktif.tip === "gorsel") {
+      try { vid.pause(); } catch (e) {}
+      gorsel.onload = function () { hataSayisi = 0; vid.style.display = "none"; yedek.style.display = "none"; gorsel.style.display = "block"; };
+      gorsel.onerror = hata;
+      gorsel.src = aktif.dosya;
+      gorselSayaci = setTimeout(sonraki, (aktif.sure || 12) * 1000);
+    } else {
+      vid.muted = !ekranAyar().sesli;
+      vid.src = aktif.dosya;
+      vid.load();
+      if (!namazAcik) { var p = vid.play(); if (p && p.catch) p.catch(function () {}); }
+    }
+  }
+  function hata() {
+    hataSayisi++;
+    var n = gecerliListe().length;
+    if (hataSayisi >= n) { yedegiGoster(); clearTimeout(gorselSayaci); gorselSayaci = setTimeout(function () { hataSayisi = 0; sonraki(); }, 30000); }
+    else { clearTimeout(gorselSayaci); gorselSayaci = setTimeout(sonraki, 1000); }
+  }
+  vid.addEventListener("playing", function () {
+    hataSayisi = 0;
+    vid.className = vid.videoWidth > vid.videoHeight ? "yatay" : "";
+    gorsel.style.display = "none"; yedek.style.display = "none"; vid.style.display = "block";
+  });
+  vid.addEventListener("ended", sonraki);
+  vid.addEventListener("error", hata);
+
+  /* ---------- Duyurular ---------- */
+  var duyuruSira = 0;
+  function duyuruGoster() {
+    var D = A.duyurular || [], kutu = el("duyuru");
+    if (!D.length) { kutu.textContent = ""; return; }
+    kutu.style.opacity = 0;
+    setTimeout(function () {
+      kutu.textContent = D[duyuruSira % D.length];
+      duyuruSira++;
+      kutu.style.opacity = 1;
+    }, 650);
+  }
+
+  /* ---------- Veriyi yenile: liste 5 dakikada, vakitler saatte bir ---------- */
+  function yenidenYukle(dosya) {
+    var s = document.createElement("script");
+    s.src = dosya + "?t=" + Date.now();
+    s.onload = s.onerror = function () { if (s.parentNode) s.parentNode.removeChild(s); sonCizim = ""; };
+    document.head.appendChild(s);
+  }
+  setInterval(function () { yenidenYukle("veri/playlist.js"); }, 5 * 60000);
+  setInterval(function () { yenidenYukle("veri/vakitler.js"); }, 60 * 60000);
+
+  /* ---------- Sahneyi ekrana sığdır ---------- */
+  var sahne = el("sahne"), cubuk = el("onizleme");
+  function sigdir() {
+    var pay = tvModu ? 0 : 64, w = window.innerWidth, h = window.innerHeight - pay;
+    var o = Math.min(w / 1920, h / 1080);
+    sahne.style.transform = "scale(" + o + ")";
+    sahne.style.left = Math.round((w - 1920 * o) / 2) + "px";
+    sahne.style.top = Math.round((h - 1080 * o) / 2) + "px";
+  }
+  window.addEventListener("resize", sigdir);
+
+  /* ---------- Ön izleme çubuğu ---------- */
+  function cubuguGuncelle(simAd) {
+    var b = cubuk.getElementsByTagName("button"), i;
+    for (i = 0; i < b.length; i++) {
+      var e = b[i].getAttribute("data-ekran"), s = b[i].getAttribute("data-sim"), tm = b[i].getAttribute("data-tema"), yz = b[i].getAttribute("data-yazi");
+      if (yz) b[i].setAttribute("aria-pressed", yz === yazi ? "true" : "false");
+      if (e) b[i].setAttribute("aria-pressed", e === ekran ? "true" : "false");
+      if (tm) b[i].setAttribute("aria-pressed", tm === tema ? "true" : "false");
+      if (s && simAd) b[i].setAttribute("aria-pressed", s === simAd ? "true" : "false");
+    }
+  }
+  if (!tvModu) {
+    cubuk.style.display = "flex";
+    cubuk.addEventListener("click", function (olay) {
+      var t = olay.target;
+      if (!t || t.tagName !== "BUTTON") return;
+      var e = t.getAttribute("data-ekran"), s = t.getAttribute("data-sim"), tm = t.getAttribute("data-tema"), yz = t.getAttribute("data-yazi");
+      if (yz) { yazi = yz; temaUygula(); cubuguGuncelle(null); }
+      if (e) { ekran = e; sonSaniye = -1; sonCizim = ""; cubuguGuncelle(null); }
+      if (tm) { tema = tm; temaUygula(); cubuguGuncelle(null); }
+      if (s) {
+        var bugun = gunAnahtari(gercekDuvar()), v = gununVakitleri(bugun);
+        if (s === "gercek" || !v) simAyarla(null);
+        else if (s === "ogle") simAyarla(vakitMs(bugun, v[2]) - 20000);
+        else if (s === "gece") simAyarla(vakitMs(bugun, v[5]) + 45 * 60000);
+        cubuguGuncelle(s);
+      }
+      tik();
+    });
+    cubuguGuncelle(simFark ? null : "gercek");
+
+    /* Tam ekran: çubuk gizlenir, televizyondaki görüntünün aynısı olur. Esc ile geri dönülür. */
+    var tamEkranda = false;
+    function tamEkranAyarla(acik) {
+      tamEkranda = acik; tvModu = acik;
+      cubuk.style.display = acik ? "none" : "flex";
+      sigdir();
+    }
+    el("tam-ekran").addEventListener("click", function () {
+      tamEkranAyarla(true);
+      var k = document.documentElement, f = k.requestFullscreen || k.webkitRequestFullscreen;
+      if (f) { try { var s = f.call(k); if (s && s.catch) s.catch(function () {}); } catch (e) {} }
+    });
+    function tamEkrandanCik() { if (tamEkranda && !(document.fullscreenElement || document.webkitFullscreenElement)) tamEkranAyarla(false); }
+    document.addEventListener("fullscreenchange", tamEkrandanCik);
+    document.addEventListener("webkitfullscreenchange", tamEkrandanCik);
+    document.addEventListener("keydown", function (o) { if (o.key === "Escape" && tamEkranda) tamEkranAyarla(false); });
+  }
+
+  /* ---------- Başlat ---------- */
+  sigdir();
+  tik();
+  setInterval(tik, 200);
+  duyuruGoster();
+  setInterval(duyuruGoster, (A.duyuruSuresi || 12) * 1000);
+  sonraki();
+})();
+</script>
+</body>
+</html>
