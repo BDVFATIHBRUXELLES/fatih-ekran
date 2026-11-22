@@ -134,6 +134,9 @@ body.tv{background:var(--zemin)}
 #duyuru{font-size:40px;font-weight:650;line-height:1.2;color:var(--alt-yazi);max-width:900px;transition:opacity .6s ease}
 #site{font-size:34px;font-weight:750;color:var(--alt-site);white-space:nowrap;margin-left:40px}
 
+/* Hangi sürümün yüklü olduğunu uzaktan anlamak için köşede küçük etiket */
+#surum-etiket{position:absolute;right:14px;bottom:8px;font-size:15px;font-weight:600;color:#FFFFFF;opacity:.55}
+
 /* Namaz modu: video durur, sade tablo kalır */
 #namaz{position:absolute;left:0;top:0;width:1920px;height:1080px;background:var(--namaz-zemin);color:var(--namaz-yazi);opacity:0;visibility:hidden;transition:opacity 1.2s ease,visibility 0s linear 1.2s}
 #namaz.acik{opacity:1;visibility:visible;transition:opacity 1.2s ease}
@@ -194,6 +197,8 @@ body.tv{background:var(--zemin)}
       <div id="site"></div>
     </div>
   </div>
+
+  <div id="surum-etiket"></div>
 
   <div id="namaz" aria-hidden="true">
     <div id="namaz-kimlik"><img class="logo-gorsel" id="namaz-logo" src="medya/logo.png" alt=""><div id="namaz-cami"></div></div>
@@ -545,7 +550,8 @@ body.tv{background:var(--zemin)}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "6";
+  var SURUM = "7";
+  el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
     s.src = "veri/surum.js?t=" + Date.now();
