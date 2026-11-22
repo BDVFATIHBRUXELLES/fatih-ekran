@@ -9,8 +9,5 @@
   bas/bit: gösterimin ilk ve son günü (YYYY-AA-GG). Yazılmazsa süresiz.
 */
 window.FATIH_PLAYLIST = [
-  { tip: "video", dosya: "medya/FATIH_20261122_EKRAN.mp4" },
-  { tip: "kampanya", sure: 14 },
-  { tip: "video", dosya: "medya/FATIH_BirSozVerdik_EKRAN.mp4" },
-  { tip: "video", dosya: "medya/FATIH_GelecegiInsa_EKRAN.mp4" }
+  { tip: "kampanya", sure: 60 }
 ];
