@@ -8,6 +8,8 @@ window.FATIH_AYARLAR = {
   tema: "acik",
   /* Yazı karakteri: "modern", "zarif" veya "yumusak" */
   yazi: "modern",
+  /* Yerleşim: "yari" = ekran ikiye bölünür, "ucte-bir" = içerik dar, bilgi alanı geniş */
+  yerlesim: "yari",
 
   /* Her mekânın ekranı ayrı davranır. */
   ekranlar: {

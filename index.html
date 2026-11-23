@@ -195,6 +195,33 @@ body.tv{background:var(--zemin)}
 #onizleme button:focus-visible{outline:3px solid #F5B93F;outline-offset:2px}
 #onizleme button[aria-pressed="true"]{background:#1B1D52;border-color:#1B1D52;color:#FFFFFF}
 
+/* ---- Yarı yarıya yerleşim: bir yarıda içerik, öbür yarıda alt alta vakit listesi ---- */
+body[data-yerlesim="yari"]{--b-ad:36px;--b-saat:54px;--b-gun:150px;--b-sure:74px;--b-vakit:58px}
+body[data-yerlesim="yari"][data-yazi="zarif"]{--b-ad:40px;--b-saat:56px;--b-gun:160px;--b-sure:76px;--b-vakit:58px}
+body[data-yerlesim="yari"][data-yazi="yumusak"]{--b-ad:38px;--b-saat:56px;--b-gun:160px;--b-sure:80px;--b-vakit:56px}
+body[data-yerlesim="yari"] #video-alani{width:960px}
+body[data-yerlesim="yari"] #video-alani video,body[data-yerlesim="yari"] #video-alani img.icerik{object-fit:contain}
+body[data-yerlesim="yari"] #kampanya,body[data-yerlesim="yari"] #site-kart,body[data-yerlesim="yari"] #video-yedek{padding-left:232px;padding-right:232px}
+body[data-yerlesim="yari"] #pano{padding-left:220px;padding-right:220px}
+body[data-yerlesim="yari"] #panel{left:960px;width:960px}
+body[data-yerlesim="yari"] #ust{height:128px;padding:0 48px}
+body[data-yerlesim="yari"] #logo{height:92px;margin-right:16px}
+body[data-yerlesim="yari"] #orta{top:128px;height:262px}
+body[data-yerlesim="yari"] #takvim{left:48px}
+body[data-yerlesim="yari"] #takvim-yazi{margin-left:16px}
+body[data-yerlesim="yari"] #ay-yil,body[data-yerlesim="yari"] #gun-adi{font-size:30px}
+body[data-yerlesim="yari"] #kalan{top:14px;width:452px;height:234px;padding:30px 0 0 32px;border-radius:28px 0 0 28px}
+body[data-yerlesim="yari"] #kalan-etiket{font-size:27px}
+body[data-yerlesim="yari"] #kalan-sure{margin-top:22px}
+body[data-yerlesim="yari"] #kalan-not{margin-top:14px;font-size:24px;max-width:400px}
+body[data-yerlesim="yari"] #vakitler{top:390px;height:560px;padding:24px 40px 0;display:block}
+body[data-yerlesim="yari"] .vakit{display:flex;align-items:center;justify-content:space-between;height:78px;margin:0 0 8px;padding:0 28px;border-radius:18px;text-align:left}
+body[data-yerlesim="yari"] .vakit .ad{font-size:40px}
+body[data-yerlesim="yari"] .vakit .zaman{margin-top:0}
+body[data-yerlesim="yari"] #alt{top:950px;height:130px;padding:0 48px}
+body[data-yerlesim="yari"] #duyuru{font-size:29px;max-width:none}
+body[data-yerlesim="yari"] #site{display:none}
+
 @media (prefers-reduced-motion:reduce){#duyuru,#namaz,#namaz.acik{transition:none}}
 </style>
 </head>
@@ -424,11 +451,15 @@ body.tv{background:var(--zemin)}
   var YAZILAR = { modern: 1, zarif: 1, yumusak: 1 };
   var tema = param("tema") || A.tema || "acik";
   var yazi = param("yazi") || A.yazi || "modern";
+  /* Yerleşim: "yari" = ekran ikiye bölünür, "ucte-bir" = içerik dar, bilgi geniş (ilk tasarım) */
+  var yerlesim = param("yerlesim") || A.yerlesim || "yari";
+  if (yerlesim !== "yari" && yerlesim !== "ucte-bir") yerlesim = "yari";
   if (!TEMALAR[tema]) tema = "acik";
   if (!YAZILAR[yazi]) yazi = "modern";
   function temaUygula() {
     document.body.setAttribute("data-tema", tema);
     document.body.setAttribute("data-yazi", yazi);
+    document.body.setAttribute("data-yerlesim", yerlesim);
     var nl = el("namaz-logo");
     if (nl.getAttribute("src") !== TEMALAR[tema].namazLogo) nl.src = TEMALAR[tema].namazLogo;
     rakamOlc();
@@ -447,7 +478,7 @@ body.tv{background:var(--zemin)}
     kap.textContent = ""; nkap.textContent = "";
     for (i = 0; i < 6; i++) {
       var h = document.createElement("div");
-      h.className = "vakit" + (v && siradaki === i ? " siradaki" : "") + (v && siradaki !== -1 && i < siradaki ? " gecti" : "") + (v && siradaki === -1 ? " gecti" : "");
+      h.className = "vakit" + (v && siradaki === i ? " siradaki" : "") + (v && siradaki !== -1 && i < siradaki ? " gecti" : "");
       var ad = document.createElement("div"); ad.className = "ad"; ad.textContent = VAKIT_ADLARI[i];
       var z = document.createElement("div"); z.className = "zaman rakam oransal"; z.textContent = v ? v[i] : "--:--";
       h.appendChild(ad); h.appendChild(z); kap.appendChild(h);
@@ -706,7 +737,7 @@ body.tv{background:var(--zemin)}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "10";
+  var SURUM = "11";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
