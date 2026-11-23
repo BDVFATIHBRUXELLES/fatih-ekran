@@ -22,5 +22,6 @@ window.FATIH_PLAYLIST = [
   { tip: "site", sure: 15 },
   { tip: "video", dosya: "medya/FATIH_5Bina3D_GENIS.mp4", bit: "2026-12-31" },
   { tip: "soz", tur: "hadis", sure: 30 },
+  { tip: "soz", tur: "dua", sure: 22 },
   { tip: "pano", sure: 15, dosya: "medya/5ekbina-plan.jpg", baslik: "Camimize bitişik 5 ek bina", aciklama: "Mavi bugünümüz, sarı geleceğimiz.", bit: "2026-12-31" }
 ];
