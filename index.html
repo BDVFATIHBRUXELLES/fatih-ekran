@@ -103,13 +103,14 @@ body.tv{background:var(--zemin)}
 #kampanya{position:absolute;left:0;top:0;width:100%;height:100%;display:none;flex-direction:column;padding:70px 56px 60px;background:var(--yedek);color:#FFFFFF}
 #kampanya .k-ust{font-size:32px;font-weight:650;color:var(--yedek-ikincil)}
 #kampanya .k-baslik{margin-top:8px;font-family:var(--baslik);font-weight:var(--kalin);font-size:88px;line-height:1;letter-spacing:var(--harf)}
-#kampanya .k-gun{margin-top:auto;font-family:var(--baslik);font-weight:var(--kalin);font-size:250px;line-height:.82;letter-spacing:-.04em;font-feature-settings:"lnum" 1}
+#kampanya .k-sayac{margin-top:auto}
+#kampanya .k-gun{font-family:var(--baslik);font-weight:var(--kalin);font-size:250px;line-height:.82;letter-spacing:-.04em;font-feature-settings:"lnum" 1}
 #kampanya .k-gun-yazi{margin-top:16px;font-family:var(--baslik);font-weight:var(--kalin);font-size:62px;line-height:1}
 #kampanya .k-son{margin-top:12px;font-size:28px;font-weight:600;color:var(--yedek-ikincil)}
 #kampanya .k-cubuk{margin-top:44px;height:28px;border-radius:999px;background:rgba(255,255,255,.28);overflow:hidden}
 #kampanya .k-dolu{height:100%;border-radius:999px;background:#F5B93F;width:0}
 #kampanya .k-oran{margin-top:18px;font-size:38px;font-weight:750}
-#kampanya .k-tutar{margin-top:10px;font-size:27px;font-weight:600;line-height:1.3}
+#kampanya .k-tutar{margin-top:10px;font-size:27px;font-weight:600;line-height:1.3;white-space:pre-line}
 #kampanya .k-tarih{margin-top:6px;font-size:23px;font-weight:500;color:var(--yedek-ikincil)}
 #kampanya .k-alt{margin-top:auto;display:flex;align-items:center}
 #kampanya .k-alt img{width:150px;height:150px;border-radius:14px;background:#FFFFFF;display:none}
@@ -123,14 +124,15 @@ body.tv{background:var(--zemin)}
 #site-kart .s-ust{margin-top:34px;font-size:32px;font-weight:650;color:var(--buyuk)}
 #site-kart .s-adres{margin-top:6px;font-family:var(--baslik);font-weight:var(--kalin);font-size:74px;line-height:1.02;letter-spacing:var(--harf)}
 #site-kart .s-metin{margin-top:22px;font-size:28px;font-weight:550;line-height:1.3}
-#site-kart .s-qr{margin-top:auto;width:300px;height:300px;display:none}
+#site-kart .s-alt{margin-top:auto}
+#site-kart .s-qr{width:300px;height:300px;display:none}
 #site-kart .s-qr-yazi{margin-top:14px;font-size:27px;font-weight:650;color:var(--buyuk)}
-#site-kart .s-sosyal{margin-top:auto;font-size:25px;font-weight:600;line-height:1.5}
+#site-kart .s-sosyal{margin-top:44px;font-size:25px;font-weight:600;line-height:1.5}
 #site-kart .s-sosyal b{font-weight:800}
 
 /* Pano: başlıklı görsel */
 #pano{position:absolute;left:0;top:0;width:100%;height:100%;display:none;flex-direction:column;padding:76px 44px 64px;background:var(--yedek);color:#FFFFFF}
-#pano .p-baslik{padding:0 12px;font-family:var(--baslik);font-weight:var(--kalin);font-size:54px;line-height:1.05;letter-spacing:var(--harf)}
+#pano .p-baslik{text-wrap:balance;padding:0 12px;font-family:var(--baslik);font-weight:var(--kalin);font-size:54px;line-height:1.05;letter-spacing:var(--harf)}
 #pano img{margin-top:auto;width:100%;height:auto;border-radius:22px;display:block}
 #pano .p-aciklama{margin-top:auto;padding:0 12px;font-size:32px;font-weight:650;line-height:1.3}
 
@@ -201,8 +203,43 @@ body[data-yerlesim="yari"][data-yazi="zarif"]{--b-ad:40px;--b-saat:56px;--b-gun:
 body[data-yerlesim="yari"][data-yazi="yumusak"]{--b-ad:38px;--b-saat:56px;--b-gun:160px;--b-sure:80px;--b-vakit:56px}
 body[data-yerlesim="yari"] #video-alani{width:960px}
 body[data-yerlesim="yari"] #video-alani video,body[data-yerlesim="yari"] #video-alani img.icerik{object-fit:contain}
-body[data-yerlesim="yari"] #kampanya,body[data-yerlesim="yari"] #site-kart,body[data-yerlesim="yari"] #video-yedek{padding-left:232px;padding-right:232px}
-body[data-yerlesim="yari"] #pano{padding-left:220px;padding-right:220px}
+body[data-yerlesim="yari"] #video-yedek{padding:72px 64px}
+body[data-yerlesim="yari"] #video-yedek .ad{font-size:96px}
+/* Kampanya kartı, tam genişlik */
+body[data-yerlesim="yari"] #kampanya{padding:60px 64px 56px}
+body[data-yerlesim="yari"] #kampanya .k-ust{font-size:40px}
+body[data-yerlesim="yari"] #kampanya .k-baslik{font-size:120px}
+body[data-yerlesim="yari"] #kampanya .k-sayac{display:flex;align-items:flex-end}
+body[data-yerlesim="yari"] #kampanya .k-gun{font-size:350px}
+body[data-yerlesim="yari"] #kampanya .k-sayac-yazi{margin-left:30px;padding-bottom:14px}
+body[data-yerlesim="yari"] #kampanya .k-gun-yazi{margin-top:0;font-size:88px}
+body[data-yerlesim="yari"] #kampanya .k-son{font-size:34px}
+body[data-yerlesim="yari"] #kampanya .k-cubuk{margin-top:52px;height:38px}
+body[data-yerlesim="yari"] #kampanya .k-bilgi{display:flex;justify-content:space-between;align-items:flex-start;margin-top:22px}
+body[data-yerlesim="yari"] #kampanya .k-oran{margin-top:0;font-size:50px;white-space:nowrap}
+body[data-yerlesim="yari"] #kampanya .k-bilgi-sag{text-align:right;margin-left:24px}
+body[data-yerlesim="yari"] #kampanya .k-tutar{margin-top:4px;font-size:29px}
+body[data-yerlesim="yari"] #kampanya .k-tarih{font-size:25px}
+body[data-yerlesim="yari"] #kampanya .k-alt img{width:190px;height:190px}
+body[data-yerlesim="yari"] #kampanya .k-alt-yazi{margin-left:32px}
+body[data-yerlesim="yari"] #kampanya .k-cagri{font-size:52px}
+body[data-yerlesim="yari"] #kampanya .k-adres{margin-top:12px;font-size:32px}
+/* Site kartı, tam genişlik */
+body[data-yerlesim="yari"] #site-kart{padding:64px 64px 60px}
+body[data-yerlesim="yari"] #site-kart .s-logo{width:190px}
+body[data-yerlesim="yari"] #site-kart .s-ust{margin-top:44px;font-size:42px}
+body[data-yerlesim="yari"] #site-kart .s-adres{font-size:112px}
+body[data-yerlesim="yari"] #site-kart .s-metin{margin-top:26px;font-size:38px}
+body[data-yerlesim="yari"] #site-kart .s-alt{display:flex;align-items:center}
+body[data-yerlesim="yari"] #site-kart .s-qr{width:330px;height:330px;flex:none}
+body[data-yerlesim="yari"] #site-kart .s-alt-yazi{margin-left:44px}
+body[data-yerlesim="yari"] #site-kart .s-qr-yazi{margin-top:0;font-size:32px;line-height:1.25}
+body[data-yerlesim="yari"] #site-kart .s-sosyal{margin-top:30px;font-size:30px}
+/* Pano, tam genişlik */
+body[data-yerlesim="yari"] #pano{padding:64px 64px 56px}
+body[data-yerlesim="yari"] #pano .p-baslik{padding:0;font-size:74px}
+body[data-yerlesim="yari"] #pano img{width:650px;align-self:center}
+body[data-yerlesim="yari"] #pano .p-aciklama{padding:0;font-size:40px}
 body[data-yerlesim="yari"] #panel{left:960px;width:960px}
 body[data-yerlesim="yari"] #ust{height:128px;padding:0 48px}
 body[data-yerlesim="yari"] #logo{height:92px;margin-right:16px}
@@ -233,13 +270,15 @@ body[data-yerlesim="yari"] #site{display:none}
     <div id="kampanya">
       <div class="k-ust" id="k-ust"></div>
       <div class="k-baslik" id="k-baslik"></div>
-      <div class="k-gun" id="k-gun"></div>
-      <div class="k-gun-yazi" id="k-gun-yazi"></div>
-      <div class="k-son" id="k-son"></div>
+      <div class="k-sayac">
+        <div class="k-gun" id="k-gun"></div>
+        <div class="k-sayac-yazi"><div class="k-gun-yazi" id="k-gun-yazi"></div><div class="k-son" id="k-son"></div></div>
+      </div>
       <div class="k-cubuk"><div class="k-dolu" id="k-dolu"></div></div>
-      <div class="k-oran" id="k-oran"></div>
-      <div class="k-tutar" id="k-tutar"></div>
-      <div class="k-tarih" id="k-tarih"></div>
+      <div class="k-bilgi">
+        <div class="k-oran" id="k-oran"></div>
+        <div class="k-bilgi-sag"><div class="k-tutar" id="k-tutar"></div><div class="k-tarih" id="k-tarih"></div></div>
+      </div>
       <div class="k-alt">
         <img class="logo-gorsel" id="k-qr" alt="">
         <div class="k-alt-yazi"><div class="k-cagri" id="k-cagri"></div><div class="k-adres" id="k-adres"></div></div>
@@ -250,9 +289,10 @@ body[data-yerlesim="yari"] #site{display:none}
       <div class="s-ust" id="s-ust"></div>
       <div class="s-adres" id="s-adres"></div>
       <div class="s-metin" id="s-metin"></div>
-      <img class="logo-gorsel s-qr" id="s-qr" alt="">
-      <div class="s-qr-yazi" id="s-qr-yazi"></div>
-      <div class="s-sosyal" id="s-sosyal"></div>
+      <div class="s-alt">
+        <img class="logo-gorsel s-qr" id="s-qr" alt="">
+        <div class="s-alt-yazi"><div class="s-qr-yazi" id="s-qr-yazi"></div><div class="s-sosyal" id="s-sosyal"></div></div>
+      </div>
     </div>
     <div id="pano">
       <div class="p-baslik" id="p-baslik"></div>
@@ -596,7 +636,7 @@ body[data-yerlesim="yari"] #site{display:none}
     el("k-son").textContent = "Son gün " + (+s[2]) + " " + AYLAR[+s[1] - 1] + " " + s[0];
     var tutar = "";
     if (d.O.toplanan) tutar = "Toplanan " + d.O.toplanan;
-    if (d.O.hedef) tutar += (tutar ? ", hedef " : "Hedef ") + d.O.hedef;
+    if (d.O.hedef) tutar += (tutar ? "\n" : "") + "Hedef " + d.O.hedef;
     el("k-tutar").textContent = tutar;
     el("k-tarih").textContent = d.O.tarih ? d.O.tarih + " itibarıyla" : "";
     el("k-cagri").textContent = d.K.cagri || "";
@@ -748,7 +788,7 @@ body[data-yerlesim="yari"] #site{display:none}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "12";
+  var SURUM = "13";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
