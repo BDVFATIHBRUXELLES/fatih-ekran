@@ -130,6 +130,14 @@ body.tv{background:var(--zemin)}
 #site-kart .s-sosyal{margin-top:44px;font-size:25px;font-weight:600;line-height:1.5}
 #site-kart .s-sosyal b{font-weight:800}
 
+/* Günün ayeti ve hadisi (kaynak: Diyanet İşleri Başkanlığı) */
+#soz-kart{position:absolute;left:0;top:0;width:100%;height:100%;display:none;flex-direction:column;padding:70px 56px 60px;background:#FFFFFF;color:var(--yazi);--z-kat:.72}
+#soz-kart .z-etiket{font-family:var(--baslik);font-weight:var(--kalin);font-size:calc(58px * var(--z-kat));line-height:1;color:var(--buyuk)}
+#soz-kart .z-cizgi{margin-top:calc(26px * var(--z-kat));width:calc(120px * var(--z-kat));height:8px;border-radius:999px;background:#F5B93F}
+#soz-kart .z-metin{margin-top:auto;font-size:calc(var(--z-boyut,46px) * var(--z-kat));font-weight:650;line-height:1.32}
+#soz-kart .z-kaynak{margin-top:calc(30px * var(--z-kat));font-size:calc(36px * var(--z-kat));font-weight:750;color:var(--buyuk)}
+#soz-kart .z-alt{margin-top:auto;font-size:calc(26px * var(--z-kat));font-weight:600;opacity:.7}
+
 /* Pano: başlıklı görsel */
 #pano{position:absolute;left:0;top:0;width:100%;height:100%;display:none;flex-direction:column;padding:76px 44px 64px;background:var(--yedek);color:#FFFFFF}
 #pano .p-baslik{text-wrap:balance;padding:0 12px;font-family:var(--baslik);font-weight:var(--kalin);font-size:54px;line-height:1.05;letter-spacing:var(--harf)}
@@ -151,6 +159,7 @@ body.tv{background:var(--zemin)}
 #takvim-yazi{margin-left:30px}
 #ay-yil{font-size:42px;font-weight:750;line-height:1.15;color:var(--yazi)}
 #gun-adi{font-size:42px;font-weight:500;line-height:1.15;color:var(--buyuk)}
+#hicri{margin-top:8px;font-size:28px;font-weight:650;line-height:1.15;color:var(--yazi);opacity:.75}
 
 #kalan{position:absolute;right:0;top:20px;width:624px;height:374px;padding:54px 0 0 52px;background:var(--kutu);border-radius:36px 0 0 36px}
 #kalan-etiket{font-size:38px;font-weight:700;line-height:1.1;color:var(--yazi)}
@@ -235,6 +244,7 @@ body[data-yerlesim="yari"] #site-kart .s-qr{width:330px;height:330px;flex:none}
 body[data-yerlesim="yari"] #site-kart .s-alt-yazi{margin-left:44px}
 body[data-yerlesim="yari"] #site-kart .s-qr-yazi{margin-top:0;font-size:32px;line-height:1.25}
 body[data-yerlesim="yari"] #site-kart .s-sosyal{margin-top:30px;font-size:30px}
+body[data-yerlesim="yari"] #soz-kart{padding:68px 64px 56px;--z-kat:1}
 /* Pano, tam genişlik */
 body[data-yerlesim="yari"] #pano{padding:64px 64px 56px}
 body[data-yerlesim="yari"] #pano .p-baslik{padding:0;font-size:74px}
@@ -247,6 +257,7 @@ body[data-yerlesim="yari"] #orta{top:128px;height:262px}
 body[data-yerlesim="yari"] #takvim{left:48px}
 body[data-yerlesim="yari"] #takvim-yazi{margin-left:16px}
 body[data-yerlesim="yari"] #ay-yil,body[data-yerlesim="yari"] #gun-adi{font-size:30px}
+body[data-yerlesim="yari"] #hicri{margin-top:6px;font-size:21px}
 body[data-yerlesim="yari"] #kalan{top:14px;width:452px;height:234px;padding:30px 0 0 32px;border-radius:28px 0 0 28px}
 body[data-yerlesim="yari"] #kalan-etiket{font-size:27px}
 body[data-yerlesim="yari"] #kalan-sure{margin-top:22px}
@@ -294,6 +305,13 @@ body[data-yerlesim="yari"] #site{display:none}
         <div class="s-alt-yazi"><div class="s-qr-yazi" id="s-qr-yazi"></div><div class="s-sosyal" id="s-sosyal"></div></div>
       </div>
     </div>
+    <div id="soz-kart">
+      <div class="z-etiket" id="z-etiket"></div>
+      <div class="z-cizgi"></div>
+      <div class="z-metin" id="z-metin"></div>
+      <div class="z-kaynak" id="z-kaynak"></div>
+      <div class="z-alt" id="z-alt"></div>
+    </div>
     <div id="pano">
       <div class="p-baslik" id="p-baslik"></div>
       <img id="p-gorsel" alt="">
@@ -312,7 +330,7 @@ body[data-yerlesim="yari"] #site{display:none}
     <div id="orta">
       <div id="takvim">
         <div id="gun-sayi"></div>
-        <div id="takvim-yazi"><div id="ay-yil"></div><div id="gun-adi"></div></div>
+        <div id="takvim-yazi"><div id="ay-yil"></div><div id="gun-adi"></div><div id="hicri"></div></div>
       </div>
       <div id="kalan">
         <div id="kalan-etiket"></div>
@@ -369,6 +387,7 @@ body[data-yerlesim="yari"] #site{display:none}
 <script src="veri/ayarlar.js" onerror="void 0"></script>
 <script src="veri/vakitler.js" onerror="void 0"></script>
 <script src="veri/kampanya.js" onerror="void 0"></script>
+<script src="veri/gunun-sozu.js" onerror="void 0"></script>
 <script src="veri/playlist.js" onerror="void 0"></script>
 <script>
 (function () {
@@ -544,6 +563,7 @@ body[data-yerlesim="yari"] #site{display:none}
     el("gun-sayi").textContent = d.getUTCDate();
     el("ay-yil").textContent = AYLAR[d.getUTCMonth()] + " " + d.getUTCFullYear();
     el("gun-adi").textContent = GUNLER[d.getUTCDay()];
+    el("hicri").textContent = (window.FATIH_HICRI || {})[gunAnahtari(ms)] || "";
 
     var bugun = gunAnahtari(ms), v = gununVakitleri(bugun);
     var etiket = el("kalan-etiket"), sure = el("kalan-sure"), not = el("kalan-not");
@@ -655,7 +675,34 @@ body[data-yerlesim="yari"] #site{display:none}
 
   /* ---------- Video ve görsel döngüsü ---------- */
   var vid = el("vid"), gorsel = el("gorsel"), yedek = el("video-yedek"), kampanya = el("kampanya");
-  var PANELLER = { video: vid, gorsel: gorsel, yedek: yedek, kampanya: kampanya, site: el("site-kart"), pano: el("pano") };
+  var PANELLER = { video: vid, gorsel: gorsel, yedek: yedek, kampanya: kampanya, site: el("site-kart"), pano: el("pano"), soz: el("soz-kart") };
+  var SOZ_ETIKET = { ayet: "Günün ayeti", hadis: "Günün hadisi", dua: "Günün duası" };
+  /* Günün sözü yalnızca tazeyse (bugünün ya da dünün verisi) gösterilir */
+  function sozVerisi(tur) {
+    var G = window.FATIH_GUNUN_SOZU;
+    if (!G || !G.tarih || !G[tur] || !G[tur].metin) return null;
+    var a = gunAnahtari(simdi()).split("-"), b = String(G.tarih).split("-");
+    var fark = Math.round((Date.UTC(+a[0], +a[1] - 1, +a[2]) - Date.UTC(+b[0], +b[1] - 1, +b[2])) / 86400000);
+    if (!(fark >= 0 && fark <= 1)) return null;
+    return G[tur];
+  }
+  function sozCiz(tur) {
+    var v = sozVerisi(tur);
+    if (!v) return false;
+    var kart = el("soz-kart"), metin = el("z-metin"), n = v.metin.length;
+    el("z-etiket").textContent = SOZ_ETIKET[tur] || "";
+    metin.textContent = "\u201C" + v.metin + "\u201D";
+    el("z-kaynak").textContent = v.kaynak || "";
+    el("z-alt").textContent = "Kaynak: Diyanet İşleri Başkanlığı";
+    var boyut = n <= 110 ? 64 : n <= 180 ? 54 : n <= 260 ? 46 : n <= 360 ? 40 : n <= 520 ? 34 : 30;
+    kart.style.setProperty("--z-boyut", boyut + "px");
+    return true;
+  }
+  /* Metin karta sığmıyorsa sığana kadar küçült */
+  function sozSigdir() {
+    var kart = el("soz-kart"), boyut = parseInt(kart.style.getPropertyValue("--z-boyut"), 10) || 46, tur = 0;
+    while (kart.scrollHeight > kart.clientHeight + 1 && boyut > 22 && tur < 30) { boyut -= 2; tur++; kart.style.setProperty("--z-boyut", boyut + "px"); }
+  }
   function panelGoster(ad) {
     for (var k in PANELLER) PANELLER[k].style.display = (k === ad) ? ((k === "video" || k === "gorsel") ? "block" : "flex") : "none";
   }
@@ -685,6 +732,7 @@ body[data-yerlesim="yari"] #site{display:none}
       var o = P[i];
       if (!o) continue;
       if (o.tip === "kampanya") { if (!kampanyaDurumu()) continue; }
+      else if (o.tip === "soz") { if (!sozVerisi(o.tur || "ayet")) continue; }
       else if (o.tip !== "site" && !o.dosya) continue;
       if (o.ekran && o.ekran.indexOf(ekran) === -1) continue;
       if (o.bas && bugun < o.bas) continue;
@@ -707,6 +755,13 @@ body[data-yerlesim="yari"] #site{display:none}
       hataSayisi = 0;
       panelGoster("kampanya");
       gorselSayaci = setTimeout(sonraki, (aktif.sure || 12) * 1000);
+    } else if (aktif.tip === "soz") {
+      try { vid.pause(); } catch (e) {}
+      if (!sozCiz(aktif.tur || "ayet")) { gorselSayaci = setTimeout(sonraki, 500); return; }
+      hataSayisi = 0;
+      panelGoster("soz");
+      sozSigdir();
+      gorselSayaci = setTimeout(sonraki, (aktif.sure || 20) * 1000);
     } else if (aktif.tip === "site") {
       try { vid.pause(); } catch (e) {}
       siteCiz();
@@ -783,12 +838,13 @@ body[data-yerlesim="yari"] #site{display:none}
   setInterval(function () { yenidenYukle("veri/playlist.js"); }, 2 * 60000);
   setInterval(function () { yenidenYukle("veri/vakitler.js"); }, 60 * 60000);
   setInterval(function () { yenidenYukle("veri/kampanya.js"); }, 10 * 60000);
+  setInterval(function () { yenidenYukle("veri/gunun-sozu.js"); }, 15 * 60000);
 
   /* ---------- Kendiliğinden güncelleme ----------
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "13";
+  var SURUM = "14";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
