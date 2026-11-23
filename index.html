@@ -172,6 +172,7 @@ body.tv{background:var(--zemin)}
 .vakit .ad{font-size:36px;font-weight:650;color:var(--bant-ad)}
 .vakit .zaman{margin-top:32px;font-size:var(--b-vakit);font-weight:var(--kalin);line-height:1}
 .vakit.gecti{opacity:.72}
+.vakit.cemaat{display:none}
 .vakit.siradaki{background:var(--secili);color:var(--secili-yazi)}
 .vakit.siradaki .ad{color:var(--secili-yazi);font-weight:800}
 
@@ -225,9 +226,9 @@ body[data-yerlesim="yari"] #kampanya .k-gun-yazi{margin-top:0;font-size:88px}
 body[data-yerlesim="yari"] #kampanya .k-son{font-size:34px}
 body[data-yerlesim="yari"] #kampanya .k-cubuk{margin-top:52px;height:38px}
 body[data-yerlesim="yari"] #kampanya .k-bilgi{display:flex;justify-content:space-between;align-items:flex-start;margin-top:22px}
-body[data-yerlesim="yari"] #kampanya .k-oran{margin-top:0;font-size:50px;white-space:nowrap}
-body[data-yerlesim="yari"] #kampanya .k-bilgi-sag{text-align:right;margin-left:24px}
-body[data-yerlesim="yari"] #kampanya .k-tutar{margin-top:4px;font-size:29px}
+body[data-yerlesim="yari"] #kampanya .k-oran{margin-top:0;font-size:46px;white-space:nowrap}
+body[data-yerlesim="yari"] #kampanya .k-bilgi-sag{text-align:right;margin-left:24px;flex:none}
+body[data-yerlesim="yari"] #kampanya .k-tutar{margin-top:4px;font-size:27px;white-space:pre}
 body[data-yerlesim="yari"] #kampanya .k-tarih{font-size:25px}
 body[data-yerlesim="yari"] #kampanya .k-alt img{width:190px;height:190px}
 body[data-yerlesim="yari"] #kampanya .k-alt-yazi{margin-left:32px}
@@ -259,13 +260,18 @@ body[data-yerlesim="yari"] #takvim-yazi{margin-left:16px}
 body[data-yerlesim="yari"] #ay-yil,body[data-yerlesim="yari"] #gun-adi{font-size:30px}
 body[data-yerlesim="yari"] #hicri{margin-top:6px;font-size:21px}
 body[data-yerlesim="yari"] #kalan{top:14px;width:452px;height:234px;padding:30px 0 0 32px;border-radius:28px 0 0 28px}
-body[data-yerlesim="yari"] #kalan-etiket{font-size:27px}
+body[data-yerlesim="yari"] #kalan-etiket{font-size:25px;white-space:nowrap}
 body[data-yerlesim="yari"] #kalan-sure{margin-top:22px}
 body[data-yerlesim="yari"] #kalan-not{margin-top:14px;font-size:24px;max-width:400px}
 body[data-yerlesim="yari"] #vakitler{top:390px;height:560px;padding:24px 40px 0;display:block}
 body[data-yerlesim="yari"] .vakit{display:flex;align-items:center;justify-content:space-between;height:78px;margin:0 0 8px;padding:0 28px;border-radius:18px;text-align:left}
 body[data-yerlesim="yari"] .vakit .ad{font-size:40px}
 body[data-yerlesim="yari"] .vakit .zaman{margin-top:0}
+body[data-yerlesim="yari"] .vakit.cemaat{display:flex}
+body[data-yerlesim="yari"] #vakitler.yedi{padding-top:20px}
+body[data-yerlesim="yari"] #vakitler.yedi .vakit{height:68px;margin-bottom:6px}
+body[data-yerlesim="yari"] #vakitler.yedi .vakit .ad{font-size:36px}
+body[data-yerlesim="yari"] #vakitler.yedi .vakit .zaman{font-size:52px}
 body[data-yerlesim="yari"] #alt{top:950px;height:130px;padding:0 48px}
 body[data-yerlesim="yari"] #duyuru{font-size:29px;max-width:none}
 body[data-yerlesim="yari"] #site{display:none}
@@ -529,19 +535,44 @@ body[data-yerlesim="yari"] #site{display:none}
 
   /* ---------- Vakit şeridi ---------- */
   var sonCizim = "";
-  function vakitleriCiz(v, siradaki, namazdaki) {
-    var imza = (v ? v.join() : "yok") + "|" + siradaki + "|" + namazdaki;
+  /* Günün sırası: altı vakit ve (ayarlıysa) sabah namazının cemaat saati */
+  function saatEkle(saat, dk) {
+    var p = saat.split(":"), t = (+p[0]) * 60 + (+p[1]) + dk;
+    t = ((t % 1440) + 1440) % 1440;
+    return iki(Math.floor(t / 60)) + ":" + iki(t % 60);
+  }
+  function sabahSaati(v) {
+    var sb = A.sabahNamazi;
+    if (!sb || typeof sb.gunestenOnce !== "number") return null;
+    var saat = saatEkle(v[1], -sb.gunestenOnce);
+    return (saat > v[0] && saat < v[1]) ? saat : null; /* imsak ile güneş arasında olmalı */
+  }
+  function gunSirasi(v) {
+    var S = [], i, sabah = sabahSaati(v);
+    for (i = 0; i < 6; i++) {
+      S.push({ ad: VAKIT_ADLARI[i], yon: VAKIT_YONELME[i], saat: v[i], vakit: i });
+      if (i === 0 && sabah) S.push({ ad: "Sabah namazı", yon: "Sabah namazına", saat: sabah, cemaat: true });
+    }
+    return S;
+  }
+
+  function vakitleriCiz(v, S, siradaki, namazdaki) {
+    var imza = (v ? v.join() : "yok") + "|" + (S ? S.length + S[1].saat : "") + "|" + siradaki + "|" + namazdaki;
     if (imza === sonCizim) return;
     sonCizim = imza;
     var kap = el("vakitler"), nkap = el("namaz-vakitler"), i;
     kap.textContent = ""; nkap.textContent = "";
-    for (i = 0; i < 6; i++) {
+    var satirlar = S || [];
+    if (!S) for (i = 0; i < 6; i++) satirlar.push({ ad: VAKIT_ADLARI[i], saat: "--:--" });
+    kap.className = satirlar.length > 6 ? "yedi" : "";
+    for (i = 0; i < satirlar.length; i++) {
       var h = document.createElement("div");
-      h.className = "vakit" + (v && siradaki === i ? " siradaki" : "") + (v && siradaki !== -1 && i < siradaki ? " gecti" : "");
-      var ad = document.createElement("div"); ad.className = "ad"; ad.textContent = VAKIT_ADLARI[i];
-      var z = document.createElement("div"); z.className = "zaman rakam oransal"; z.textContent = v ? v[i] : "--:--";
+      h.className = "vakit" + (satirlar[i].cemaat ? " cemaat" : "") + (v && siradaki === i ? " siradaki" : "") + (v && siradaki !== -1 && i < siradaki ? " gecti" : "");
+      var ad = document.createElement("div"); ad.className = "ad"; ad.textContent = satirlar[i].ad;
+      var z = document.createElement("div"); z.className = "zaman rakam oransal"; z.textContent = satirlar[i].saat;
       h.appendChild(ad); h.appendChild(z); kap.appendChild(h);
-
+    }
+    for (i = 0; i < 6; i++) {
       var n = document.createElement("div");
       n.className = "nv" + (namazdaki === i ? " simdi" : "");
       var nad = document.createElement("div"); nad.className = "ad"; nad.textContent = VAKIT_ADLARI[i];
@@ -569,20 +600,20 @@ body[data-yerlesim="yari"] #site{display:none}
     var etiket = el("kalan-etiket"), sure = el("kalan-sure"), not = el("kalan-not");
 
     if (!v) {
-      vakitleriCiz(null, -1, -1);
+      vakitleriCiz(null, null, -1, -1);
       etiket.textContent = "Bugünün vakitleri yüklenemedi";
       sure.style.display = "none";
       not.style.display = "block";
       not.textContent = "İnternet bağlantısını kontrol edin. Vakitler gelince ekran kendiliğinden düzelir.";
-      namazModu(false, -1);
+      namazModu(false, "");
       return;
     }
 
-    var i, siradaki = -1, hedef = null, hedefEtiket = "";
-    for (i = 0; i < 6; i++) if (vakitMs(bugun, v[i]) > ms) { siradaki = i; break; }
+    var i, siradaki = -1, hedef = null, hedefEtiket = "", S = gunSirasi(v);
+    for (i = 0; i < S.length; i++) if (vakitMs(bugun, S[i].saat) > ms) { siradaki = i; break; }
     if (siradaki !== -1) {
-      hedef = vakitMs(bugun, v[siradaki]);
-      hedefEtiket = VAKIT_YONELME[siradaki] + " kalan süre";
+      hedef = vakitMs(bugun, S[siradaki].saat);
+      hedefEtiket = S[siradaki].yon + " kalan süre";
     } else {
       var yarin = gunAnahtari(ms + 86400000), yv = gununVakitleri(yarin);
       if (yv) { hedef = vakitMs(yarin, yv[0]); hedefEtiket = "Yarınki imsaka kalan süre"; }
@@ -602,24 +633,30 @@ body[data-yerlesim="yari"] #site{display:none}
     }
 
     /* Namaz modu penceresi içinde miyiz? */
-    var namazdaki = -1;
-    if (ekranAyar().namazModu && A.namazModu) {
-      for (i = 0; i < 6; i++) {
+    var namazdaki = -1, namazBaslik = "";
+    if (ekranAyar().namazModu) {
+      for (i = 0; i < 6 && A.namazModu; i++) {
         var k = NAMAZ_ANAHTAR[i], ay = k ? A.namazModu[k] : null;
         if (!ay) continue;
         var bas = vakitMs(bugun, v[i]) + (ay.bas || 0) * 60000;
-        if (ms >= bas && ms < bas + (ay.sure || 0) * 60000) { namazdaki = i; break; }
+        if (ms >= bas && ms < bas + (ay.sure || 0) * 60000) { namazdaki = i; namazBaslik = NAMAZ_ADLARI[i] || ""; break; }
+      }
+      /* Sabah namazı cemaat saati: güneşten belirli dakika önce */
+      var sabah = sabahSaati(v), sb = A.sabahNamazi;
+      if (!namazBaslik && sabah && sb.sure) {
+        var sBas = vakitMs(bugun, sabah);
+        if (ms >= sBas && ms < sBas + sb.sure * 60000) namazBaslik = "Sabah namazı";
       }
     }
-    vakitleriCiz(v, siradaki, namazdaki);
-    namazModu(namazdaki !== -1, namazdaki);
+    vakitleriCiz(v, S, siradaki, namazdaki);
+    namazModu(!!namazBaslik, namazBaslik);
 
     /* Gece 03.30'da sayfayı tazele: yeni sürüm varsa kendiliğinden gelir */
     if (tvModu && !simFark && d.getUTCHours() === 3 && d.getUTCMinutes() === 30 && d.getUTCSeconds() === 0 && performance.now() > 3600000) location.reload();
   }
 
-  function namazModu(acik, hangi) {
-    if (acik) el("namaz-baslik").textContent = NAMAZ_ADLARI[hangi] || "";
+  function namazModu(acik, baslik) {
+    if (acik) el("namaz-baslik").textContent = baslik || "";
     if (acik === namazAcik) return;
     namazAcik = acik;
     el("namaz").className = acik ? "acik" : "";
@@ -844,7 +881,7 @@ body[data-yerlesim="yari"] #site{display:none}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "14";
+  var SURUM = "15";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");

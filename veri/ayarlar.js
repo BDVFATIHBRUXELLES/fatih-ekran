@@ -33,6 +33,13 @@ window.FATIH_AYARLAR = {
   },
 
   /*
+    Sabah namazı cemaatle, güneşin doğuşundan şu kadar dakika önce kılınır (başkanın verdiği bilgi).
+    Ekranda vakit listesinde ayrı satırda görünür ve geri sayıma girer.
+    sure = bu saatte namaz modunun kaç dakika süreceği (varsayım).
+  */
+  sabahNamazi: { gunestenOnce: 45, sure: 25 },
+
+  /*
     5 Ek Bina kampanyası. Kalan gün her gün kendiliğinden hesaplanır.
     Oran, tutarlar ve "itibarıyla" tarihi bxlfatih.com ana sayfasından saatte bir otomatik okunur
     (veri/kampanya.js). Buradaki yuzde yalnızca o dosya okunamazsa kullanılan yedek değerdir.
@@ -72,6 +79,7 @@ window.FATIH_AYARLAR = {
   duyurular: [
     "5 Ek Bina kampanyası: tamamlanan %{yuzde}, kalan süre {gun} gün.",
     "Camimiz her gün sabah 05.30'dan itibaren açıktır.",
+    "Sabah namazı, güneşin doğuşundan 45 dakika önce cemaatle kılınır.",
     { metin: "Bir tuğla da sen koy. Bağış için: bxlfatih.com/bagis-yap", bit: "2026-12-31" },
     "Sabah namazından önce vaaz ve sohbet, namazdan sonra çay ocağında buluşuyoruz.",
     { metin: "Bağış hesabı: BE54 0689 5841 5597. Açıklama: Fatih Camii Ek Bina", bit: "2026-12-31" },
