@@ -32,14 +32,32 @@ window.FATIH_AYARLAR = {
 
   /*
     5 Ek Bina kampanyası. Kalan gün her gün kendiliğinden hesaplanır.
-    yuzde: toplanan oran. Bu sayı otomatik gelmez; değişince buradan güncellenir.
+    Oran, tutarlar ve "itibarıyla" tarihi bxlfatih.com ana sayfasından saatte bir otomatik okunur
+    (veri/kampanya.js). Buradaki yuzde yalnızca o dosya okunamazsa kullanılan yedek değerdir.
     Son gün geçince kampanya kartı ve duyurusu kendiliğinden kalkar.
   */
   kampanya: {
     baslik: "5 Ek Bina",
     altBaslik: "5 bina, 5 güzel umut",
     sonGun: "2026-12-31",
-    yuzde: 65
+    yuzde: 65,
+    cagri: "Bir tuğla da sen koy",
+    adres: "bxlfatih.com/bagis-yap",
+    qr: "medya/qr-bagis.png"
+  },
+
+  /* Web sitesi kartı */
+  siteKarti: {
+    ust: "Camimiz internette",
+    adres: "bxlfatih.com",
+    metin: "Haberler, faaliyetler, eğitim ve 5 Bina Projesi",
+    qr: "medya/qr-site.png",
+    qrYazi: "Telefonunuzun kamerasıyla okutun",
+    sosyal: [
+      { ad: "Instagram", hesap: "bruksel.fatih.camii" },
+      { ad: "YouTube", hesap: "@bxlfatihcamii" },
+      { ad: "TikTok", hesap: "@fatihcamii_bxl" }
+    ]
   },
 
   /* Alt bantta sırayla dönen duyurular. {gun} ve {yuzde} kampanyadan kendiliğinden dolar. */

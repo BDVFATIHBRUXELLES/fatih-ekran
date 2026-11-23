@@ -16,9 +16,15 @@ Bruxelles Fatih Camii'nin mescit ve çay ocağı ekranları: namaz vakitleri, ge
 | `veri/playlist.js` | Ekranda dönecek videolar ve görseller |
 | `veri/vakitler.js` | Namaz vakitleri |
 | `veri/surum.js` | Sayfanın sürümü; değişince ekranlar kendini yeniler |
+| `veri/kampanya.js` | 5 Ek Bina oranı ve tutarları. Otomatik yazılır, elle değiştirilmez |
 | `medya/` | Videolar, görseller, logo |
 
 Ekranlar `playlist.js` dosyasını 2 dakikada, `vakitler.js` dosyasını saatte bir yeniden okur.
+
+## Otomatik işler
+
+- **Kampanya oranı:** `.github/workflows/kampanya.yml` saatte bir bxlfatih.com ana sayfasını okur. "%.. tamamlandı", toplanan tutar, hedef ve "itibarıyla" tarihi değiştiyse `veri/kampanya.js` güncellenir. Sitedeki rakamı değiştirmek yeterlidir.
+- **Kalan gün:** Ekran her gün kendisi hesaplar.
 
 ## Bilinen eksikler
 
