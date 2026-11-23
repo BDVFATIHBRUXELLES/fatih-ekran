@@ -715,8 +715,19 @@ body[data-yerlesim="yari"] #site{display:none}
   function duyuruGoster() {
     var D = A.duyurular || [], kutu = el("duyuru");
     if (!D.length) { kutu.textContent = ""; return; }
-    var metin = null, deneme = 0;
-    while (metin === null && deneme < D.length) { metin = metinDoldur(String(D[duyuruSira % D.length])); duyuruSira++; deneme++; }
+    /* Duyuru düz yazı ya da { metin, bas, bit, ekran } olabilir; tarihi geçen ya da bu ekrana ait olmayan atlanır */
+    var metin = null, deneme = 0, bugun = gunAnahtari(simdi());
+    while (metin === null && deneme < D.length) {
+      var d = D[duyuruSira % D.length];
+      duyuruSira++; deneme++;
+      if (d && typeof d === "object") {
+        if (!d.metin) continue;
+        if (d.bas && bugun < d.bas) continue;
+        if (d.bit && bugun > d.bit) continue;
+        if (d.ekran && d.ekran.indexOf(ekran) === -1) continue;
+        metin = metinDoldur(String(d.metin));
+      } else if (d) metin = metinDoldur(String(d));
+    }
     if (metin === null) { kutu.textContent = ""; return; }
     kutu.style.opacity = 0;
     setTimeout(function () { kutu.textContent = metin; kutu.style.opacity = 1; }, 650);
@@ -737,7 +748,7 @@ body[data-yerlesim="yari"] #site{display:none}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "11";
+  var SURUM = "12";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
