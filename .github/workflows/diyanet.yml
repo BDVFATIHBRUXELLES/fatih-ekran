@@ -1,0 +1,51 @@
+name: Diyanet verilerini güncelle
+
+# Namaz vakitlerini, hicri tarihi ve günün ayeti ile hadisini Diyanet'in sayfalarından okur.
+# Gece yarısından sonra ve gün içinde birkaç kez çalışır; veri değiştiyse dosyaları günceller.
+on:
+  schedule:
+    - cron: "5 23 * * *"
+    - cron: "35 0 * * *"
+    - cron: "35 4 * * *"
+    - cron: "35 10 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: diyanet
+  cancel-in-progress: false
+
+jobs:
+  guncelle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Diyanet'ten oku
+        run: node araclar/diyanet-guncelle.mjs
+
+      - name: Değiştiyse kaydet
+        id: kaydet
+        run: |
+          git add veri/vakitler.js veri/gunun-sozu.js 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "Değişiklik yok"
+            exit 0
+          fi
+          git config user.name "fatih-ekran-otomatik"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Diyanet verileri güncellendi (vakitler, günün ayeti ve hadisi)"
+          git pull --rebase origin main
+          git push
+          echo "degisti=1" >> "$GITHUB_OUTPUT"
+
+      - name: Sayfayı yeniden yayınla
+        if: steps.kaydet.outputs.degisti == '1'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
