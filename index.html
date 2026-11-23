@@ -138,6 +138,20 @@ body.tv{background:var(--zemin)}
 #soz-kart .z-kaynak{margin-top:calc(30px * var(--z-kat));font-size:calc(36px * var(--z-kat));font-weight:750;color:var(--buyuk)}
 #soz-kart .z-alt{margin-top:auto;font-size:calc(26px * var(--z-kat));font-weight:600;opacity:.7}
 
+/* Bilgi kartı: bir kurumu ya da hizmeti maddelerle tanıtır (metinler veri/ayarlar.js içinde) */
+#bilgi-kart{position:absolute;left:0;top:0;width:100%;height:100%;display:none;flex-direction:column;padding:64px 56px 56px;background:var(--yedek);color:#FFFFFF;--b-kat:.66}
+#bilgi-kart .b-logo{width:calc(120px * var(--b-kat));height:auto;display:none}
+#bilgi-kart .b-ust{margin-top:calc(28px * var(--b-kat));font-size:calc(36px * var(--b-kat));font-weight:650;color:var(--yedek-ikincil)}
+#bilgi-kart .b-baslik{margin-top:6px;font-family:var(--baslik);font-weight:var(--kalin);font-size:calc(76px * var(--b-kat));line-height:1.04;letter-spacing:var(--harf);text-wrap:balance}
+#bilgi-kart .b-liste{margin-top:auto;list-style:none}
+#bilgi-kart .b-liste li{padding:calc(13px * var(--b-kat)) 0;border-top:2px solid rgba(255,255,255,.28);font-size:calc(35px * var(--b-kat));font-weight:650;line-height:1.2}
+#bilgi-kart .b-liste li:last-child{border-bottom:2px solid rgba(255,255,255,.28)}
+#bilgi-kart .b-alt{margin-top:auto;display:flex;align-items:center}
+#bilgi-kart .b-alt img{width:calc(160px * var(--b-kat));height:calc(160px * var(--b-kat));border-radius:14px;background:#FFFFFF;display:none;flex:none}
+#bilgi-kart .b-alt-yazi{margin-left:calc(30px * var(--b-kat))}
+#bilgi-kart .b-adres{font-family:var(--baslik);font-weight:var(--kalin);font-size:calc(48px * var(--b-kat));line-height:1.1}
+#bilgi-kart .b-not{margin-top:8px;font-size:calc(29px * var(--b-kat));font-weight:600;line-height:1.3;color:var(--yedek-ikincil);white-space:pre-line}
+
 /* Pano: başlıklı görsel */
 #pano{position:absolute;left:0;top:0;width:100%;height:100%;display:none;flex-direction:column;padding:76px 44px 64px;background:var(--yedek);color:#FFFFFF}
 #pano .p-baslik{text-wrap:balance;padding:0 12px;font-family:var(--baslik);font-weight:var(--kalin);font-size:54px;line-height:1.05;letter-spacing:var(--harf)}
@@ -246,6 +260,7 @@ body[data-yerlesim="yari"] #site-kart .s-alt-yazi{margin-left:44px}
 body[data-yerlesim="yari"] #site-kart .s-qr-yazi{margin-top:0;font-size:32px;line-height:1.25}
 body[data-yerlesim="yari"] #site-kart .s-sosyal{margin-top:30px;font-size:30px}
 body[data-yerlesim="yari"] #soz-kart{padding:68px 64px 56px;--z-kat:1}
+body[data-yerlesim="yari"] #bilgi-kart{padding:60px 64px 54px;--b-kat:1}
 /* Pano, tam genişlik */
 body[data-yerlesim="yari"] #pano{padding:64px 64px 56px}
 body[data-yerlesim="yari"] #pano .p-baslik{padding:0;font-size:74px}
@@ -317,6 +332,16 @@ body[data-yerlesim="yari"] #site{display:none}
       <div class="z-metin" id="z-metin"></div>
       <div class="z-kaynak" id="z-kaynak"></div>
       <div class="z-alt" id="z-alt"></div>
+    </div>
+    <div id="bilgi-kart">
+      <img class="logo-gorsel b-logo" id="b-logo" alt="">
+      <div class="b-ust" id="b-ust"></div>
+      <div class="b-baslik" id="b-baslik"></div>
+      <ul class="b-liste" id="b-liste"></ul>
+      <div class="b-alt">
+        <img class="logo-gorsel" id="b-qr" alt="">
+        <div class="b-alt-yazi"><div class="b-adres" id="b-adres"></div><div class="b-not" id="b-not"></div></div>
+      </div>
     </div>
     <div id="pano">
       <div class="p-baslik" id="p-baslik"></div>
@@ -712,7 +737,26 @@ body[data-yerlesim="yari"] #site{display:none}
 
   /* ---------- Video ve görsel döngüsü ---------- */
   var vid = el("vid"), gorsel = el("gorsel"), yedek = el("video-yedek"), kampanya = el("kampanya");
-  var PANELLER = { video: vid, gorsel: gorsel, yedek: yedek, kampanya: kampanya, site: el("site-kart"), pano: el("pano"), soz: el("soz-kart") };
+  var PANELLER = { video: vid, gorsel: gorsel, yedek: yedek, kampanya: kampanya, site: el("site-kart"), pano: el("pano"), soz: el("soz-kart"), bilgi: el("bilgi-kart") };
+  function bilgiVerisi(ad) { var B = A.bilgiKartlari || {}; return (ad && B[ad] && B[ad].baslik) ? B[ad] : null; }
+  function resimAyarla(im, yol) {
+    if (yol) { if (im.getAttribute("src") !== yol) im.src = yol; }
+    else { im.removeAttribute("src"); im.style.display = "none"; }
+  }
+  function bilgiCiz(ad) {
+    var b = bilgiVerisi(ad);
+    if (!b) return false;
+    el("b-ust").textContent = b.ust || "";
+    el("b-baslik").textContent = b.baslik;
+    el("b-adres").textContent = b.adres || "";
+    el("b-not").textContent = b.not || "";
+    resimAyarla(el("b-logo"), b.logo);
+    resimAyarla(el("b-qr"), b.qr);
+    var liste = el("b-liste"), M = b.maddeler || [], i;
+    liste.textContent = "";
+    for (i = 0; i < M.length; i++) { var li = document.createElement("li"); li.textContent = M[i]; liste.appendChild(li); }
+    return true;
+  }
   var SOZ_ETIKET = { ayet: "Günün ayeti", hadis: "Günün hadisi", dua: "Günün duası" };
   /* Günün sözü yalnızca tazeyse (bugünün ya da dünün verisi) gösterilir */
   function sozVerisi(tur) {
@@ -770,6 +814,7 @@ body[data-yerlesim="yari"] #site{display:none}
       if (!o) continue;
       if (o.tip === "kampanya") { if (!kampanyaDurumu()) continue; }
       else if (o.tip === "soz") { if (!sozVerisi(o.tur || "ayet")) continue; }
+      else if (o.tip === "bilgi") { if (!bilgiVerisi(o.kart)) continue; }
       else if (o.tip !== "site" && !o.dosya) continue;
       if (o.ekran && o.ekran.indexOf(ekran) === -1) continue;
       if (o.bas && bugun < o.bas) continue;
@@ -799,6 +844,12 @@ body[data-yerlesim="yari"] #site{display:none}
       panelGoster("soz");
       sozSigdir();
       gorselSayaci = setTimeout(sonraki, (aktif.sure || 20) * 1000);
+    } else if (aktif.tip === "bilgi") {
+      try { vid.pause(); } catch (e) {}
+      if (!bilgiCiz(aktif.kart)) { gorselSayaci = setTimeout(sonraki, 500); return; }
+      hataSayisi = 0;
+      panelGoster("bilgi");
+      gorselSayaci = setTimeout(sonraki, (aktif.sure || 18) * 1000);
     } else if (aktif.tip === "site") {
       try { vid.pause(); } catch (e) {}
       siteCiz();
@@ -881,7 +932,7 @@ body[data-yerlesim="yari"] #site{display:none}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "15";
+  var SURUM = "16";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");

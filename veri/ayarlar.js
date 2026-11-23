@@ -70,6 +70,28 @@ window.FATIH_AYARLAR = {
   },
 
   /*
+    Bilgi kartları: bir kurumu ya da hizmeti maddelerle tanıtır.
+    Belçika Diyanet Vakfı bilgilerinin kaynağı: diyanet.be (23.11.2026).
+  */
+  bilgiKartlari: {
+    bdv: {
+      logo: "medya/logo-beyaz.png",
+      ust: "1982'den bu yana",
+      baslik: "Belçika Diyanet Vakfı",
+      maddeler: [
+        "73 cami ve yüzden fazla dernek",
+        "Cenaze Nakil Fonu: 38.000 kayıtlı aile",
+        "Hac ve umre organizasyonları",
+        "Eğitim: yaklaşık 5.000 öğrenci",
+        "Hukuk danışmanlığı ve sosyal hizmetler"
+      ],
+      adres: "diyanet.be",
+      not: "+32 2 218 57 55\ninfo@diyanet.be",
+      qr: "medya/qr-bdv.png"
+    }
+  },
+
+  /*
     Alt bantta sırayla dönen duyurular. {gun} ve {yuzde} kampanyadan kendiliğinden dolar.
     Bir duyuru düz yazı olabilir ya da { metin, bas, bit, ekran } biçiminde yazılabilir:
     bas/bit = ilk ve son gün (YYYY-AA-GG), ekran = ["mescit"] ya da ["cay"].
@@ -93,6 +115,8 @@ window.FATIH_AYARLAR = {
     "Bizi takip edin: Instagram bruksel.fatih.camii, YouTube @bxlfatihcamii, TikTok @fatihcamii_bxl",
     "Camimiz 1978'den bu yana Schaerbeek'te hizmet veriyor.",
     "Bir yetkiliyle görüşmek için ziyaretinizden önce arayın: +32 494 12 06 14",
-    "Haberler ve faaliyetler için: bxlfatih.com"
+    "Haberler ve faaliyetler için: bxlfatih.com",
+    "Belçika Diyanet Vakfı: hac ve umre, cenaze nakil fonu, eğitim ve sosyal hizmetler. diyanet.be",
+    "Belçika Diyanet Vakfı bilgi hattı: +32 2 218 57 55, hafta içi 09.30–12.30 ve 14.00–16.00"
   ]
 };
