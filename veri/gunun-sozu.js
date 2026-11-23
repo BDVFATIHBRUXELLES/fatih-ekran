@@ -1,7 +1,7 @@
 /* Günün ayeti, hadisi ve duası. Bu dosya otomatik yazılır, elle değiştirmeyin.
    Kaynak: Diyanet İşleri Başkanlığı, diyanet.gov.tr */
 window.FATIH_GUNUN_SOZU = {
- "tarih": "2026-11-23",
+ "tarih": "2026-11-24",
  "ayet": {
   "metin": "Sizin için belirlenen bir gün vardır ki, ondan ne bir saat geri kalabilirsiniz, ne de ileri geçebilirsiniz.",
   "kaynak": "Seb'e, 34/30"
