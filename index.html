@@ -338,6 +338,39 @@ body[data-yerlesim="yari"] #duyuru{font-size:29px;max-width:none}
 body[data-yerlesim="yari"] #site{display:none}
 
 @media (prefers-reduced-motion:reduce){#duyuru,#namaz,#namaz.acik{transition:none}}
+/* ---- Üst şerit düzeni (veri/ayarlar.js: yanSayfa) ----
+   Namaz vakitleri üstte tek şerit; altında solda dönen içerik, sağda sabit duran sayfa (bağış havuzu); en altta duyurular.
+   İçerik alanı 1220×1080 çizilip 960×850'ye küçültülür: kartlar yarıyı tam doldurur. */
+#yan-sayfa{position:absolute;left:960px;top:150px;width:960px;height:850px;display:none;overflow:hidden;background:#F2FBFD}
+#yan-sayfa iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
+body[data-duzen="ust"] #yan-sayfa{display:block}
+body[data-duzen="ust"] #video-alani{left:0;top:150px;width:1220px;height:1080px;transform:scale(.78704);transform-origin:0 0}
+body[data-duzen="ust"] #panel{left:0;width:1920px}
+body[data-duzen="ust"] #panel #ust{left:0;top:0;width:1920px;height:150px;padding:20px 36px 0;align-items:flex-start;background:var(--zemin)}
+body[data-duzen="ust"] #panel #kimlik{align-items:flex-start}
+body[data-duzen="ust"] #panel #logo{height:108px;margin-right:16px}
+body[data-duzen="ust"] #panel #cami-adi{margin-top:8px;font-size:25px;line-height:1.2}
+body[data-duzen="ust"] #panel #saat{margin-top:2px;font-size:60px;line-height:1}
+body[data-duzen="ust"] #panel #orta{left:0;top:0;width:1920px;height:150px}
+body[data-duzen="ust"] #panel #takvim{left:160px;top:66px;height:auto;align-items:baseline}
+body[data-duzen="ust"] #panel #gun-sayi{font-family:inherit;font-size:21px;font-weight:750;line-height:1.2;letter-spacing:0;color:var(--yazi)}
+body[data-duzen="ust"] #panel #takvim-yazi{margin-left:7px;display:flex;align-items:baseline}
+body[data-duzen="ust"] #panel #ay-yil,body[data-duzen="ust"] #panel #gun-adi{font-size:21px;line-height:1.2;white-space:nowrap}
+body[data-duzen="ust"] #panel #gun-adi{margin-left:8px}
+body[data-duzen="ust"] #panel #hicri{position:absolute;left:0;top:32px;margin:0;font-size:18px;white-space:nowrap}
+body[data-duzen="ust"] #panel #kalan{right:36px;top:88px;width:auto;height:auto;padding:0;background:none;border-radius:0;display:flex;align-items:baseline}
+body[data-duzen="ust"] #panel #kalan-etiket{font-size:19px;white-space:nowrap}
+body[data-duzen="ust"] #panel #kalan-sure{margin-top:0;margin-left:10px;font-size:31px}
+body[data-duzen="ust"] #panel #kalan-not{margin:0;font-size:17px;line-height:1.2;max-width:400px;text-align:right}
+body[data-duzen="ust"] #panel #vakitler,body[data-duzen="ust"] #panel #vakitler.yedi{left:452px;top:16px;width:968px;height:118px;padding:0 6px;display:flex;border-radius:22px}
+body[data-duzen="ust"] #panel #vakitler .vakit,body[data-duzen="ust"] #panel #vakitler.yedi .vakit{display:block;flex:1 1 0;height:auto;margin:8px 3px;padding:13px 0 0;border-radius:16px;text-align:center}
+body[data-duzen="ust"] #panel #vakitler .vakit.cemaat{flex:1.2 1 0}
+body[data-duzen="ust"] #panel #vakitler.yedi .vakit.cemaat .ad{font-size:19px}
+body[data-duzen="ust"] #panel #vakitler .vakit .ad,body[data-duzen="ust"] #panel #vakitler.yedi .vakit .ad{font-size:20px;line-height:1.2;white-space:nowrap}
+body[data-duzen="ust"] #panel #vakitler .vakit .zaman,body[data-duzen="ust"] #panel #vakitler.yedi .vakit .zaman{margin-top:8px;font-size:42px}
+body[data-duzen="ust"] #panel #alt{left:0;top:1000px;width:1920px;height:80px;padding:0 40px}
+body[data-duzen="ust"] #panel #duyuru{font-size:28px;line-height:1.2;max-width:none}
+body[data-duzen="ust"] #panel #kose-qr{display:none !important}
 </style>
 </head>
 <body>
@@ -398,6 +431,8 @@ body[data-yerlesim="yari"] #site{display:none}
     <img id="gorsel" class="icerik" alt="">
     <iframe id="sayfa" class="icerik" title="Canlı sayfa" scrolling="no" tabindex="-1"></iframe>
   </div>
+
+  <div id="yan-sayfa"><iframe id="yan-cerceve" title="Sabit sayfa" scrolling="no" tabindex="-1"></iframe></div>
 
   <div id="panel">
     <div id="ust">
@@ -1077,7 +1112,7 @@ body[data-yerlesim="yari"] #site{display:none}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "23";
+  var SURUM = "24";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
@@ -1243,6 +1278,25 @@ body[data-yerlesim="yari"] #site{display:none}
   }
   koseQrCiz();
   setInterval(koseQrCiz, 10 * 60000);
+
+  /* ---------- Üst şerit düzeni (veri/ayarlar.js: yanSayfa) ----------
+     yanSayfa tanımlı ve süresi geçmemişse: namaz vakitleri üstte tek şerit olur, sağ yarıda o sayfa (bağış havuzu) sabit durur,
+     sol yarıda içerik döner. Tanımlı değilse ya da son günü geçtiyse ekran kendiliğinden yarı yarıya düzene döner. */
+  function duzenAyarla() {
+    var Y = A.yanSayfa, bugun = gunAnahtari(simdi());
+    var acik = yerlesim === "yari" && param("duzen") !== "yari" && !!(Y && Y.dosya) &&
+      !(Y.bas && bugun < Y.bas) && !(Y.bit && bugun > Y.bit) && !(Y.ekran && Y.ekran.indexOf(ekran) === -1);
+    var c = el("yan-cerceve");
+    if (acik) {
+      if (c.getAttribute("src") !== Y.dosya) c.src = Y.dosya;
+      if (document.body.getAttribute("data-duzen") !== "ust") document.body.setAttribute("data-duzen", "ust");
+    } else if (document.body.getAttribute("data-duzen")) {
+      document.body.removeAttribute("data-duzen");
+      c.removeAttribute("src");
+    }
+  }
+  duzenAyarla();
+  setInterval(duzenAyarla, 10 * 60000);
   setInterval(duyuruGoster, (A.duyuruSuresi || 12) * 1000);
   sonraki();
 })();

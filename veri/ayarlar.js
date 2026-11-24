@@ -11,6 +11,14 @@ window.FATIH_AYARLAR = {
   /* Yerleşim: "yari" = ekran ikiye bölünür, "ucte-bir" = içerik dar, bilgi alanı geniş */
   yerlesim: "yari",
 
+  /*
+    Sabit yan sayfa (başkanın isteği 24.11.2026): tanımlıysa namaz vakitleri üstte tek şerit olur,
+    ekranın sağ yarısında bu sayfa (bağış havuzu) hep durur, sol yarıda içerik döner.
+    bit = son gün; geçince ekran kendiliğinden eski yarı yarıya düzene (vakitler sağda) döner.
+    Bu satır silinirse de eski düzen geri gelir.
+  */
+  yanSayfa: { dosya: "havuz/index.html?ekran=1&v=2", bit: "2026-12-31" },
+
   /* Her mekânın ekranı ayrı davranır. */
   ekranlar: {
     mescit: { ad: "Mescit", sesli: false, namazModu: true },
