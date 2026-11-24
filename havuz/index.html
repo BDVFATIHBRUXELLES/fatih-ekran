@@ -150,6 +150,7 @@ h1 em {
 .sum.bump { animation: bump .45s ease-out; }
 @keyframes bump { 30% { transform: scale(1.1); } }
 .cap { display: block; margin-top: 6px; font-size: .9rem; font-weight: 800; }
+.levha { display: block; }
 
 .meter { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
 .meter div { border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; background: var(--white); box-shadow: 0 8px 22px rgba(10,20,64,.08); }
@@ -335,6 +336,14 @@ html.tam .ekranyan .qr img { width: 268px; height: 268px; border-radius: 14px; }
 html.tam .ekranyan .qr b { font-size: 62px; line-height: 1.08; }
 html.tam .ekranyan .qr span { margin-top: 18px; font-size: 42px; }
 html.tam .ekranalt { display: none; }
+/* Cami ekranlarında havuzdaki toplam uzaktan okunsun: beyaz levha üzerinde kırmızı rakam (başkanın isteği) */
+html.ekran .read { text-shadow: none; }
+html.ekran .levha { display: inline-block; margin-top: 12px; padding: 10px 20px 12px; background: var(--white); border: 4px solid var(--gold); border-radius: 22px; box-shadow: 0 14px 30px rgba(10,20,64,.32); }
+html.ekran .sum { margin-top: 0; color: #D40A2C; white-space: nowrap; }
+html.ekran .cap { margin-top: 4px; color: var(--ink); }
+html.tam .levha { margin-top: 16px; padding: 14px 24px 16px; border-width: 5px; border-radius: 30px; }
+html.tam .sum { font-size: 92px; margin-top: 0; }
+html.tam .cap { font-size: 32px; margin-top: 6px; }
 .tk { display: none; }
 html.tam .tk { display: inline; }
 
@@ -374,8 +383,8 @@ html.tam .tk { display: inline; }
           <canvas id="c" width="360" height="430" aria-hidden="true"></canvas>
           <div class="read">
             <span class="live"><i></i>Canlı</span>
-            <span class="sum" id="sum">0<small>€</small></span>
-            <span class="cap">havuzda birikti</span>
+            <span class="levha"><span class="sum" id="sum">0<small>€</small></span>
+            <span class="cap">havuzda birikti</span></span>
           </div>
           </div>
         </div>
