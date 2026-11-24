@@ -196,6 +196,38 @@ body.tv{background:var(--zemin)}
 #site{font-size:34px;font-weight:750;color:var(--alt-site);white-space:nowrap;margin-left:40px}
 
 /* Hangi sürümün yüklü olduğunu uzaktan anlamak için köşede küçük etiket */
+/* Kampanya kartının tam ekran hâli: sırası gelince bütün ekranı kaplar, saat ve geri sayım köşede kalır */
+@keyframes belir{from{opacity:0}to{opacity:1}}
+#kampanya-tam{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none;flex-direction:column;padding:56px 96px 56px;background:var(--yedek);color:#FFFFFF;animation:belir .6s ease}
+#kampanya-tam .kt-ust{display:flex;justify-content:space-between;align-items:flex-start}
+#kampanya-tam .kt-slogan{font-size:42px;font-weight:650;color:var(--yedek-ikincil)}
+#kampanya-tam .kt-baslik{margin-top:6px;font-family:var(--baslik);font-weight:var(--kalin);font-size:128px;line-height:1;letter-spacing:var(--harf)}
+#kampanya-tam .kt-zaman{text-align:right;flex:none}
+#kampanya-tam .kt-saat{font-size:92px;font-weight:700;line-height:1}
+#kampanya-tam .kt-kalan{margin-top:12px;font-size:30px;font-weight:600;color:var(--yedek-ikincil);white-space:nowrap}
+#kampanya-tam .kt-kalan .rakam{font-weight:700;color:#FFFFFF;margin-left:8px}
+#kampanya-tam .kt-orta{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end}
+#kampanya-tam .kt-yuzde{display:flex;align-items:baseline;white-space:nowrap}
+#kampanya-tam .kt-yuzde-sayi{font-family:var(--baslik);font-weight:var(--kalin);font-size:360px;line-height:.8;letter-spacing:-.04em;font-feature-settings:"lnum" 1}
+#kampanya-tam .kt-yuzde.uc .kt-yuzde-sayi{font-size:290px}
+#kampanya-tam .kt-yuzde-yazi{margin-left:34px;font-family:var(--baslik);font-weight:var(--kalin);font-size:84px;line-height:1}
+#kampanya-tam .kt-gun{text-align:right;flex:none;white-space:nowrap}
+#kampanya-tam .kt-gun-sayi{font-family:var(--baslik);font-weight:var(--kalin);font-size:200px;line-height:.8;letter-spacing:-.04em;padding-right:.04em;font-feature-settings:"lnum" 1}
+#kampanya-tam .kt-yuzde.uc .kt-yuzde-yazi{font-size:68px}
+#kampanya-tam .kt-gun.son .kt-gun-yazi{font-size:46px}
+#kampanya-tam .kt-gun-yazi{margin-top:18px;font-family:var(--baslik);font-weight:var(--kalin);font-size:62px;line-height:1}
+#kampanya-tam .kt-son{margin-top:10px;font-size:30px;font-weight:600;color:var(--yedek-ikincil)}
+#kampanya-tam .kt-cubuk{margin-top:44px;height:50px;border-radius:999px;background:rgba(255,255,255,.28);overflow:hidden;flex:none}
+#kampanya-tam .kt-dolu{height:100%;border-radius:999px;background:#F5B93F;width:0}
+#kampanya-tam .kt-bilgi{margin-top:20px;display:flex;justify-content:space-between;align-items:flex-start}
+#kampanya-tam .kt-tutar{font-size:40px;font-weight:700;white-space:nowrap}
+#kampanya-tam .kt-tarih{margin-top:4px;font-size:27px;font-weight:500;color:var(--yedek-ikincil)}
+#kampanya-tam .kt-alt{margin-top:auto;display:flex;align-items:center}
+#kampanya-tam .kt-alt #kt-qr{width:176px;height:176px;border-radius:14px;background:#FFFFFF;display:none;flex:none}
+#kampanya-tam .kt-alt-yazi{margin-left:36px}
+#kampanya-tam .kt-cagri{font-family:var(--baslik);font-weight:var(--kalin);font-size:66px;line-height:1.05}
+#kampanya-tam .kt-adres{margin-top:12px;font-size:38px;font-weight:600;color:var(--yedek-ikincil)}
+#kampanya-tam .kt-logo{margin-left:auto;height:150px;width:auto;display:none}
 #surum-etiket{position:absolute;right:14px;bottom:8px;font-size:15px;font-weight:600;color:#FFFFFF;opacity:.55}
 
 /* Namaz modu: video durur, sade tablo kalır */
@@ -375,6 +407,27 @@ body[data-yerlesim="yari"] #site{display:none}
     <div id="alt">
       <div id="duyuru"></div>
       <div id="site"></div>
+    </div>
+  </div>
+
+  <div id="kampanya-tam">
+    <div class="kt-ust">
+      <div><div class="kt-slogan" id="kt-slogan"></div><div class="kt-baslik" id="kt-baslik"></div></div>
+      <div class="kt-zaman"><div class="kt-saat rakam" id="kt-saat"></div><div class="kt-kalan"><span id="kt-kalan-etiket"></span><span class="rakam" id="kt-kalan-sure"></span></div></div>
+    </div>
+    <div class="kt-orta">
+      <div class="kt-yuzde"><span class="kt-yuzde-sayi" id="kt-yuzde"></span><span class="kt-yuzde-yazi">tamamlandı</span></div>
+      <div class="kt-gun"><div class="kt-gun-sayi" id="kt-gun"></div><div class="kt-gun-yazi" id="kt-gun-yazi"></div><div class="kt-son" id="kt-son"></div></div>
+    </div>
+    <div class="kt-cubuk"><div class="kt-dolu" id="kt-dolu"></div></div>
+    <div class="kt-bilgi">
+      <div><div class="kt-tutar" id="kt-toplanan"></div><div class="kt-tarih" id="kt-tarih"></div></div>
+      <div class="kt-tutar" id="kt-hedef"></div>
+    </div>
+    <div class="kt-alt">
+      <img class="logo-gorsel" id="kt-qr" alt="">
+      <div class="kt-alt-yazi"><div class="kt-cagri" id="kt-cagri"></div><div class="kt-adres" id="kt-adres"></div></div>
+      <img class="logo-gorsel kt-logo" src="medya/logo-beyaz.png" alt="">
     </div>
   </div>
 
@@ -616,6 +669,7 @@ body[data-yerlesim="yari"] #site{display:none}
     var saatMetni = iki(d.getUTCHours()) + ":" + iki(d.getUTCMinutes()) + ":" + iki(d.getUTCSeconds());
     rakamYaz(el("saat"), saatMetni);
     rakamYaz(el("namaz-saat"), saatMetni.substr(0, 5));
+    rakamYaz(el("kt-saat"), saatMetni.substr(0, 5));
     el("gun-sayi").textContent = d.getUTCDate();
     el("ay-yil").textContent = AYLAR[d.getUTCMonth()] + " " + d.getUTCFullYear();
     el("gun-adi").textContent = GUNLER[d.getUTCDay()];
@@ -649,8 +703,12 @@ body[data-yerlesim="yari"] #site{display:none}
       etiket.textContent = hedefEtiket;
       sure.style.display = "";
       not.style.display = "none";
-      rakamYaz(sure, iki(Math.floor(kalan / 3600)) + ":" + iki(Math.floor(kalan % 3600 / 60)) + ":" + iki(kalan % 60));
+      var kalanMetni = iki(Math.floor(kalan / 3600)) + ":" + iki(Math.floor(kalan % 3600 / 60)) + ":" + iki(kalan % 60);
+      rakamYaz(sure, kalanMetni);
+      el("kt-kalan-etiket").textContent = hedefEtiket;
+      rakamYaz(el("kt-kalan-sure"), kalanMetni);
     } else {
+      el("kt-kalan-etiket").textContent = ""; el("kt-kalan-sure").textContent = "";
       etiket.textContent = "Yarının vakitleri bekleniyor";
       sure.style.display = "none";
       not.style.display = "block";
@@ -725,8 +783,26 @@ body[data-yerlesim="yari"] #site{display:none}
     el("k-adres").textContent = d.K.adres || "";
     var q = el("k-qr");
     if (d.K.qr) { if (q.getAttribute("src") !== d.K.qr) q.src = d.K.qr; } else { q.removeAttribute("src"); q.style.display = "none"; }
+    /* Tam ekran hâli: aynı veriler, yüzde en büyük öğe */
+    el("kt-slogan").textContent = d.K.altBaslik || "";
+    el("kt-baslik").textContent = d.K.baslik || "";
+    el("kt-yuzde").textContent = d.yuzde === null ? "" : "%" + d.yuzde;
+    el("kt-yuzde").parentNode.className = "kt-yuzde" + (d.yuzde !== null && d.yuzde >= 100 ? " uc" : "");
+    el("kt-dolu").style.width = (d.yuzde === null ? 0 : d.yuzde) + "%";
+    el("kt-gun").textContent = d.gun === 0 ? "" : String(d.gun);
+    el("kt-gun-yazi").textContent = d.gun === 0 ? "Bugün son gün" : "gün kaldı";
+    el("kt-gun").parentNode.className = "kt-gun" + (d.gun === 0 ? " son" : "");
+    el("kt-son").textContent = el("k-son").textContent;
+    el("kt-toplanan").textContent = d.O.toplanan ? "Toplanan " + d.O.toplanan : "";
+    el("kt-hedef").textContent = d.O.hedef ? "Hedef " + d.O.hedef : "";
+    el("kt-tarih").textContent = el("k-tarih").textContent;
+    el("kt-cagri").textContent = d.K.cagri || "";
+    el("kt-adres").textContent = d.K.adres || "";
+    resimAyarla(el("kt-qr"), d.K.qr);
     return true;
   }
+  /* Tam ekran yalnızca oran biliniyorsa kullanılır; bilinmiyorsa kart yarım alanda kalır */
+  function kampanyaTamMi(o) { var d = kampanyaDurumu(); return !!(o && o.tam && d && d.yuzde !== null); }
   function metinDoldur(m) {
     var d = kampanyaDurumu();
     if (m.indexOf("{gun}") === -1 && m.indexOf("{yuzde}") === -1) return m;
@@ -737,7 +813,7 @@ body[data-yerlesim="yari"] #site{display:none}
 
   /* ---------- Video ve görsel döngüsü ---------- */
   var vid = el("vid"), gorsel = el("gorsel"), yedek = el("video-yedek"), kampanya = el("kampanya");
-  var PANELLER = { video: vid, gorsel: gorsel, yedek: yedek, kampanya: kampanya, site: el("site-kart"), pano: el("pano"), soz: el("soz-kart"), bilgi: el("bilgi-kart") };
+  var PANELLER = { video: vid, gorsel: gorsel, yedek: yedek, kampanya: kampanya, kampanyaTam: el("kampanya-tam"), site: el("site-kart"), pano: el("pano"), soz: el("soz-kart"), bilgi: el("bilgi-kart") };
   function bilgiVerisi(ad) { var B = A.bilgiKartlari || {}; return (ad && B[ad] && B[ad].baslik) ? B[ad] : null; }
   function resimAyarla(im, yol) {
     if (yol) { if (im.getAttribute("src") !== yol) im.src = yol; }
@@ -835,7 +911,7 @@ body[data-yerlesim="yari"] #site{display:none}
       try { vid.pause(); } catch (e) {}
       if (!kampanyaCiz()) { gorselSayaci = setTimeout(sonraki, 500); return; }
       hataSayisi = 0;
-      panelGoster("kampanya");
+      panelGoster(kampanyaTamMi(aktif) ? "kampanyaTam" : "kampanya");
       gorselSayaci = setTimeout(sonraki, (aktif.sure || 12) * 1000);
     } else if (aktif.tip === "soz") {
       try { vid.pause(); } catch (e) {}
@@ -932,7 +1008,7 @@ body[data-yerlesim="yari"] #site{display:none}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "17";
+  var SURUM = "18";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
