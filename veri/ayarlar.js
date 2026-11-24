@@ -22,14 +22,15 @@ window.FATIH_AYARLAR = {
     bas  = vakit girdikten kaç dakika sonra başlasın
     sure = kaç dakika sürsün
     null = o vakitte namaz modu yok
-    BU SÜRELER VARSAYIMDIR — caminin cemaat saatlerine göre düzeltilecek.
+    Süre başkanın isteğiyle her vakitte 10 dakika (10 dakikayı geçmesin).
+    Başlangıç (bas) hâlâ varsayım: ekran vakit girer girmez açılıyor; cemaat saatleri gelince düzeltilecek.
   */
   namazModu: {
     imsak:  null,
-    ogle:   { bas: 0, sure: 25 },
-    ikindi: { bas: 0, sure: 20 },
-    aksam:  { bas: 0, sure: 20 },
-    yatsi:  { bas: 0, sure: 25 }
+    ogle:   { bas: 0, sure: 10 },
+    ikindi: { bas: 0, sure: 10 },
+    aksam:  { bas: 0, sure: 10 },
+    yatsi:  { bas: 0, sure: 10 }
   },
 
   /*
