@@ -3,15 +3,15 @@
 window.FATIH_GUNUN_SOZU = {
  "tarih": "2026-11-24",
  "ayet": {
-  "metin": "Sizin için belirlenen bir gün vardır ki, ondan ne bir saat geri kalabilirsiniz, ne de ileri geçebilirsiniz.",
-  "kaynak": "Seb'e, 34/30"
+  "metin": "Suçlular Rablerinin huzurunda boyunlarını büküp, ‘Rabbimiz! (Gerçeği) gördük ve işittik. Artık şimdi bizi (dünyaya) döndür ki, salih amel işleyelim. Biz artık kesin olarak inanmaktayız’, dedikleri vakit (onları) bir görsen!",
+  "kaynak": "Secde, 32/12"
  },
  "hadis": {
-  "metin": "Kimin üzerinde din kardeşinin ırzı, namusu veya malıyla ilgili bir hak varsa, altın ve gümüşün geçmediği hesap günü gelmeden helalleşsin. Aksi takdirde, yaptığı haksızlık ölçüsünde, iyi amellerinden alınıp hak sahibine verilir. İyiliği yoksa hak sahibin günahından alınıp haksızlık eden kimseye yüklenir.",
-  "kaynak": "Buharî, \"Mezalim\",210; \"Rikak\",48"
+  "metin": "Kişi, -kıyamet günü- sevdiği kimse ile beraberdir.",
+  "kaynak": "Buharî, “Edeb”, 96; Müslim, “Birr”, 165"
  },
  "dua": {
-  "metin": "Yavrularımıza, hayırlı kısmetler, başarı, huzur, bereket ve sağlık içinde bir ömür lütfeyle! Onları her türlü kötülüklerden ve zararlı alışkanlıklardan muhafaza eyle Allah’ım!",
+  "metin": "Yüce Rabbim! Bizleri işitip akleden, düşünüp kavrayan, adaletle tedbir alan kullarından eyle!",
   "kaynak": ""
  }
 };
