@@ -35,9 +35,9 @@ window.FATIH_AYARLAR = {
   /*
     Sabah namazı cemaatle, güneşin doğuşundan şu kadar dakika önce kılınır (başkanın verdiği bilgi).
     Ekranda vakit listesinde ayrı satırda görünür ve geri sayıma girer.
-    sure = bu saatte namaz modunun kaç dakika süreceği (varsayım).
+    sure = bu saatte namaz modunun kaç dakika süreceği (başkanın isteği: 10 dakikayı geçmesin).
   */
-  sabahNamazi: { gunestenOnce: 45, sure: 25 },
+  sabahNamazi: { gunestenOnce: 45, sure: 10 },
 
   /*
     5 Ek Bina kampanyası. Kalan gün her gün kendiliğinden hesaplanır.
