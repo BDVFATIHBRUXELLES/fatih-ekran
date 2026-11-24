@@ -229,6 +229,13 @@ body.tv{background:var(--zemin)}
 #kampanya-tam .kt-cagri{font-family:var(--baslik);font-weight:var(--kalin);font-size:66px;line-height:1.05}
 #kampanya-tam .kt-adres{margin-top:12px;font-size:38px;font-weight:600;color:var(--yedek-ikincil)}
 #kampanya-tam .kt-logo{margin-left:auto;height:150px;width:auto;display:none}
+/* Canlı sayfanın tam ekran hâli (ör. bağış havuzu): sırası gelince bütün ekranı kaplar, saat ve geri sayım sağ üstte kalır */
+#sayfa-tam{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none;background:#F2FBFD;color:#0A1440;animation:belir .6s ease}
+#sayfa-tam iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
+#sayfa-tam .st-zaman{position:absolute;right:96px;top:40px;text-align:right}
+#sayfa-tam .st-saat{font-size:96px;font-weight:700;line-height:1}
+#sayfa-tam .st-kalan{margin-top:10px;font-size:30px;font-weight:650;white-space:nowrap}
+#sayfa-tam .st-kalan .rakam{font-weight:800;margin-left:10px}
 #surum-etiket{position:absolute;right:14px;bottom:8px;font-size:15px;font-weight:600;color:#FFFFFF;opacity:.55}
 
 /* Namaz modu: video durur, sade tablo kalır */
@@ -431,6 +438,11 @@ body[data-yerlesim="yari"] #site{display:none}
       <div class="kt-alt-yazi"><div class="kt-cagri" id="kt-cagri"></div><div class="kt-adres" id="kt-adres"></div></div>
       <img class="logo-gorsel kt-logo" src="medya/logo-beyaz.png" alt="">
     </div>
+  </div>
+
+  <div id="sayfa-tam">
+    <iframe id="sayfa-tam-cerceve" title="Canlı sayfa, tam ekran" scrolling="no" tabindex="-1"></iframe>
+    <div class="st-zaman"><div class="st-saat rakam" id="st-saat"></div><div class="st-kalan"><span id="st-kalan-etiket"></span><span class="rakam" id="st-kalan-sure"></span></div></div>
   </div>
 
   <div id="surum-etiket"></div>
@@ -672,6 +684,7 @@ body[data-yerlesim="yari"] #site{display:none}
     rakamYaz(el("saat"), saatMetni);
     rakamYaz(el("namaz-saat"), saatMetni.substr(0, 5));
     rakamYaz(el("kt-saat"), saatMetni.substr(0, 5));
+    rakamYaz(el("st-saat"), saatMetni.substr(0, 5));
     el("gun-sayi").textContent = d.getUTCDate();
     el("ay-yil").textContent = AYLAR[d.getUTCMonth()] + " " + d.getUTCFullYear();
     el("gun-adi").textContent = GUNLER[d.getUTCDay()];
@@ -709,8 +722,11 @@ body[data-yerlesim="yari"] #site{display:none}
       rakamYaz(sure, kalanMetni);
       el("kt-kalan-etiket").textContent = hedefEtiket;
       rakamYaz(el("kt-kalan-sure"), kalanMetni);
+      el("st-kalan-etiket").textContent = hedefEtiket;
+      rakamYaz(el("st-kalan-sure"), kalanMetni);
     } else {
       el("kt-kalan-etiket").textContent = ""; el("kt-kalan-sure").textContent = "";
+      el("st-kalan-etiket").textContent = ""; el("st-kalan-sure").textContent = "";
       etiket.textContent = "Yarının vakitleri bekleniyor";
       sure.style.display = "none";
       not.style.display = "block";
@@ -815,7 +831,7 @@ body[data-yerlesim="yari"] #site{display:none}
 
   /* ---------- Video ve görsel döngüsü ---------- */
   var vid = el("vid"), gorsel = el("gorsel"), yedek = el("video-yedek"), kampanya = el("kampanya");
-  var PANELLER = { video: vid, gorsel: gorsel, yedek: yedek, kampanya: kampanya, kampanyaTam: el("kampanya-tam"), site: el("site-kart"), pano: el("pano"), soz: el("soz-kart"), bilgi: el("bilgi-kart"), sayfa: el("sayfa") };
+  var PANELLER = { video: vid, gorsel: gorsel, yedek: yedek, kampanya: kampanya, kampanyaTam: el("kampanya-tam"), site: el("site-kart"), pano: el("pano"), soz: el("soz-kart"), bilgi: el("bilgi-kart"), sayfa: el("sayfa"), sayfaTam: el("sayfa-tam") };
   function bilgiVerisi(ad) { var B = A.bilgiKartlari || {}; return (ad && B[ad] && B[ad].baslik) ? B[ad] : null; }
   function resimAyarla(im, yol) {
     if (yol) { if (im.getAttribute("src") !== yol) im.src = yol; }
@@ -863,7 +879,7 @@ body[data-yerlesim="yari"] #site{display:none}
     while (kart.scrollHeight > kart.clientHeight + 1 && boyut > 22 && tur < 30) { boyut -= 2; tur++; kart.style.setProperty("--z-boyut", boyut + "px"); }
   }
   function panelGoster(ad) {
-    for (var k in PANELLER) PANELLER[k].style.display = (k === ad) ? ((k === "video" || k === "gorsel" || k === "sayfa") ? "block" : "flex") : "none";
+    for (var k in PANELLER) PANELLER[k].style.display = (k === ad) ? ((k === "video" || k === "gorsel" || k === "sayfa" || k === "sayfaTam") ? "block" : "flex") : "none";
   }
   function videoMu(o) { return !!o && (!o.tip || o.tip === "video"); }
   function siteCiz() {
@@ -947,10 +963,11 @@ body[data-yerlesim="yari"] #site{display:none}
     } else if (aktif.tip === "sayfa") {
       /* Canlı sayfa (ör. bağış havuzu): bir kez yüklenir, sırası gelince gösterilir; sayfa kendi verisini kendisi yeniler */
       try { vid.pause(); } catch (e) {}
-      var sf = el("sayfa");
+      /* tam: true ise sayfa bütün ekranı kaplar (kendi çerçevesinde); saat ve geri sayım sağ üstte kalır */
+      var sf = el(aktif.tam ? "sayfa-tam-cerceve" : "sayfa");
       if (sf.getAttribute("src") !== aktif.dosya) sf.src = aktif.dosya;
       hataSayisi = 0;
-      panelGoster("sayfa");
+      panelGoster(aktif.tam ? "sayfaTam" : "sayfa");
       gorselSayaci = setTimeout(sonraki, (aktif.sure || 20) * 1000);
     } else if (aktif.tip === "gorsel") {
       try { vid.pause(); } catch (e) {}
@@ -1018,7 +1035,7 @@ body[data-yerlesim="yari"] #site{display:none}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "20";
+  var SURUM = "21";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");

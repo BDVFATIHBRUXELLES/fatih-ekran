@@ -11,7 +11,8 @@
            "sayfa"    canlı sayfa (dosya: sayfanın adresi; ör. bağış havuzu). Sayfa kendi verisini kendisi yeniler
   dosya  : dosyanın yolu
   sure   : video dışındaki içeriklerde ekranda kalma süresi (saniye)
-  tam    : yalnızca "kampanya" için; true ise kart sırası gelince bütün ekranı kaplar (saat ve geri sayım köşede kalır)
+  tam    : "kampanya" ve "sayfa" için; true ise sırası gelince bütün ekranı kaplar (saat ve geri sayım köşede kalır).
+           Tam ekran sayfa 1920×1080 çizilmelidir (bağış havuzu için adres ?ekran=2; yarım alan için ?ekran=1)
   ekran  : hangi ekranlarda görünsün ("mescit", "cay"). Yazılmazsa hepsinde görünür.
   bas/bit: gösterimin ilk ve son günü (YYYY-AA-GG). Yazılmazsa süresiz.
 
@@ -20,7 +21,7 @@
 */
 window.FATIH_PLAYLIST = [
   { tip: "kampanya", sure: 20, tam: true },
-  { tip: "sayfa", dosya: "havuz/index.html?ekran=1", sure: 25, bit: "2026-12-31" },
+  { tip: "sayfa", dosya: "havuz/index.html?ekran=2", sure: 60, tam: true, bit: "2026-12-31" },
   { tip: "video", dosya: "medya/FATIH_Kulliye5EkBina_GENIS.mp4", bit: "2026-12-31" },
   { tip: "soz", tur: "ayet", sure: 22 },
   { tip: "site", sure: 15 },

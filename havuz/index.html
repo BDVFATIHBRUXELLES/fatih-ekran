@@ -306,6 +306,38 @@ html.ekran .ekranalt { display: block; position: absolute; left: 52px; right: 52
 html.ekran .ekranalt b { font-weight: 900; }
 html.ekran .pool::after { animation: none; }
 
+/* Tam ekran görünümü (?ekran=2): 1920×1080 tasarlanır. Sağ üst köşe, ekran sisteminin saat ve geri sayımı için boş bırakılır. */
+html.tam .wrap { width: 1920px; padding: 46px 96px 0; }
+html.tam .top { justify-content: flex-start; gap: 44px; height: 112px; }
+html.tam .brand { gap: 22px; }
+html.tam .brand img { width: 108px; height: 108px; }
+html.tam .brand b { font-size: 40px; }
+html.tam .brand span { font-size: 26px; margin-top: 4px; }
+html.tam .days { font-size: 28px; padding: 14px 30px; gap: 12px; }
+html.tam .days b { font-size: 46px; }
+html.tam .stage { grid-template-columns: minmax(0, 1fr) 600px; grid-template-areas: "say pool" "yan pool"; column-gap: 88px; row-gap: 30px; margin-top: 26px; align-items: start; }
+html.tam .eyebrow { font-size: 30px; margin-bottom: 14px; }
+html.tam h1 { font-size: 116px; }
+html.tam .lead { display: block !important; max-width: none; margin-top: 22px; font-size: 38px; font-weight: 600; line-height: 1.25; }
+html.tam .lead .uzun { display: none; }
+html.tam .poolbox { max-width: 600px; }
+html.tam .hover { width: 128px; height: 128px; margin-bottom: 4px; }
+html.tam .sum { font-size: 80px; margin-top: 10px; }
+html.tam .live { font-size: 21px; padding: 8px 18px; gap: 10px; }
+html.tam .live i { width: 12px; height: 12px; }
+html.tam .cap { font-size: 30px; margin-top: 10px; }
+html.tam .ekranyan { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-content: start; }
+html.tam .ekranyan .kutu { padding: 16px 22px 18px; border-radius: 24px; }
+html.tam .ekranyan .kutu span { font-size: 22px; }
+html.tam .ekranyan .kutu b { font-size: 49px; }
+html.tam .ekranyan .qr { grid-column: 1 / -1; grid-template-columns: 268px minmax(0, 1fr); gap: 40px; padding: 22px; border-radius: 30px; margin-top: 8px; }
+html.tam .ekranyan .qr img { width: 268px; height: 268px; border-radius: 14px; }
+html.tam .ekranyan .qr b { font-size: 62px; line-height: 1.08; }
+html.tam .ekranyan .qr span { margin-top: 18px; font-size: 42px; }
+html.tam .ekranalt { display: none; }
+.tk { display: none; }
+html.tam .tk { display: inline; }
+
 @media (prefers-reduced-motion: reduce) {
   .live i, .sum.bump, .drops li.new, .pool::after, .hover, .hover.go, .give.toss .coin, .thanks__in { animation: none; }
   .c3 { animation: none; transform: rotateY(-24deg); }
@@ -332,7 +364,7 @@ html.ekran .pool::after { animation: none; }
       <div class="say">
         <p class="eyebrow">5 Ek Bina Bağış Havuzu</p>
         <h1>Sen de at, <em>havuz dolsun.</em></h1>
-        <p class="lead">Tek başına küçük, <b>hep birlikte beş bina.</b> Atılan her euro bu havuza düşüyor ve herkesin gözü önünde birikiyor.</p>
+        <p class="lead">Tek başına küçük, <b>hep birlikte beş bina.</b><span class="uzun"> Atılan her euro bu havuza düşüyor ve herkesin gözü önünde birikiyor.</span></p>
       </div>
 
       <div class="poolbox">
@@ -358,7 +390,7 @@ html.ekran .pool::after { animation: none; }
         <div class="kutu"><span>Hedef</span><b id="e-goal">4.000.000 €</b></div>
         <div class="kutu"><span>Tamamlanan</span><b id="e-pct">%66,3</b></div>
         <div class="kutu kalan"><span>Hedefe kalan</span><b id="e-left">1.350.000 €</b></div>
-        <div class="qr"><img src="media/qr-sayfa.png" alt="" width="180" height="180"><div><b>Telefonunla okut, sen de at</b><span>bxlfatih.com/havuz</span></div></div>
+        <div class="qr"><img src="media/qr-sayfa.png" alt="" width="180" height="180"><div><b>Telefonunla okut, <br class="tk">sen de at</b><span>bxlfatih.com/havuz</span></div></div>
       </div>
 
       <div class="cta">
@@ -477,15 +509,18 @@ var CONFIG = {
 
 var $ = function (id) { return document.getElementById(id); };
 
-/* Cami ekranı görünümü: adres ?ekran=1 ile biterse butonlar gizlenir, sayfa alana sığacak kadar ölçeklenir */
-var EKRAN = /[?&]ekran=1/.test(location.search);
+/* Cami ekranı görünümü: adres ?ekran=1 (yarım alan, 960×1080) ya da ?ekran=2 (tam ekran, 1920×1080) ile biterse
+   butonlar gizlenir, sayfa alana sığacak kadar ölçeklenir */
+var TAM = /[?&]ekran=2/.test(location.search);
+var EKRAN = TAM || /[?&]ekran=1/.test(location.search);
 if (EKRAN) {
   document.documentElement.classList.add("ekran");
+  if (TAM) document.documentElement.classList.add("tam");
   (function () {
-    var wrap = document.querySelector(".wrap");
+    var wrap = document.querySelector(".wrap"), EN = TAM ? 1920 : 960;
     var fit = function () {
-      var w = window.innerWidth, h = window.innerHeight, k = Math.min(w / 960, h / 1080);
-      wrap.style.transform = "translate(" + Math.max(0, (w - 960 * k) / 2) + "px," + Math.max(0, (h - 1080 * k) / 2) + "px) scale(" + k + ")";
+      var w = window.innerWidth, h = window.innerHeight, k = Math.min(w / EN, h / 1080);
+      wrap.style.transform = "translate(" + Math.max(0, (w - EN * k) / 2) + "px," + Math.max(0, (h - 1080 * k) / 2) + "px) scale(" + k + ")";
     };
     fit(); window.addEventListener("resize", fit);
     try { var v0 = document.getElementById("bgv"); v0.removeAttribute("autoplay"); v0.pause(); v0.removeAttribute("src"); v0.load(); } catch (e) {}
@@ -551,6 +586,7 @@ var W = 360, H = 430;
 var V = { l: 36, r: 324, top: 28, sh: 198, bot: 406, rad: 30 };
 (function () {
   var dpr = Math.min(window.devicePixelRatio || 1, 3);
+  if (TAM) dpr = Math.max(dpr, 2);
   cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
 })();
 function path() {
