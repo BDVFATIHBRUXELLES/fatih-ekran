@@ -2,7 +2,10 @@
   "baslangic": 2650000,
   "baslangicTarihi": "2026-11-24",
   "hedef": 4000000,
-  "online": { "toplam": 0, "adet": 0 },
-  "toplam": 2650000,
-  "guncelleme": "2026-11-24T17:25:00.000Z"
+  "online": {
+    "toplam": 20,
+    "adet": 1
+  },
+  "toplam": 2650020,
+  "guncelleme": "2026-11-24T19:01:59.810Z"
 }
