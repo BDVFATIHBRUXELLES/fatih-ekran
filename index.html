@@ -774,6 +774,29 @@ body[data-yerlesim="yari"] #site{display:none}
   }
 
   /* ---------- Kampanya: kalan gün her gün kendiliğinden hesaplanır ---------- */
+  /* Bağış havuzu verisi (veri/havuz.json): kampanya kartındaki oran ve tutarlar buradan gelir.
+     Oran aşağı yuvarlanır; hedefe gerçekten ulaşılmadan %100 yazmaz. */
+  var havuzVerisi = null;
+  function binlik(n) { return String(Math.floor(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+  function havuzDurumu() {
+    var h = havuzVerisi;
+    if (!h || typeof h.toplam !== "number" || typeof h.hedef !== "number" || !(h.hedef > 0) || !(h.toplam >= 0)) return null;
+    var yuzde = Math.min(100, Math.floor(h.toplam / h.hedef * 100));
+    return { yuzde: yuzde, toplanan: binlik(h.toplam) + " €", hedef: binlik(h.hedef) + " €", not: "Bağış havuzundaki güncel toplam" };
+  }
+  function havuzOku() {
+    if (location.protocol === "file:") return;
+    try {
+      var x = new XMLHttpRequest();
+      x.open("GET", "veri/havuz.json?t=" + Date.now(), true);
+      x.onreadystatechange = function () {
+        if (x.readyState !== 4 || x.status !== 200) return;
+        try { havuzVerisi = JSON.parse(x.responseText); } catch (e) { return; }
+        if (aktif && aktif.tip === "kampanya") kampanyaCiz(); /* kart ekrandaysa hemen yenile */
+      };
+      x.send();
+    } catch (e) {}
+  }
   function kampanyaDurumu() {
     var K = A.kampanya;
     if (!K || !K.sonGun) return null;
@@ -781,7 +804,10 @@ body[data-yerlesim="yari"] #site{display:none}
     var a = bugun.split("-"), b = K.sonGun.split("-");
     var gun = Math.round((Date.UTC(+b[0], +b[1] - 1, +b[2]) - Date.UTC(+a[0], +a[1] - 1, +a[2])) / 86400000);
     if (gun < 0) return null; /* son gün geçtiyse kampanya gösterilmez */
-    /* Oran önce siteden otomatik okunan dosyadan (veri/kampanya.js), yoksa ayarlardan alınır */
+    /* Oran ve tutarlar önce bağış havuzundan (veri/havuz.json, gerçek sayım) alınır; o okunamazsa
+       siteden otomatik okunan dosyadan (veri/kampanya.js), o da yoksa ayarlardan */
+    var H = havuzDurumu();
+    if (H) return { gun: gun, yuzde: H.yuzde, K: K, O: H };
     var O = window.FATIH_KAMPANYA || {};
     function gecerli(n) { return typeof n === "number" && n >= 0 && n <= 100; }
     var yuzde = gecerli(O.yuzde) ? O.yuzde : (gecerli(K.yuzde) ? K.yuzde : null);
@@ -803,7 +829,7 @@ body[data-yerlesim="yari"] #site{display:none}
     if (d.O.toplanan) tutar = "Toplanan " + d.O.toplanan;
     if (d.O.hedef) tutar += (tutar ? "\n" : "") + "Hedef " + d.O.hedef;
     el("k-tutar").textContent = tutar;
-    el("k-tarih").textContent = d.O.tarih ? d.O.tarih + " itibarıyla" : "";
+    el("k-tarih").textContent = d.O.not || (d.O.tarih ? d.O.tarih + " itibarıyla" : "");
     el("k-cagri").textContent = d.K.cagri || "";
     el("k-adres").textContent = d.K.adres || "";
     var q = el("k-qr");
@@ -1043,13 +1069,15 @@ body[data-yerlesim="yari"] #site{display:none}
   setInterval(function () { yenidenYukle("veri/playlist.js"); }, 2 * 60000);
   setInterval(function () { yenidenYukle("veri/vakitler.js"); }, 60 * 60000);
   setInterval(function () { yenidenYukle("veri/kampanya.js"); }, 10 * 60000);
+  havuzOku();
+  setInterval(havuzOku, 2 * 60000);
   setInterval(function () { yenidenYukle("veri/gunun-sozu.js"); }, 15 * 60000);
 
   /* ---------- Kendiliğinden güncelleme ----------
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "22";
+  var SURUM = "23";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");

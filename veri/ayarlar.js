@@ -42,8 +42,9 @@ window.FATIH_AYARLAR = {
 
   /*
     5 Ek Bina kampanyası. Kalan gün her gün kendiliğinden hesaplanır.
-    Oran, tutarlar ve "itibarıyla" tarihi bxlfatih.com ana sayfasından saatte bir otomatik okunur
-    (veri/kampanya.js). Buradaki yuzde yalnızca o dosya okunamazsa kullanılan yedek değerdir.
+    Oran ve tutarlar bağış havuzundan gelir (veri/havuz.json, gerçek sayım; başkanın isteği 24.11.2026).
+    Havuz okunamazsa bxlfatih.com ana sayfasından saatte bir okunan değerler (veri/kampanya.js),
+    o da yoksa buradaki yuzde kullanılır.
     Son gün geçince kampanya kartı ve duyurusu kendiliğinden kalkar.
   */
   kampanya: {

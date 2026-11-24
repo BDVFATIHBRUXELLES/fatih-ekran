@@ -1,2 +1,2 @@
 /* Ekran sayfasının sürümü. index.html içindeki SURUM ile aynı olmalı; değişince ekranlar kendini yeniler. */
-window.FATIH_SURUM = "22";
+window.FATIH_SURUM = "23";
