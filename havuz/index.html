@@ -289,7 +289,7 @@ html.ekran .eyebrow { font-size: 22px; margin-bottom: 12px; }
 html.ekran h1 { font-size: 76px; }
 html.ekran .poolbox { max-width: 410px; margin: 0; align-self: start; }
 html.ekran .hover { width: 106px; height: 106px; }
-html.ekran .sum { font-size: 60px; }
+html.ekran .sum { font-size: 54px; }
 html.ekran .live { font-size: 15px; padding: 6px 14px; }
 html.ekran .cap { font-size: 21px; }
 html.ekran .ekranyan { grid-area: yan; display: grid; gap: 16px; align-content: center; }
@@ -304,6 +304,7 @@ html.ekran .ekranyan { grid-area: yan; display: grid; gap: 16px; align-content: 
 .ekranyan .qr span { display: block; margin-top: 10px; font-size: 18px; color: var(--gold-hi); font-weight: 800; white-space: nowrap; }
 html.ekran .ekranalt { display: block; position: absolute; left: 52px; right: 52px; bottom: 34px; margin: 0; text-align: center; font-size: 30px; font-weight: 700; }
 html.ekran .ekranalt b { font-weight: 900; }
+html.ekran .pool::after { animation: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .live i, .sum.bump, .drops li.new, .pool::after, .hover, .hover.go, .give.toss .coin, .thanks__in { animation: none; }
@@ -324,7 +325,7 @@ html.ekran .ekranalt b { font-weight: 900; }
     <div class="days" aria-label="Kampanyanın bitmesine kalan gün"><b id="days">37</b> gün kaldı</div>
   </header>
 
-  <p class="preview" id="preview">ÖNİZLEME · Butonlar gerçek ödeme sayfasını açar. 2.650.000 € gerçek başlangıç, üstüne eklenen rakamlar örnektir</p>
+  <p class="preview" id="preview" hidden></p>
 
   <main>
     <section class="stage">

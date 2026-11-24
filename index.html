@@ -93,6 +93,7 @@ body.tv{background:var(--zemin)}
 /* Sol: dikey video alanı */
 #video-alani{position:absolute;left:0;top:0;width:608px;height:1080px;background:var(--yedek);overflow:hidden}
 #video-alani video,#video-alani img.icerik{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;display:none;background:var(--yedek)}
+#video-alani iframe.icerik{position:absolute;left:0;top:0;width:100%;height:100%;border:0;display:none;background:var(--yedek)}
 #video-alani .yatay{object-fit:contain}
 #video-yedek{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:72px 56px;background:var(--yedek);color:var(--yedek-yazi)}
 #video-yedek img{width:300px;height:auto;margin-bottom:48px;display:none}
@@ -382,6 +383,7 @@ body[data-yerlesim="yari"] #site{display:none}
     </div>
     <video id="vid" muted playsinline preload="auto"></video>
     <img id="gorsel" class="icerik" alt="">
+    <iframe id="sayfa" class="icerik" title="Canlı sayfa" scrolling="no" tabindex="-1"></iframe>
   </div>
 
   <div id="panel">
@@ -813,7 +815,7 @@ body[data-yerlesim="yari"] #site{display:none}
 
   /* ---------- Video ve görsel döngüsü ---------- */
   var vid = el("vid"), gorsel = el("gorsel"), yedek = el("video-yedek"), kampanya = el("kampanya");
-  var PANELLER = { video: vid, gorsel: gorsel, yedek: yedek, kampanya: kampanya, kampanyaTam: el("kampanya-tam"), site: el("site-kart"), pano: el("pano"), soz: el("soz-kart"), bilgi: el("bilgi-kart") };
+  var PANELLER = { video: vid, gorsel: gorsel, yedek: yedek, kampanya: kampanya, kampanyaTam: el("kampanya-tam"), site: el("site-kart"), pano: el("pano"), soz: el("soz-kart"), bilgi: el("bilgi-kart"), sayfa: el("sayfa") };
   function bilgiVerisi(ad) { var B = A.bilgiKartlari || {}; return (ad && B[ad] && B[ad].baslik) ? B[ad] : null; }
   function resimAyarla(im, yol) {
     if (yol) { if (im.getAttribute("src") !== yol) im.src = yol; }
@@ -861,7 +863,7 @@ body[data-yerlesim="yari"] #site{display:none}
     while (kart.scrollHeight > kart.clientHeight + 1 && boyut > 22 && tur < 30) { boyut -= 2; tur++; kart.style.setProperty("--z-boyut", boyut + "px"); }
   }
   function panelGoster(ad) {
-    for (var k in PANELLER) PANELLER[k].style.display = (k === ad) ? ((k === "video" || k === "gorsel") ? "block" : "flex") : "none";
+    for (var k in PANELLER) PANELLER[k].style.display = (k === ad) ? ((k === "video" || k === "gorsel" || k === "sayfa") ? "block" : "flex") : "none";
   }
   function videoMu(o) { return !!o && (!o.tip || o.tip === "video"); }
   function siteCiz() {
@@ -942,6 +944,14 @@ body[data-yerlesim="yari"] #site{display:none}
       if (pg.getAttribute("src") === aktif.dosya && pg.complete && pg.naturalWidth) { hataSayisi = 0; panelGoster("pano"); }
       else pg.src = aktif.dosya;
       gorselSayaci = setTimeout(sonraki, (aktif.sure || 12) * 1000);
+    } else if (aktif.tip === "sayfa") {
+      /* Canlı sayfa (ör. bağış havuzu): bir kez yüklenir, sırası gelince gösterilir; sayfa kendi verisini kendisi yeniler */
+      try { vid.pause(); } catch (e) {}
+      var sf = el("sayfa");
+      if (sf.getAttribute("src") !== aktif.dosya) sf.src = aktif.dosya;
+      hataSayisi = 0;
+      panelGoster("sayfa");
+      gorselSayaci = setTimeout(sonraki, (aktif.sure || 20) * 1000);
     } else if (aktif.tip === "gorsel") {
       try { vid.pause(); } catch (e) {}
       gorsel.onload = function () { hataSayisi = 0; panelGoster("gorsel"); };
@@ -1008,7 +1018,7 @@ body[data-yerlesim="yari"] #site{display:none}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "19";
+  var SURUM = "20";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
