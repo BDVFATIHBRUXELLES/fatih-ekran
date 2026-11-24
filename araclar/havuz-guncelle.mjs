@@ -1,4 +1,5 @@
 // Bağış havuzu sayımı: Mollie'deki havuz linklerine ve serbest tutarlı bağış linkine yapılan ÖDENMİŞ bağışları toplar,
+// başkanın bildirdiği banka havalesi toplamını (veri/havuz-banka.json) ekler ve
 // veri/havuz.json dosyasına yalnızca toplam ve adet yazar (tek tek tutar ya da isim yazılmaz).
 // Anahtar yalnızca MOLLIE_TOKEN ortam değişkeninden okunur, dosyaya ya da çıktıya yazılmaz.
 // Mollie'den okunamazsa dosyaya dokunmaz ve hata ile çıkar; sayfada son doğru değer kalır.
@@ -7,6 +8,7 @@ import { readFile, writeFile } from "node:fs/promises";
 const API = process.env.MOLLIE_API_BASE || "https://api.mollie.com/v2";
 const TOKEN = process.env.MOLLIE_TOKEN;
 const OUT = process.env.HAVUZ_DOSYA || new URL("../veri/havuz.json", import.meta.url);
+const BANKA = process.env.HAVUZ_BANKA_DOSYA || new URL("../veri/havuz-banka.json", import.meta.url);
 
 // Başlangıç: başkanın bildirdiği toplam. Bu tarihten sonra havuz linklerine gelen bağışlar üstüne eklenir.
 const BASLANGIC = 2650000;
@@ -29,6 +31,18 @@ const ACIK_LINKLER = [
 ];
 
 if (!TOKEN) { console.log("MOLLIE_TOKEN tanımlı değil, sayım atlandı."); process.exit(0); }
+
+// Banka havaleleri Mollie'den okunamaz. Başkan her akşam yazılı bildirir; toplam veri/havuz-banka.json
+// dosyasına elle işlenir ve buradan havuza eklenir. Dosya yoksa 0 sayılır; bozuksa sayım hata ile durur
+// (yanlış bir toplam yayımlamaktansa son doğru değer kalsın diye).
+async function bankaOku() {
+  let j;
+  try { j = JSON.parse(await readFile(BANKA, "utf8")); }
+  catch (e) { if (e.code === "ENOENT") return { toplam: 0, adet: 0, tarih: null }; throw new Error("havuz-banka.json okunamadı: " + e.message); }
+  const toplam = Number(j.toplam), adet = Number(j.adet);
+  if (!Number.isFinite(toplam) || toplam < 0 || !Number.isInteger(adet) || adet < 0) throw new Error("havuz-banka.json geçersiz");
+  return { toplam: Math.round(toplam * 100) / 100, adet, tarih: typeof j.tarih === "string" ? j.tarih : null };
+}
 
 const sent = (v) => Math.round(parseFloat(v ?? "0") * 100);
 
@@ -61,12 +75,15 @@ for (const id of LINKLER) { const t = await linkToplami(id); kurus += t.kurus; a
 for (const id of ACIK_LINKLER) { const t = await linkToplami(id, BASLANGIC_ANI); kurus += t.kurus; adet += t.adet; }
 
 const online = kurus / 100;
-const yeni = { baslangic: BASLANGIC, baslangicTarihi: BASLANGIC_TARIHI, hedef: HEDEF, online: { toplam: online, adet }, toplam: BASLANGIC + online };
+const banka = await bankaOku();
+const toplam = Math.round((BASLANGIC + online + banka.toplam) * 100) / 100;
+const yeni = { baslangic: BASLANGIC, baslangicTarihi: BASLANGIC_TARIHI, hedef: HEDEF, online: { toplam: online, adet }, banka, toplam };
 
 let eski = null;
 try { eski = JSON.parse(await readFile(OUT, "utf8")); } catch {}
-const ayni = eski && ["baslangic", "baslangicTarihi", "hedef", "toplam"].every((k) => eski[k] === yeni[k]) && eski.online?.adet === adet;
-if (ayni) { console.log(`Değişiklik yok: ${adet} bağış, ${online} €`); process.exit(0); }
+const ayni = eski && ["baslangic", "baslangicTarihi", "hedef", "toplam"].every((k) => eski[k] === yeni[k]) && eski.online?.adet === adet
+  && eski.banka?.toplam === banka.toplam && eski.banka?.adet === banka.adet && (eski.banka?.tarih ?? null) === banka.tarih;
+if (ayni) { console.log(`Değişiklik yok: çevrim içi ${adet} bağış, ${online} €; banka ${banka.adet} havale, ${banka.toplam} €`); process.exit(0); }
 
 await writeFile(OUT, JSON.stringify({ ...yeni, guncelleme: new Date().toISOString() }, null, 2) + "\n");
-console.log(`Güncellendi: ${adet} bağış, ${online} €, toplam ${yeni.toplam} €`);
+console.log(`Güncellendi: çevrim içi ${adet} bağış, ${online} €; banka ${banka.adet} havale, ${banka.toplam} €; toplam ${yeni.toplam} €`);
