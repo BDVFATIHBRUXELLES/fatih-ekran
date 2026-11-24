@@ -1,7 +1,7 @@
 /* Günün ayeti, hadisi ve duası. Bu dosya otomatik yazılır, elle değiştirmeyin.
    Kaynak: Diyanet İşleri Başkanlığı, diyanet.gov.tr */
 window.FATIH_GUNUN_SOZU = {
- "tarih": "2026-11-24",
+ "tarih": "2026-11-25",
  "ayet": {
   "metin": "Suçlular Rablerinin huzurunda boyunlarını büküp, ‘Rabbimiz! (Gerçeği) gördük ve işittik. Artık şimdi bizi (dünyaya) döndür ki, salih amel işleyelim. Biz artık kesin olarak inanmaktayız’, dedikleri vakit (onları) bir görsen!",
   "kaynak": "Secde, 32/12"
