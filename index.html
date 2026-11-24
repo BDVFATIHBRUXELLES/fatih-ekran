@@ -236,6 +236,12 @@ body.tv{background:var(--zemin)}
 #sayfa-tam .st-saat{font-size:96px;font-weight:700;line-height:1}
 #sayfa-tam .st-kalan{margin-top:10px;font-size:30px;font-weight:650;white-space:nowrap}
 #sayfa-tam .st-kalan .rakam{font-weight:800;margin-left:10px}
+/* Köşe QR kodu: duyuru bandının sağ ucunda her zaman durur (tam ekran kartların kendi QR kodu vardır) */
+#kose-qr{display:none;align-items:center;flex:none;margin-left:28px;margin-right:44px}
+#kose-qr .kq-yazi{margin-right:14px;text-align:right;white-space:nowrap}
+#kose-qr .kq-yazi b{display:block;font-size:30px;font-weight:800;line-height:1.1;color:#F5B93F}
+#kose-qr .kq-yazi span{display:block;margin-top:4px;font-size:21px;font-weight:650;line-height:1.15;color:var(--alt-yazi)}
+#kose-qr img{display:block;width:118px;height:118px;padding:5px;border-radius:10px;background:#FFFFFF}
 #surum-etiket{position:absolute;right:14px;bottom:8px;font-size:15px;font-weight:600;color:#FFFFFF;opacity:.55}
 
 /* Namaz modu: video durur, sade tablo kalır */
@@ -416,6 +422,7 @@ body[data-yerlesim="yari"] #site{display:none}
     <div id="alt">
       <div id="duyuru"></div>
       <div id="site"></div>
+      <div id="kose-qr"><div class="kq-yazi"><b id="kq-ust"></b><span id="kq-alt"></span></div><img id="kq-gorsel" alt=""></div>
     </div>
   </div>
 
@@ -1016,7 +1023,14 @@ body[data-yerlesim="yari"] #site{display:none}
     }
     if (metin === null) { kutu.textContent = ""; return; }
     kutu.style.opacity = 0;
-    setTimeout(function () { kutu.textContent = metin; kutu.style.opacity = 1; }, 650);
+    setTimeout(function () { kutu.textContent = metin; duyuruSigdir(); kutu.style.opacity = 1; }, 650);
+  }
+  /* Uzun duyuru banda sığmıyorsa sığana kadar küçültülür (köşe QR kodu bandı daraltır) */
+  function duyuruSigdir() {
+    var kutu = el("duyuru"), bant = el("alt"), tur = 0, boyut;
+    kutu.style.fontSize = "";
+    boyut = parseFloat(window.getComputedStyle(kutu).fontSize) || 29;
+    while (kutu.offsetHeight > bant.clientHeight - 14 && boyut > 18 && tur < 20) { boyut -= 1; tur++; kutu.style.fontSize = boyut + "px"; }
   }
 
   /* ---------- Veriyi yenile: liste 5 dakikada, vakitler saatte bir ---------- */
@@ -1035,7 +1049,7 @@ body[data-yerlesim="yari"] #site{display:none}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "21";
+  var SURUM = "22";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
@@ -1187,6 +1201,20 @@ body[data-yerlesim="yari"] #site{display:none}
   tik();
   setInterval(tik, 200);
   duyuruGoster();
+
+  /* ---------- Köşe QR kodu (veri/ayarlar.js: koseQr) ---------- */
+  function koseQrCiz() {
+    var K = A.koseQr, kutu = el("kose-qr"), bugun = gunAnahtari(simdi());
+    var acik = !!(K && K.gorsel) && !(K.bas && bugun < K.bas) && !(K.bit && bugun > K.bit) && !(K.ekran && K.ekran.indexOf(ekran) === -1);
+    kutu.style.display = acik ? "flex" : "none";
+    if (!acik) return;
+    el("kq-ust").textContent = K.ust || "";
+    el("kq-alt").textContent = K.alt || "";
+    var im = el("kq-gorsel");
+    if (im.getAttribute("src") !== K.gorsel) im.src = K.gorsel;
+  }
+  koseQrCiz();
+  setInterval(koseQrCiz, 10 * 60000);
   setInterval(duyuruGoster, (A.duyuruSuresi || 12) * 1000);
   sonraki();
 })();

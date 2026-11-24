@@ -56,6 +56,13 @@ window.FATIH_AYARLAR = {
     qr: "medya/qr-bagis.png"
   },
 
+  /*
+    Köşe QR kodu: alt bandın sağ ucunda her zaman durur (namaz modu dışında). Bağış havuzu sayfasına götürür.
+    Tam ekran kartlarda (kampanya, bağış havuzu) kartın kendi QR kodu görünür.
+    bit = son gün; geçince kendiliğinden kalkar. ekran: ["mescit"] ya da ["cay"] yazılırsa yalnızca o ekranda görünür.
+  */
+  koseQr: { gorsel: "medya/qr-havuz.png", ust: "Bağış", alt: "için okutun", bit: "2026-12-31" },
+
   /* Web sitesi kartı */
   siteKarti: {
     ust: "Camimiz internette",

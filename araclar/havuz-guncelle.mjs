@@ -1,4 +1,4 @@
-// Bağış havuzu sayımı: Mollie'deki havuz linklerine yapılan ÖDENMİŞ bağışları toplar,
+// Bağış havuzu sayımı: Mollie'deki havuz linklerine ve serbest tutarlı bağış linkine yapılan ÖDENMİŞ bağışları toplar,
 // veri/havuz.json dosyasına yalnızca toplam ve adet yazar (tek tek tutar ya da isim yazılmaz).
 // Anahtar yalnızca MOLLIE_TOKEN ortam değişkeninden okunur, dosyaya ya da çıktıya yazılmaz.
 // Mollie'den okunamazsa dosyaya dokunmaz ve hata ile çıkar; sayfada son doğru değer kalır.
@@ -19,12 +19,23 @@ const LINKLER = [
   "pl_7LXgodhzd9s4McAcYM5aJ", // 100 €
   "pl_KPEjMh69Gyf9sMvyJQUrQ"  // 1.000 €
 ];
+// Serbest tutarlı bağış linki: bxlfatih.com/bagis-yap sayfasındaki QR kod ve havuz sayfasındaki
+// "Farklı bir tutar" bağlantısı (başkanın isteğiyle 24.11.2026'da sayıma eklendi).
+// Bu linkin eski bağışları başlangıç tutarının içindedir. Çift sayılmasın diye yalnızca
+// BASLANGIC_ANI'ndan sonra ödenenler eklenir.
+const BASLANGIC_ANI = "2026-11-24T17:25:00Z"; // 2.650.000 € rakamının havuza yazıldığı an (24.11.2026 18:25, Brüksel)
+const ACIK_LINKLER = [
+  "pl_NmX4fQidk8KBU9HdegFTH"
+];
 
 if (!TOKEN) { console.log("MOLLIE_TOKEN tanımlı değil, sayım atlandı."); process.exit(0); }
 
 const sent = (v) => Math.round(parseFloat(v ?? "0") * 100);
 
-async function linkToplami(id) {
+// sonra verilirse yalnızca o andan sonra ödenen bağışlar sayılır
+async function linkToplami(id, sonra = null) {
+  const esik = sonra ? Date.parse(sonra) : null;
+  if (sonra && !Number.isFinite(esik)) throw new Error("başlangıç anı okunamadı: " + sonra);
   let url = `${API}/payment-links/${id}/payments?limit=250`;
   let kurus = 0, adet = 0, sayfa = 0;
   while (url) {
@@ -35,6 +46,7 @@ async function linkToplami(id) {
     for (const p of j?._embedded?.payments ?? []) {
       if (p.status !== "paid" || p.mode === "test") continue;
       if (p.amount?.currency !== "EUR") continue;
+      if (esik !== null && !(Date.parse(p.paidAt || p.createdAt || "") >= esik)) continue;
       const net = sent(p.amount.value) - sent(p.amountRefunded?.value) - sent(p.amountChargedBack?.value);
       if (net <= 0) continue;
       kurus += net; adet += 1;
@@ -46,6 +58,7 @@ async function linkToplami(id) {
 
 let kurus = 0, adet = 0;
 for (const id of LINKLER) { const t = await linkToplami(id); kurus += t.kurus; adet += t.adet; }
+for (const id of ACIK_LINKLER) { const t = await linkToplami(id, BASLANGIC_ANI); kurus += t.kurus; adet += t.adet; }
 
 const online = kurus / 100;
 const yeni = { baslangic: BASLANGIC, baslangicTarihi: BASLANGIC_TARIHI, hedef: HEDEF, online: { toplam: online, adet }, toplam: BASLANGIC + online };
