@@ -39,8 +39,9 @@ async function bankaOku() {
   let j;
   try { j = JSON.parse(await readFile(BANKA, "utf8")); }
   catch (e) { if (e.code === "ENOENT") return { toplam: 0, adet: 0, tarih: null }; throw new Error("havuz-banka.json okunamadı: " + e.message); }
-  const toplam = Number(j.toplam), adet = Number(j.adet);
-  if (!Number.isFinite(toplam) || toplam < 0 || !Number.isInteger(adet) || adet < 0) throw new Error("havuz-banka.json geçersiz");
+  // adet bilinmiyorsa null yazılır (başkan yalnızca tutarı bildirmiş olabilir); uydurulmaz
+  const toplam = Number(j.toplam), adet = j.adet == null ? null : Number(j.adet);
+  if (!Number.isFinite(toplam) || toplam < 0 || (adet !== null && (!Number.isInteger(adet) || adet < 0))) throw new Error("havuz-banka.json geçersiz");
   return { toplam: Math.round(toplam * 100) / 100, adet, tarih: typeof j.tarih === "string" ? j.tarih : null };
 }
 
@@ -83,7 +84,7 @@ let eski = null;
 try { eski = JSON.parse(await readFile(OUT, "utf8")); } catch {}
 const ayni = eski && ["baslangic", "baslangicTarihi", "hedef", "toplam"].every((k) => eski[k] === yeni[k]) && eski.online?.adet === adet
   && eski.banka?.toplam === banka.toplam && eski.banka?.adet === banka.adet && (eski.banka?.tarih ?? null) === banka.tarih;
-if (ayni) { console.log(`Değişiklik yok: çevrim içi ${adet} bağış, ${online} €; banka ${banka.adet} havale, ${banka.toplam} €`); process.exit(0); }
+if (ayni) { console.log(`Değişiklik yok: çevrim içi ${adet} bağış, ${online} €; banka ${banka.toplam} €`); process.exit(0); }
 
 await writeFile(OUT, JSON.stringify({ ...yeni, guncelleme: new Date().toISOString() }, null, 2) + "\n");
-console.log(`Güncellendi: çevrim içi ${adet} bağış, ${online} €; banka ${banka.adet} havale, ${banka.toplam} €; toplam ${yeni.toplam} €`);
+console.log(`Güncellendi: çevrim içi ${adet} bağış, ${online} €; banka ${banka.toplam} €; toplam ${yeni.toplam} €`);
