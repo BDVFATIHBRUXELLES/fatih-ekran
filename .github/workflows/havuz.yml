@@ -1,0 +1,51 @@
+name: Bağış havuzu sayımı
+
+# Mollie'deki beş havuz linkine gelen ödenmiş bağışları 5 dakikada bir sayar.
+# Toplam değiştiyse veri/havuz.json dosyasını günceller. Yalnızca toplam ve adet yazılır.
+# Gizli değişken: MOLLIE_TOKEN (yalnızca payment-links.read izinli Mollie jetonu).
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: havuz-sayim
+  cancel-in-progress: false
+
+jobs:
+  say:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mollie'den say
+        env:
+          MOLLIE_TOKEN: ${{ secrets.MOLLIE_TOKEN }}
+        run: node araclar/havuz-guncelle.mjs
+
+      - name: Değiştiyse kaydet
+        id: kaydet
+        run: |
+          if [ -z "$(git status --porcelain -- veri/havuz.json)" ]; then
+            echo "Değişiklik yok"
+            exit 0
+          fi
+          git config user.name "fatih-ekran-otomatik"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add veri/havuz.json
+          git commit -m "Havuz sayımı güncellendi"
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push
+          echo "degisti=1" >> "$GITHUB_OUTPUT"
+
+      - name: Sayfayı yeniden yayınla
+        if: steps.kaydet.outputs.degisti == '1'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
