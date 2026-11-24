@@ -275,7 +275,14 @@ footer a { color: var(--sky); font-weight: 700; }
 .ekranyan, .ekranalt { display: none; }
 html.ekran, html.ekran body { height: 100%; overflow: hidden; }
 html.ekran .bg { height: 100%; }
-html.ekran .bg video { display: none; }
+/* Cami ekranlarında fon: caminin drone görüntüsü (başkanın isteği 24.11.2026). Örtü, yazılar okunacak kadar açık tutulur.
+   Video yalnızca ekran sistemi "oynat" dediğinde oynar; aynı anda tek video çözülsün diye sistem gerektiğinde durdurur. */
+html.ekran .bg video { opacity: 1; }
+html.ekran .bg::after {
+  background:
+    radial-gradient(85% 55% at 88% 4%, rgba(255,224,138,.5) 0%, rgba(255,224,138,0) 62%),
+    linear-gradient(180deg, rgba(25,195,206,.5) 0%, rgba(130,224,238,.56) 32%, rgba(242,251,253,.68) 72%, rgba(250,253,254,.76) 100%);
+}
 html.ekran .preview, html.ekran .lead, html.ekran .cta, html.ekran .below, html.ekran footer, html.ekran .stick,
 html.ekran .meter, html.ekran .basenote, html.ekran .toast, html.ekran .thanks { display: none !important; }
 html.ekran .wrap { position: absolute; left: 0; top: 0; width: 960px; height: 1080px; max-width: none; margin: 0; padding: 40px 52px 0; transform-origin: 0 0; }
@@ -532,7 +539,17 @@ if (EKRAN) {
       wrap.style.transform = "translate(" + Math.max(0, (w - EN * k) / 2) + "px," + Math.max(0, (h - 1080 * k) / 2) + "px) scale(" + k + ")";
     };
     fit(); window.addEventListener("resize", fit);
-    try { var v0 = document.getElementById("bgv"); v0.removeAttribute("autoplay"); v0.pause(); v0.removeAttribute("src"); v0.load(); } catch (e) {}
+    /* Fon videosu: kendiliğinden başlamaz; ekran sistemi (üst sayfa) { fatihEkran: "video", oynat: true/false } iletisiyle yönetir.
+       İleti gelmezse kuşbakışı fotoğraf (poster) fon olarak kalır. */
+    var v0 = document.getElementById("bgv");
+    /* Ekranlarda ileri-geri kurgulanmış sürüm kullanılır (13 sn): döngü başa sararken görüntü sıçramaz */
+    try { v0.removeAttribute("autoplay"); v0.pause(); v0.setAttribute("src", "media/drone-ekran.mp4"); v0.load(); } catch (e) {}
+    window.addEventListener("message", function (e) {
+      var d = e.data;
+      if (!d || d.fatihEkran !== "video") return;
+      try { if (d.oynat) { var p = v0.play(); if (p && p.catch) p.catch(function () {}); } else v0.pause(); } catch (x) {}
+    });
+    try { if (window.parent && window.parent !== window) window.parent.postMessage({ fatihEkran: "hazir" }, "*"); } catch (e) {}
   })();
 }
 var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

@@ -804,6 +804,7 @@ body[data-duzen="ust"] #panel #kose-qr{display:none !important}
     namazAcik = acik;
     el("namaz").className = acik ? "acik" : "";
     el("namaz").setAttribute("aria-hidden", acik ? "false" : "true");
+    fonVideoGonder();
     if (acik) { try { vid.pause(); } catch (e) {} }
     else if (videoMu(aktif)) { var p = vid.play(); if (p && p.catch) p.catch(function () {}); }
   }
@@ -948,7 +949,21 @@ body[data-duzen="ust"] #panel #kose-qr{display:none !important}
   }
   function panelGoster(ad) {
     for (var k in PANELLER) PANELLER[k].style.display = (k === ad) ? ((k === "video" || k === "gorsel" || k === "sayfa" || k === "sayfaTam") ? "block" : "flex") : "none";
+    fonVideo.tam = ad === "sayfaTam";
+    fonVideo.icerik = ad === "video";
+    fonVideoGonder();
   }
+  /* Canlı sayfaların (bağış havuzu) fon videosu: aynı anda yalnızca bir video oynasın diye buradan yönetilir.
+     Tam ekran sayfa görünürken yalnızca onunki; bölünmüş ekranda sağ yarıdaki oynar, sol yarıda video varken ve namaz modunda durur. */
+  var fonVideo = { tam: false, icerik: false };
+  function fonVideoGonder() {
+    function ilet(id, oynat) {
+      try { var c = el(id); if (c && c.getAttribute("src") && c.contentWindow) c.contentWindow.postMessage({ fatihEkran: "video", oynat: !!oynat }, "*"); } catch (e) {}
+    }
+    ilet("sayfa-tam-cerceve", fonVideo.tam && !namazAcik);
+    ilet("yan-cerceve", !fonVideo.tam && !fonVideo.icerik && !namazAcik && document.body.getAttribute("data-duzen") === "ust");
+  }
+  window.addEventListener("message", function (e) { if (e.data && e.data.fatihEkran === "hazir") fonVideoGonder(); });
   function videoMu(o) { return !!o && (!o.tip || o.tip === "video"); }
   function siteCiz() {
     var S = A.siteKarti || {};
@@ -1044,6 +1059,7 @@ body[data-duzen="ust"] #panel #kose-qr{display:none !important}
       gorsel.src = aktif.dosya;
       gorselSayaci = setTimeout(sonraki, (aktif.sure || 12) * 1000);
     } else {
+      fonVideo.tam = false; fonVideo.icerik = true; fonVideoGonder();
       vid.muted = !ekranAyar().sesli;
       vid.src = aktif.dosya;
       vid.load();
@@ -1112,7 +1128,7 @@ body[data-duzen="ust"] #panel #kose-qr{display:none !important}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "24";
+  var SURUM = "25";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");

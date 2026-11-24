@@ -17,7 +17,7 @@ window.FATIH_AYARLAR = {
     bit = son gün; geçince ekran kendiliğinden eski yarı yarıya düzene (vakitler sağda) döner.
     Bu satır silinirse de eski düzen geri gelir.
   */
-  yanSayfa: { dosya: "havuz/index.html?ekran=1&v=2", bit: "2026-12-31" },
+  yanSayfa: { dosya: "havuz/index.html?ekran=1&v=3", bit: "2026-12-31" },
 
   /* Her mekânın ekranı ayrı davranır. */
   ekranlar: {

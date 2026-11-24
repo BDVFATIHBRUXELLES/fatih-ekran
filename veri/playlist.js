@@ -21,7 +21,7 @@
   iki yanı aynı videonun bulanık hâliyle doludur.
 */
 window.FATIH_PLAYLIST = [
-  { tip: "sayfa", dosya: "havuz/index.html?ekran=2&v=2", sure: 120, tam: true, bit: "2026-12-31" },
+  { tip: "sayfa", dosya: "havuz/index.html?ekran=2&v=3", sure: 120, tam: true, bit: "2026-12-31" },
   { tip: "kampanya", sure: 20 },
   { tip: "video", dosya: "medya/FATIH_Kulliye5EkBina_GENIS.mp4", bit: "2026-12-31" },
   { tip: "soz", tur: "ayet", sure: 22 },
