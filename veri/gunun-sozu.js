@@ -1,7 +1,7 @@
 /* Günün ayeti, hadisi ve duası. Bu dosya otomatik yazılır, elle değiştirmeyin.
    Kaynak: Diyanet İşleri Başkanlığı, diyanet.gov.tr */
 window.FATIH_GUNUN_SOZU = {
- "tarih": "2026-11-25",
+ "tarih": "2026-11-26",
  "ayet": {
   "metin": "Hiç Mü'min (İman etmiş kimse) fasık (günaha batmış kimse) gibi olur mu? Bunlar elbette eşit değildirler.",
   "kaynak": "Secde, 32/18"
