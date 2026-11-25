@@ -2,7 +2,9 @@ name: Bağış havuzu sayımı
 
 # Mollie'deki beş havuz linkine gelen ödenmiş bağışları 5 dakikada bir sayar.
 # Toplam değiştiyse veri/havuz.json dosyasını günceller. Yalnızca toplam ve adet yazılır.
-# Gizli değişken: MOLLIE_TOKEN (yalnızca payment-links.read izinli Mollie jetonu).
+# Gizli değişkenler: MOLLIE_TOKEN (yalnızca payment-links.read izinli Mollie jetonu);
+# ODOO_HAVUZ_WEBHOOK (isteğe bağlı): Odoo'daki "Havuz sayacı" otomasyon kuralının webhook adresi.
+# Bu adres varsa sonuç her çalışmada bxlfatih.com'daki veri ekine de yazılır (bkz. odoo/havuz-webhook.py).
 on:
   schedule:
     - cron: "*/5 * * * *"
@@ -49,3 +51,16 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
+
+      - name: Odoo'ya yaz (bxlfatih.com sayacı)
+        continue-on-error: true
+        env:
+          ODOO_HAVUZ_WEBHOOK: ${{ secrets.ODOO_HAVUZ_WEBHOOK }}
+        run: |
+          if [ -z "$ODOO_HAVUZ_WEBHOOK" ]; then
+            echo "ODOO_HAVUZ_WEBHOOK tanımlı değil; Odoo'ya yazma atlandı"
+            exit 0
+          fi
+          curl -fsS --max-time 20 -o /dev/null -w "Odoo: HTTP %{http_code}\n" \
+            -X POST -H "Content-Type: application/json" \
+            --data-binary @veri/havuz.json "$ODOO_HAVUZ_WEBHOOK"
