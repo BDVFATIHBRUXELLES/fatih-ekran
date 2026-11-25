@@ -18,6 +18,8 @@
   bant   : tam ekran "video" için; true ise videonun altında 200 px'lik canlı bant durur (kalan gün, havuzda biriken,
            hedefe kalan, QR kodu, saat). O zaman video üstteki 1920×880 alanı doldurur: 1920×880 hazırlanırsa hiç kırpılmaz,
            1920×1080 gelirse üstten ve alttan 100'er px kırpılır.
+           "yan" ise (dikey videolar için) video ortada tam yükseklikte durur, iki yanında aynı bilgiler ve oran büyük yazılır;
+           video 608×1080 hazırlanır.
   ekran  : hangi ekranlarda görünsün ("mescit", "cay"). Yazılmazsa hepsinde görünür.
   bas/bit: gösterimin ilk ve son günü (YYYY-AA-GG). Yazılmazsa süresiz.
 
@@ -26,6 +28,7 @@
 */
 window.FATIH_PLAYLIST = [
   { tip: "sayfa", dosya: "havuz/index.html?ekran=2&v=3", sure: 120, tam: true, bit: "2026-12-31" },
+  { tip: "video", dosya: "medya/FATIH_TrenPeronda_EKRAN.mp4", tam: true, bant: "yan", bit: "2026-12-31" },
   { tip: "kampanya", sure: 20 },
   { tip: "video", dosya: "medya/FATIH_Kulliye5EkBina_GENIS.mp4", bit: "2026-12-31" },
   { tip: "soz", tur: "ayet", sure: 22 },

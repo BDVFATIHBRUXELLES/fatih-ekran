@@ -270,6 +270,45 @@ body.tv{background:var(--zemin)}
 #vt-bant .vb-saat{font-size:70px;font-weight:700;line-height:1}
 #vt-bant .vb-sure{margin-top:10px;font-size:18px;font-weight:600;line-height:1.25;white-space:nowrap}
 #vt-bant .vb-sure .rakam{display:block;font-size:28px;font-weight:750;color:#FFBE2E}
+/* Bant kipinde (bant: true) gruplar tek sıra olur; yalnızca yan kipte görünen öğeler gizlidir */
+#vt-bant .vb-sol,#vt-bant .vb-sag{display:contents}
+#vt-bant .vb-ust,#vt-bant .vb-oran,#vt-bant .vb-son{display:none}
+#vt-bant .vb-zaman{order:5}
+/* Yan kip (bant: "yan"): dikey video ortada tam yükseklikte (608×1080), iki yanında canlı bilgiler.
+   Sol: başlık, kalan gün, saat. Sağ: havuzda biriken, oran, hedefe kalan, QR kodu. Renkler tren videosunun yeşili ve altını. */
+#video-tam.yanli{background:#0E473A}
+#video-tam.yanli video{left:656px;width:608px;height:1080px}
+#video-tam.yanli #vt-bant{display:block;left:0;top:0;width:1920px;height:1080px;padding:0;background:none}
+#video-tam.yanli .vb-sol,#video-tam.yanli .vb-sag{position:absolute;top:0;width:656px;height:1080px;padding:60px 54px 56px;display:flex;flex-direction:column;justify-content:space-between}
+#video-tam.yanli .vb-sol{left:0}
+#video-tam.yanli .vb-sag{left:1264px}
+#video-tam.yanli .vb-ust{display:flex;align-items:center}
+#video-tam.yanli .vb-ust img{height:112px;width:auto;margin-right:20px;display:none;flex:none}
+#video-tam.yanli .vb-slogan{font-size:27px;font-weight:650;color:#F0C766}
+#video-tam.yanli .vb-baslik{margin-top:2px;font-family:var(--baslik);font-weight:var(--kalin);font-size:66px;line-height:1.05;letter-spacing:var(--harf)}
+#video-tam.yanli .vb-gun{display:block}
+#video-tam.yanli .vb-gun-sayi{display:block;font-size:330px;line-height:.82;color:#F0C766}
+#video-tam.yanli .vb-gun-yazi{display:block;margin:22px 0 0;font-size:84px;line-height:1;white-space:normal}
+#video-tam.yanli .vb-son{display:block;margin-top:16px;font-size:31px;font-weight:600;color:#CFE3DA}
+#video-tam.yanli .vb-zaman{order:0;text-align:left}
+#video-tam.yanli .vb-saat{font-size:96px}
+#video-tam.yanli .vb-sure{margin-top:12px;font-size:26px}
+#video-tam.yanli .vb-sure .rakam{display:inline;margin-left:12px;font-size:34px;color:#F0C766}
+#video-tam.yanli .vb-kutu{padding:22px 30px 26px;border-radius:24px}
+#video-tam.yanli .vb-etiket{font-size:30px}
+#video-tam.yanli .vb-biriken .vb-tutar{margin-top:8px;font-size:70px}
+#video-tam.yanli .vb-kalan{background:#F0C766}
+#video-tam.yanli .vb-kalan .vb-tutar{margin-top:8px;font-size:66px}
+#video-tam.yanli .vb-oran{display:block}
+#video-tam.yanli .vb-oran-yazi{font-family:var(--baslik);font-weight:var(--kalin);font-size:46px;line-height:1}
+#video-tam.yanli .vb-oran-sayi{font-size:92px;color:#F0C766;letter-spacing:-.02em}
+#video-tam.yanli .vb-cubuk{margin-top:18px;height:30px;border-radius:999px;background:rgba(255,255,255,.22);overflow:hidden}
+#video-tam.yanli .vb-dolu{height:100%;width:0;border-radius:999px;background:#F0C766}
+#video-tam.yanli .vb-hedef{margin-top:12px;font-size:27px;font-weight:600;color:#CFE3DA}
+#video-tam.yanli .vb-qr img{width:196px;height:196px;border-radius:16px}
+#video-tam.yanli .vb-qr-yazi{margin-left:26px}
+#video-tam.yanli .vb-cagri{font-size:42px;font-weight:800;line-height:1.1}
+#video-tam.yanli .vb-adres{margin-top:12px;font-size:30px;color:#F0C766}
 #surum-etiket{position:absolute;right:14px;bottom:8px;font-size:15px;font-weight:600;color:#FFFFFF;opacity:.55}
 
 /* Namaz modu: video durur, sade tablo kalır */
@@ -518,11 +557,17 @@ body[data-duzen="ust"] #panel #kose-qr{display:none !important}
   <div id="video-tam">
     <video id="vid-tam" muted playsinline preload="auto"></video>
     <div id="vt-bant">
-      <div class="vb-gun"><span class="vb-gun-sayi" id="vb-gun"></span><span class="vb-gun-yazi" id="vb-gun-yazi"></span></div>
-      <div class="vb-kutu vb-biriken" id="vb-biriken-kutu"><div class="vb-etiket" id="vb-biriken-etiket"></div><div class="vb-tutar" id="vb-biriken"></div></div>
-      <div class="vb-kutu vb-kalan" id="vb-kalan-kutu"><div class="vb-etiket">Hedefe kalan</div><div class="vb-tutar" id="vb-kalan"></div></div>
-      <div class="vb-qr"><img class="logo-gorsel" id="vb-qr" alt=""><div class="vb-qr-yazi"><div class="vb-cagri" id="vb-cagri"></div><div class="vb-adres" id="vb-adres"></div></div></div>
-      <div class="vb-zaman"><div class="vb-saat rakam" id="vt-saat"></div><div class="vb-sure"><span id="vt-kalan-etiket"></span><span class="rakam" id="vt-kalan-sure"></span></div></div>
+      <div class="vb-sol">
+        <div class="vb-ust"><img class="logo-gorsel" src="medya/logo-beyaz.png" alt=""><div><div class="vb-slogan" id="vb-slogan"></div><div class="vb-baslik" id="vb-baslik"></div></div></div>
+        <div class="vb-gun"><span class="vb-gun-sayi" id="vb-gun"></span><span class="vb-gun-yazi" id="vb-gun-yazi"></span><span class="vb-son" id="vb-son"></span></div>
+        <div class="vb-zaman"><div class="vb-saat rakam" id="vt-saat"></div><div class="vb-sure"><span id="vt-kalan-etiket"></span><span class="rakam" id="vt-kalan-sure"></span></div></div>
+      </div>
+      <div class="vb-sag">
+        <div class="vb-kutu vb-biriken" id="vb-biriken-kutu"><div class="vb-etiket" id="vb-biriken-etiket"></div><div class="vb-tutar" id="vb-biriken"></div></div>
+        <div class="vb-oran" id="vb-oran-kutu"><div class="vb-oran-yazi"><span class="vb-oran-sayi" id="vb-oran"></span> tamamlandı</div><div class="vb-cubuk"><div class="vb-dolu" id="vb-dolu"></div></div><div class="vb-hedef" id="vb-hedef"></div></div>
+        <div class="vb-kutu vb-kalan" id="vb-kalan-kutu"><div class="vb-etiket">Hedefe kalan</div><div class="vb-tutar" id="vb-kalan"></div></div>
+        <div class="vb-qr"><img class="logo-gorsel" id="vb-qr" alt=""><div class="vb-qr-yazi"><div class="vb-cagri" id="vb-cagri"></div><div class="vb-adres" id="vb-adres"></div></div></div>
+      </div>
     </div>
   </div>
 
@@ -1150,7 +1195,16 @@ body[data-duzen="ust"] #panel #kose-qr{display:none !important}
     el("vb-cagri").textContent = B.cagri || "";
     el("vb-adres").textContent = B.adres || "";
     resimAyarla(el("vb-qr"), B.qr);
-    kutu.className = "bantli";
+    /* yan kipte görünen alanlar */
+    kampanyaCiz();
+    el("vb-slogan").textContent = d.K.altBaslik || "";
+    el("vb-baslik").textContent = d.K.baslik || "";
+    el("vb-son").textContent = el("k-son").textContent;
+    el("vb-oran-kutu").style.visibility = d.yuzde === null ? "hidden" : "";
+    el("vb-oran").textContent = d.yuzde === null ? "" : "%" + d.yuzde;
+    el("vb-dolu").style.width = (d.yuzde === null ? 0 : d.yuzde) + "%";
+    el("vb-hedef").textContent = d.O.hedef ? "Hedef " + d.O.hedef : "";
+    kutu.className = o.bant === "yan" ? "yanli" : "bantli";
   }
 
   /* ---------- Duyurular ---------- */
@@ -1201,7 +1255,7 @@ body[data-duzen="ust"] #panel #kose-qr{display:none !important}
      Ekran, veri/surum.js dosyasına iki dakikada bir bakar. Oradaki sürüm bu sayfanınkinden
      farklıysa sayfayı yeni adresle baştan yükler; böylece tarayıcının eski kopyası kullanılmaz.
      Sayfa her değiştiğinde SURUM ve veri/surum.js birlikte artırılır. */
-  var SURUM = "26";
+  var SURUM = "27";
   el("surum-etiket").textContent = "sürüm " + SURUM;
   function surumDenetle() {
     var s = document.createElement("script");
