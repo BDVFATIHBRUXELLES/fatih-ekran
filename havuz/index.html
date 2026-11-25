@@ -58,6 +58,14 @@ a { color: inherit; }
 
 .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 16px 20px 40px; }
 
+/* Dil seçici */
+.dil { display: flex; justify-content: flex-end; gap: 6px; margin: -4px 0 8px; }
+.dil a { min-width: 44px; min-height: 32px; display: inline-flex; align-items: center; justify-content: center; padding: 4px 10px; border-radius: 999px;
+  font-weight: 800; font-size: .78rem; letter-spacing: .06em; color: var(--ink); text-decoration: none; background: rgba(255,255,255,.72); box-shadow: 0 2px 8px rgba(10,20,64,.12); }
+.dil a[aria-current] { background: var(--ink); color: var(--white); }
+.dil a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+html.ekran .dil { display: none; }
+
 /* Üst şerit */
 .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
@@ -217,8 +225,8 @@ dl { margin: 0; }
 }
 .chip.on { background: var(--ink); border-color: var(--ink); color: var(--white); }
 .qrhelp { margin: 14px 0 0; font-size: .93rem; font-weight: 600; }
-.bank { margin: 12px 0 12px; display: grid; gap: 6px; font-size: .9rem; }
-.bank div { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 8px; }
+.bank { margin: 12px 0 12px; display: grid; grid-template-columns: minmax(92px, max-content) minmax(0, 1fr); gap: 6px 10px; font-size: .9rem; }
+.bank div { display: contents; }
 .bank dt { color: var(--muted); font-weight: 700; }
 .bank dd { margin: 0; font-weight: 800; overflow-wrap: anywhere; }
 .share p { margin: 0 0 12px; font-weight: 700; }
@@ -365,6 +373,7 @@ html.tam .tk { display: inline; }
 <div class="bg" aria-hidden="true"><video id="bgv" src="media/drone.mp4" poster="media/kusbakisi.jpg" autoplay muted loop playsinline></video></div>
 
 <div class="wrap">
+  <nav class="dil" aria-label="Dil · Langue · Taal"><a href="./" hreflang="tr" lang="tr" aria-current="page">TR</a><a href="fr.html" hreflang="fr" lang="fr">FR</a><a href="nl.html" hreflang="nl" lang="nl">NL</a></nav>
   <header class="top">
     <a class="brand" href="https://www.bxlfatih.com">
       <img src="media/logo-white.png" alt="Brüksel Fatih Camii logosu" width="46" height="46">
@@ -525,6 +534,30 @@ var CONFIG = {
 
 var $ = function (id) { return document.getElementById(id); };
 
+/* ---------- Dil: fr.html ve nl.html, araclar/havuz-dil.py ile bu dosyadan üretilir (yalnızca DIL ve sayfa metinleri değişir) ---------- */
+var DIL = "tr";
+var LOC = { tr: "tr-TR", fr: "nl-BE", nl: "nl-BE" }[DIL] || "tr-TR";   // FR sayfa da sitedeki gibi 2.650.000 € biçimini kullanır
+var TXT = {
+  tr: { gecildi: " € geçildi", ibanOk: "IBAN kopyalandı", linkOk: "Link kopyalandı",
+        qrAlt: function (a) { return a + " euro havale için QR kod"; },
+        ago: ["az önce", function (n) { return n + " dk önce"; }, function (n) { return n + " sa önce"; }, function (n) { return n + " gün önce"; }],
+        pct: function (n) { return "%" + n; },
+        shareTitle: "5 Ek Bina Bağış Havuzu · Brüksel Fatih Camii",
+        shareText: "Brüksel Fatih Camii 5 Ek Bina kampanyasında bağış havuzu açıldı. Ben attım, sıra sende. " },
+  fr: { gecildi: " € dépassés", ibanOk: "IBAN copié", linkOk: "Lien copié",
+        qrAlt: function (a) { return "QR code pour un virement de " + a + " €"; },
+        ago: ["à l'instant", function (n) { return "il y a " + n + " min"; }, function (n) { return "il y a " + n + " h"; }, function (n) { return "il y a " + n + " j"; }],
+        pct: function (n) { return n + "\u00a0%"; },
+        shareTitle: "Cagnotte du projet 5 bâtiments · Mosquée Fatih de Bruxelles",
+        shareText: "La Mosquée Fatih de Bruxelles a ouvert une cagnotte pour son projet 5 bâtiments. J'ai donné, à vous maintenant. " },
+  nl: { gecildi: " € overschreden", ibanOk: "IBAN gekopieerd", linkOk: "Link gekopieerd",
+        qrAlt: function (a) { return "QR-code voor een overschrijving van " + a + " €"; },
+        ago: ["zonet", function (n) { return n + " min geleden"; }, function (n) { return n + " u geleden"; }, function (n) { return n + " d geleden"; }],
+        pct: function (n) { return n + "%"; },
+        shareTitle: "Donatiepot project 5 gebouwen · Fatih Moskee Brussel",
+        shareText: "De Fatih Moskee Brussel heeft een donatiepot geopend voor het project 5 gebouwen. Ik heb gegeven, nu jij. " }
+}[DIL];
+
 /* Cami ekranı görünümü: adres ?ekran=1 (yarım alan, 960×1080) ya da ?ekran=2 (tam ekran, 1920×1080) ile biterse
    butonlar gizlenir, sayfa alana sığacak kadar ölçeklenir */
 var TAM = /[?&]ekran=2/.test(location.search);
@@ -553,7 +586,7 @@ if (EKRAN) {
   })();
 }
 var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-var fmt = function (n) { return Math.round(n).toLocaleString("tr-TR"); };
+var fmt = function (n) { return Math.round(n).toLocaleString(LOC); };
 
 /* Geri sayım: takvim günü farkı */
 (function () {
@@ -570,16 +603,16 @@ function applyTotals() {
   var ratio = Math.min(1, state.total / CONFIG.goal);
   state.fillTo = Math.max(0.04, ratio);
   $("goal").textContent = fmt(CONFIG.goal) + " €";
-  $("pct").textContent = "%" + (ratio * 100).toLocaleString("tr-TR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  $("pct").textContent = TXT.pct((ratio * 100).toLocaleString(LOC, { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
   $("left").textContent = fmt(Math.max(0, CONFIG.goal - state.total)) + " €";
   $("e-goal").textContent = $("goal").textContent; $("e-pct").textContent = $("pct").textContent; $("e-left").textContent = $("left").textContent;
 }
 function ago(ts) {
   var s = Math.max(0, (Date.now() - ts) / 1000);
-  if (s < 45) return "az önce";
-  if (s < 3600) return Math.round(s / 60) + " dk önce";
-  if (s < 86400) return Math.round(s / 3600) + " sa önce";
-  return Math.round(s / 86400) + " gün önce";
+  if (s < 45) return TXT.ago[0];
+  if (s < 3600) return TXT.ago[1](Math.round(s / 60));
+  if (s < 86400) return TXT.ago[2](Math.round(s / 3600));
+  return TXT.ago[3](Math.round(s / 86400));
 }
 function renderDrops(markNew) {
   var ul = $("drops"); ul.textContent = "";
@@ -603,7 +636,7 @@ function addDonation(amount, at, quiet) {
   var hv = $("hover"); hv.classList.remove("go"); void hv.offsetWidth; hv.classList.add("go");
   var el = $("sum"); el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump");
   var after = Math.floor(state.total / CONFIG.cheerEvery);
-  if (after > before) { burst(); toast(fmt(after * CONFIG.cheerEvery) + " € geçildi"); }
+  if (after > before) { burst(); toast(fmt(after * CONFIG.cheerEvery) + TXT.gecildi); }
 }
 
 /* ---------- Havuz çizimi ---------- */
@@ -875,19 +908,19 @@ Array.prototype.forEach.call(document.querySelectorAll("[data-amt]"), function (
   Array.prototype.forEach.call(chips, function (c) {
     c.addEventListener("click", function () {
       var a = c.getAttribute("data-qr");
-      img.src = "media/qr-" + a + ".png"; img.alt = fmt(+a) + " euro havale için QR kod";
+      img.src = "media/qr-" + a + ".png"; img.alt = TXT.qrAlt(fmt(+a));
       Array.prototype.forEach.call(chips, function (x) { x.classList.toggle("on", x === c); x.setAttribute("aria-pressed", x === c ? "true" : "false"); });
     });
   });
   $("ibancp").addEventListener("click", function () {
-    try { navigator.clipboard.writeText("BE54068958415597").then(function () { toast("IBAN kopyalandı"); }, function () { toast("BE54 0689 5841 5597"); }); }
+    try { navigator.clipboard.writeText("BE54068958415597").then(function () { toast(TXT.ibanOk); }, function () { toast("BE54 0689 5841 5597"); }); }
     catch (e) { toast("BE54 0689 5841 5597"); }
   });
 })();
 
 /* ---------- Paylaşım ---------- */
-var shareTitle = "5 Ek Bina Bağış Havuzu · Brüksel Fatih Camii";
-var shareText = "Brüksel Fatih Camii 5 Ek Bina kampanyasında bağış havuzu açıldı. Ben attım, sıra sende. ";
+var shareTitle = TXT.shareTitle;
+var shareText = TXT.shareText;
 (function () {
   var u = CONFIG.pageUrl, E = encodeURIComponent;
   var urls = u ? {
@@ -907,7 +940,7 @@ var shareText = "Brüksel Fatih Camii 5 Ek Bina kampanyasında bağış havuzu a
     if (k === "copy") {
       el.addEventListener("click", function () {
         if (!u) { toast("Önizleme: sayfa yayınlanınca link buradan kopyalanır"); return; }
-        try { navigator.clipboard.writeText(u).then(function () { toast("Link kopyalandı"); }, function () { toast(u); }); }
+        try { navigator.clipboard.writeText(u).then(function () { toast(TXT.linkOk); }, function () { toast(u); }); }
         catch (e) { toast(u); }
       });
       return;
