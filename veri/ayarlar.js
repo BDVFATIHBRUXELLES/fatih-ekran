@@ -72,6 +72,10 @@ window.FATIH_AYARLAR = {
   */
   koseQr: { gorsel: "medya/qr-havuz.png", ust: "Bağış", alt: "için okutun", bit: "2026-12-31" },
 
+  /* Tam ekran videonun altındaki canlı bantta (playlist: tam: true, bant: true) QR kodu ve yanındaki yazı.
+     Kalan gün, havuzda biriken ve hedefe kalan tutar kendiliğinden gelir. */
+  videoBant: { qr: "medya/qr-havuz.png", cagri: "Bağış için\nokutun", adres: "bxlfatih.com/havuz" },
+
   /* Web sitesi kartı */
   siteKarti: {
     ust: "Camimiz internette",

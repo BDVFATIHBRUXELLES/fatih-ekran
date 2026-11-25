@@ -14,6 +14,10 @@
   tam    : "kampanya" ve "sayfa" için; true ise sırası gelince bütün ekranı kaplar (saat ve geri sayım köşede kalır).
            Tam ekran sayfa 1920×1080 çizilmelidir (bağış havuzu için adres ?ekran=2; yarım alan için ?ekran=1)
            Sayfanın kendisi değişince adresin sonundaki v= sayısı artırılır; açık ekranlar sayfayı o zaman yeniden yükler
+           "video" için de geçerlidir: video bütün ekranı kaplar. Yatay hazırlanır.
+  bant   : tam ekran "video" için; true ise videonun altında 200 px'lik canlı bant durur (kalan gün, havuzda biriken,
+           hedefe kalan, QR kodu, saat). O zaman video üstteki 1920×880 alanı doldurur: 1920×880 hazırlanırsa hiç kırpılmaz,
+           1920×1080 gelirse üstten ve alttan 100'er px kırpılır.
   ekran  : hangi ekranlarda görünsün ("mescit", "cay"). Yazılmazsa hepsinde görünür.
   bas/bit: gösterimin ilk ve son günü (YYYY-AA-GG). Yazılmazsa süresiz.
 
