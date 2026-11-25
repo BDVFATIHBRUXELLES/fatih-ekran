@@ -239,7 +239,6 @@ dl { margin: 0; }
 .sb.wa { background: #17A853; }
 .sb.fb { background: #1877F2; }
 .sb.x { background: #000000; }
-.sb.tg { background: #1E96D1; }
 .sb.cp { grid-column: 1 / -1; background: var(--white); color: var(--ink); box-shadow: inset 0 0 0 2px rgba(10,20,64,.28); }
 
 /* Teşekkür ekranı */
@@ -473,7 +472,6 @@ html.tam .tk { display: inline; }
           <a class="sb wa" data-share="wa" role="button" tabindex="0">WhatsApp</a>
           <a class="sb fb" data-share="fb" role="button" tabindex="0">Facebook</a>
           <a class="sb x" data-share="x" role="button" tabindex="0">X</a>
-          <a class="sb tg" data-share="tg" role="button" tabindex="0">Telegram</a>
           <button class="sb cp" data-share="copy" type="button">Linki kopyala</button>
         </div>
       </div>
@@ -502,7 +500,6 @@ html.tam .tk { display: inline; }
       <a class="sb wa" data-share="wa" role="button" tabindex="0">WhatsApp</a>
       <a class="sb fb" data-share="fb" role="button" tabindex="0">Facebook</a>
       <a class="sb x" data-share="x" role="button" tabindex="0">X</a>
-      <a class="sb tg" data-share="tg" role="button" tabindex="0">Telegram</a>
       <button class="sb cp" data-share="copy" type="button">Linki kopyala</button>
     </div>
     <button class="sb cp" id="th-close" type="button">Havuza dön</button>
@@ -926,8 +923,7 @@ var shareText = TXT.shareText;
   var urls = u ? {
     wa: "https://wa.me/?text=" + E(shareText + u),
     fb: "https://www.facebook.com/sharer/sharer.php?u=" + E(u),
-    x: "https://twitter.com/intent/tweet?text=" + E(shareText) + "&url=" + E(u),
-    tg: "https://t.me/share/url?url=" + E(u) + "&text=" + E(shareText)
+    x: "https://twitter.com/intent/tweet?text=" + E(shareText) + "&url=" + E(u)
   } : {};
   Array.prototype.forEach.call(document.querySelectorAll("[data-share]"), function (el) {
     var k = el.getAttribute("data-share");
