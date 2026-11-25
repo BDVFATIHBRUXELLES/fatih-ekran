@@ -372,7 +372,7 @@ html.tam .tk { display: inline; }
 <div class="bg" aria-hidden="true"><video id="bgv" src="/web/content/3419/havuz-drone.mp4" poster="/web/content/3421/havuz-kusbakisi.jpg" autoplay="" muted="" loop="" playsinline=""/></div>
 
 <div class="wrap">
-  <nav class="dil" aria-label="Dil · Langue · Taal"><a href="/havuz" hreflang="tr" lang="tr" aria-current="page">TR</a><a href="/cagnotte" hreflang="fr" lang="fr">FR</a><a href="/donatiepot" hreflang="nl" lang="nl">NL</a></nav>
+  <nav class="dil" aria-label="Dil · Langue · Taal"><a href="https://www.bxlfatih.com/havuz" hreflang="tr" lang="tr" aria-current="page">TR</a><a href="https://www.bxlfatih.com/cagnotte" hreflang="fr" lang="fr">FR</a><a href="https://www.bxlfatih.com/donatiepot" hreflang="nl" lang="nl">NL</a></nav>
   <header class="top">
     <a class="brand" href="https://www.bxlfatih.com">
       <img src="/web/content/3422/havuz-logo-white.png" alt="Brüksel Fatih Camii logosu" width="46" height="46"/>
@@ -511,6 +511,7 @@ html.tam .tk { display: inline; }
 <div class="toast" id="toast" role="status"/>
 
 <script>
+(function () { try { var p = "/havuz"; if (location.pathname !== p) history.replaceState(null, "", p + location.search + location.hash); } catch (e) {} })();
 var QR_URL = {10: "/web/content/3426/havuz-qr-10.png", 20: "/web/content/3427/havuz-qr-20.png", 50: "/web/content/3428/havuz-qr-50.png", 100: "/web/content/3429/havuz-qr-100.png", 1000: "/web/content/3430/havuz-qr-1000.png"};
 /* ---------- AYARLAR: yayına alırken yalnızca burası değişir ---------- */
 var CONFIG = {

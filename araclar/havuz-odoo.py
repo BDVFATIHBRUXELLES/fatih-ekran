@@ -74,12 +74,17 @@ def uret(dosya, dil, yol):
     if "media/" in s.replace("/web/content/", ""):
         sys.exit("çevrilmemiş medya adresi kaldı: " + dosya)
     # dil düğmeleri
-    s = degistir(s, 'href="./"', 'href="/havuz"')
-    s = degistir(s, 'href="fr.html"', 'href="/cagnotte"')
-    s = degistir(s, 'href="nl.html"', 'href="/donatiepot"')
+    # Dil düğmeleri tam adresle yazılır; Odoo göreli adreslerin başına site dilini (/fr, /nl) ekliyor.
+    s = degistir(s, 'href="./"', 'href="%s/havuz"' % SITE)
+    s = degistir(s, 'href="fr.html"', 'href="%s/cagnotte"' % SITE)
+    s = degistir(s, 'href="nl.html"', 'href="%s/donatiepot"' % SITE)
     # veri
     s = degistir(s, 'api: "../veri/havuz.json",', 'api: "/web/content/%d/havuz-veri.json",\n  apiYedek: "%s",' % (VERI_EK, GH_VERI))
-    s = degistir(s, "<script>\n", "<script>\nvar QR_URL = %s;\n" % QR_TABLO)
+    # Odoo, ziyaretçinin site dilini adresin başına ekleyip yönlendiriyor (/donatiepot → /fr/donatiepot).
+    # Sayfa açılınca adres çubuğu kendi temiz adresine döndürülür (QR'lardaki, videolardaki adres).
+    temiz = ('(function () { try { var p = "/%s"; if (location.pathname !== p) '
+             'history.replaceState(null, "", p + location.search + location.hash); } catch (e) {} })();\n') % yol
+    s = degistir(s, "<script>\n", "<script>\n%svar QR_URL = %s;\n" % (temiz, QR_TABLO))
     s = degistir(s, 'fetch(u, { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (d) {',
                  "veriAl(u).then(function (d) {")
     s = degistir(s, "\nfunction startLive() {", VERI_AL)
