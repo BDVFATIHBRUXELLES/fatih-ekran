@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Siteden oku
         run: node araclar/kampanya-guncelle.mjs
@@ -36,7 +36,13 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add veri/kampanya.js
           git commit -m "Kampanya oranı siteden güncellendi"
-          git push
+          ok=0
+          for i in 1 2 3; do
+            if git pull --rebase origin main && git push; then ok=1; break; fi
+            echo "Gönderilemedi, $((i * 10)) sn sonra yeniden denenecek ($i/3)"
+            sleep $((i * 10))
+          done
+          [ "$ok" = 1 ] || exit 1
           echo "degisti=1" >> "$GITHUB_OUTPUT"
 
       - name: Sayfayı yeniden yayınla
