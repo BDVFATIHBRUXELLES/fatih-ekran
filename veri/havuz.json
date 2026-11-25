@@ -3,14 +3,14 @@
   "baslangicTarihi": "2026-11-24",
   "hedef": 4000000,
   "online": {
-    "toplam": 670,
-    "adet": 27
+    "toplam": 672,
+    "adet": 28
   },
   "banka": {
     "toplam": 2195,
     "adet": null,
     "tarih": "2026-11-24"
   },
-  "toplam": 2652865,
-  "guncelleme": "2026-11-25T14:55:40.213Z"
+  "toplam": 2652867,
+  "guncelleme": "2026-11-25T16:21:00.369Z"
 }
