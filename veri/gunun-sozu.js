@@ -3,15 +3,15 @@
 window.FATIH_GUNUN_SOZU = {
  "tarih": "2026-11-26",
  "ayet": {
-  "metin": "Hiç Mü'min (İman etmiş kimse) fasık (günaha batmış kimse) gibi olur mu? Bunlar elbette eşit değildirler.",
-  "kaynak": "Secde, 32/18"
+  "metin": "İman edip salih amel işleyenlere gelince, onlar için, yapmakta olduklarına karşılık bir mükafat olarak Me'vâ cennetleri vardır.",
+  "kaynak": "Secde, 32/19"
  },
  "hadis": {
-  "metin": "Kişinin kalbi doğru olmadıkça imanı doğru olmaz. Dili doğru olmadıkça da kalbi doğru olmaz. Kötülüğünden komşusu emin olmadıkça kişi cennete giremez.",
-  "kaynak": "Ahmed b. Hanbel, Müsned, III /198"
+  "metin": "Kişiyi ölürken üç şey uğurlar: Sevdikleri, malı ve yaptıkları. İlk ikisi geri döner ve o yaptıkları ile baş başa kalır.",
+  "kaynak": "Buharî, “Rikak”, 42; Müslim, “Zühd”, 5"
  },
  "dua": {
-  "metin": "Zalimlerin baskı ve zulmünden, hâinlerin hile ve hıyanetinden, kıskançların hasedinden bizleri muhafaza eyle Allah’ım!",
-  "kaynak": ""
+  "metin": "…Allahım! Nefsime takvasını (günahlardan sakınma duygusu) ver ve onu (her türlü günahtan) temizle, Sen temizleyenlerin en hayırlısısın. Onun koruyucusu ve efendisi de sensin...",
+  "kaynak": "Müslim, \"Dua\", 73"
  }
 };
