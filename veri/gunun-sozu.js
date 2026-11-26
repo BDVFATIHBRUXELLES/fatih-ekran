@@ -1,7 +1,7 @@
 /* Günün ayeti, hadisi ve duası. Bu dosya otomatik yazılır, elle değiştirmeyin.
    Kaynak: Diyanet İşleri Başkanlığı, diyanet.gov.tr */
 window.FATIH_GUNUN_SOZU = {
- "tarih": "2026-11-26",
+ "tarih": "2026-11-27",
  "ayet": {
   "metin": "İman edip salih amel işleyenlere gelince, onlar için, yapmakta olduklarına karşılık bir mükafat olarak Me'vâ cennetleri vardır.",
   "kaynak": "Secde, 32/19"
