@@ -1,7 +1,7 @@
 /* Günün ayeti, hadisi ve duası. Bu dosya otomatik yazılır, elle değiştirmeyin.
    Kaynak: Diyanet İşleri Başkanlığı, diyanet.gov.tr */
 window.FATIH_GUNUN_SOZU = {
- "tarih": "2026-11-27",
+ "tarih": "2026-11-28",
  "ayet": {
   "metin": "Ölçüyü tam yapın. Eksik verenlerden olmayın.\" \"Doğru terazi ile tartın.\" \"İnsanların mallarını ve haklarını eksiltmeyin. Yeryüzünde bozgunculuk yaparak karışıklık çıkarmayın.",
   "kaynak": "Şu'arâ, 26/181-183"
