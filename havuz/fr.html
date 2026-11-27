@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Figtree:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
 /* Düzen: açık ve ferah. Üstte turkuaz gökyüzü ile drone görüntüsü, altta beyaz kartlar. Altın yalnızca çağrı ve vurgu için. */
 :root {
@@ -363,10 +363,162 @@ html.tam .cap { font-size: 32px; margin-top: 6px; }
 .tk { display: none; }
 html.tam .tk { display: inline; }
 
+/* ---------- Canlı pano (27.11.2026, başkanın seçimi: açık renk): çevirmeli sayaç, hedef çubuğu, kartlar, kayan yazı.
+   Cami ekranı görünümlerinde (?ekran=1, ?ekran=2) pano yoktur; orada kubbe havuz kalır. ---------- */
+:root { --cond: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif; --red: #E5322D; }
+html.ekran .pano, html.ekran .yayin, html.ekran .p-tick { display: none; }
+html:not(.ekran) .poolbox, html:not(.ekran) .days, html:not(.ekran) .proof, html:not(.ekran) .eyebrow, html:not(.ekran) .lead { display: none; }
+
+.yayin { flex: none; display: flex; align-items: center; gap: 18px; }
+.canli {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 10px; border-radius: 9px;
+  background: var(--red); color: #fff; font-weight: 900; font-size: .8rem; letter-spacing: .14em; white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(229,50,45,.4);
+}
+.canli i { width: 9px; height: 9px; border-radius: 50%; background: #fff; animation: pnok 1.4s ease-in-out infinite; }
+@keyframes pnok { 50% { opacity: .3; } }
+.saat { display: none; text-align: right; line-height: 1; }
+.saat b { display: block; font-family: var(--cond); font-weight: 800; font-size: 2.6rem; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+.saat span { display: block; margin-top: 3px; font-weight: 800; font-size: .72rem; letter-spacing: .16em; opacity: .85; white-space: nowrap; }
+
+.pano { position: relative; margin-top: 18px; text-align: center; --tw: clamp(28px, 9.6vw, 112px); }
+.p-ust { position: relative; height: 28px; display: grid; place-items: center; }
+.p-lbl { margin: 0 -.34em 0 0; font-weight: 900; font-size: clamp(.74rem, 3.3vw, 1.3rem); letter-spacing: .34em; white-space: nowrap; transition: opacity .25s; }
+.p-flash { position: absolute; inset: 0; margin: 0; display: grid; place-items: center; opacity: 0; transform: scale(.9); transition: opacity .25s, transform .25s; pointer-events: none; }
+.p-flash b {
+  padding: 5px 14px; border-radius: 999px; background: var(--gold); color: var(--ink);
+  font-weight: 900; font-size: clamp(.58rem, 2.75vw, 1.1rem); letter-spacing: .09em; white-space: nowrap; box-shadow: 0 8px 22px rgba(255,170,20,.55);
+}
+.pano.yeni .p-lbl { opacity: 0; }
+.pano.yeni .p-flash { opacity: 1; transform: scale(1); }
+
+.p-cnt { position: relative; display: flex; justify-content: center; align-items: flex-end; margin-top: 8px; }
+.p-tl {
+  position: relative; flex: none; width: var(--tw); height: calc(var(--tw) * 1.42); margin: 0 calc(var(--tw) * .045);
+  border-radius: calc(var(--tw) * .15); overflow: hidden;
+  background: linear-gradient(180deg, #16246A 0%, #0D1850 49.4%, #060C30 49.5%, #060C30 50.6%, #0C164A 50.7%, #111E5E 100%);
+  box-shadow: 0 calc(var(--tw) * .1) calc(var(--tw) * .22) rgba(10,20,64,.35), inset 0 0 0 1.5px rgba(255,255,255,.1);
+  animation: pgir .5s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes pgir { from { opacity: 0; transform: translateY(calc(var(--tw) * .4)); } }
+.p-tl b {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding-bottom: calc(var(--tw) * .06);
+  color: #fff; font-family: var(--cond); font-weight: 800; font-size: calc(var(--tw) * 1.3); line-height: 1;
+}
+.p-tl b.don { animation: pdon .34s ease-in-out; }
+@keyframes pdon { 50% { transform: scaleY(0); } }
+.p-sp { flex: none; width: calc(var(--tw) * .16); height: calc(var(--tw) * .16); margin: 0 calc(var(--tw) * .03) calc(var(--tw) * .11); border-radius: 50%; background: var(--gold); box-shadow: 0 3px 8px rgba(255,170,20,.5); }
+.p-eu { flex: none; margin-left: calc(var(--tw) * .1); color: var(--ink); font-family: var(--cond); font-weight: 800; font-size: calc(var(--tw) * 1.36); line-height: .98; }
+.p-kv { position: absolute; left: 50%; top: 50%; width: var(--s); height: var(--s); margin: calc(var(--s) / -2); border-radius: 50%; background: var(--gold-hi); box-shadow: 0 0 12px 3px rgba(255,210,90,.85); opacity: 0; pointer-events: none; }
+.pano.kiv .p-kv { animation: pkiv 1s ease-out both; }
+@keyframes pkiv { 0% { opacity: .95; transform: translate(0, 0) scale(.6); } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1); } }
+
+.p-bar { position: relative; margin-top: 52px; padding-bottom: 26px; --bh: clamp(16px, 4.4vw, 30px); }
+.p-tr { position: relative; height: var(--bh); border-radius: 999px; background: #fff; overflow: hidden; box-shadow: inset 0 0 0 2px rgba(10,20,64,.14), 0 8px 20px rgba(10,20,64,.14); }
+.p-fl {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 999px; overflow: hidden;
+  background: linear-gradient(90deg, #0A9BA8 0%, #19C3CE 55%, #7DEBD0 82%, #FFD45E 100%); transition: width 1.5s cubic-bezier(.2,.8,.2,1);
+}
+.p-fl i { position: absolute; top: 0; bottom: 0; left: 0; width: 90px; background: linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0)); animation: pisik 3s linear infinite; }
+@keyframes pisik { from { transform: translateX(-100px); } to { transform: translateX(760px); } }
+.p-pc {
+  position: absolute; left: 0; top: -40px; transform: translateX(-50%); padding: 1px 10px 2px; border-radius: 9px;
+  background: var(--ink); color: #fff; font-family: var(--cond); font-weight: 800; font-size: 1.45rem; line-height: 1.25; white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(10,20,64,.3); transition: left 1.5s cubic-bezier(.2,.8,.2,1);
+}
+.p-pc::after { content: ""; position: absolute; left: 50%; bottom: -5px; z-index: -1; width: 12px; height: 12px; border-radius: 2px; background: var(--ink); transform: translateX(-50%) rotate(45deg); }
+.p-tk { position: absolute; top: -4px; width: 3px; height: calc(var(--bh) + 8px); margin-left: -1.5px; border-radius: 2px; background: rgba(10,20,64,.42); }
+.p-x { position: absolute; top: calc(var(--bh) + 7px); font-weight: 800; font-size: .74rem; letter-spacing: .05em; white-space: nowrap; }
+.p-x b { font-family: var(--cond); font-weight: 800; font-size: 1.3em; letter-spacing: .01em; }
+.p-x3 { display: none; transform: translateX(-50%); }
+.p-xh { right: 0; }
+
+.p-kartlar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; text-align: left; }
+.p-kart { min-width: 0; padding: 12px 14px 11px; border-radius: 18px; background: rgba(255,255,255,.9); box-shadow: inset 0 0 0 1.5px #fff, 0 12px 28px rgba(10,20,64,.13); }
+.p-kart h3 { margin: 0; font-family: var(--body); font-size: .66rem; font-weight: 900; letter-spacing: .14em; color: var(--teal); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p-kart p { margin: 0; }
+.p-kart .n { margin: 5px 0 3px; font-family: var(--cond); font-weight: 800; font-size: clamp(1.55rem, 7.3vw, 2.2rem); line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.p-kart .n small { font-size: .56em; font-weight: 700; }
+.p-kart .alt { font-size: clamp(.7rem, 3.3vw, .78rem); font-weight: 700; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p-kart .alt b { color: var(--ink); font-weight: 900; }
+.p-son { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 14px; align-items: end; }
+.p-son h3 { grid-column: 1 / -1; }
+.p-son .n { margin-bottom: 0; }
+.p-son .alt { white-space: normal; text-align: right; line-height: 1.25; text-wrap: balance; }
+.pano.tek .p-kalan { grid-column: 1 / -1; }
+.p-qr { display: none; }
+
+html:not(.ekran) .stage { grid-template-areas: "say" "cta"; gap: 14px; margin-top: 20px; }
+html:not(.ekran) h1 { font-size: clamp(1.7rem, 7.6vw, 2.4rem); text-align: center; }
+html:not(.ekran) .more-label { margin: 16px 0 8px; text-align: center; }
+html:not(.ekran) .more { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+html:not(.ekran) .more a { padding: 12px 2px; font-size: 1.02rem; white-space: nowrap; }
+html:not(.ekran) .basenote { margin-top: 12px; }
+
+.p-tick { position: relative; display: flex; align-items: center; height: 46px; margin: 28px calc(50% - 50vw) 0; overflow: hidden; background: var(--gold); color: var(--ink); box-shadow: 0 8px 24px rgba(10,20,64,.16); }
+.p-tick > b { position: relative; z-index: 2; flex: none; align-self: stretch; display: flex; align-items: center; padding: 0 16px; background: var(--red); color: #fff; font-weight: 900; font-size: .82rem; letter-spacing: .16em; box-shadow: 10px 0 22px rgba(10,20,64,.3); }
+.p-tick .mv { flex: none; display: flex; align-items: center; white-space: nowrap; font-weight: 900; font-size: 1rem; letter-spacing: .05em; animation: pkay 60s linear infinite; will-change: transform; }
+.p-tick .mv span { margin: 0 20px; }
+.p-tick .mv em { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); }
+@keyframes pkay { to { transform: translateX(-50%); } }
+
+@media (min-width: 900px) {
+  .saat { display: block; }
+  .canli { gap: 11px; padding: 8px 18px 8px 15px; border-radius: 12px; font-size: 1.15rem; }
+  .canli i { width: 13px; height: 13px; }
+  html:not(.ekran) .bg { height: 900px; }
+  .pano { margin-top: 22px; }
+  .p-ust { height: 46px; }
+  .p-cnt { margin-top: 12px; }
+  .p-bar { margin-top: 78px; padding-bottom: 42px; }
+  .p-pc { top: -58px; padding: 2px 16px 3px; border-radius: 12px; font-size: 2rem; }
+  .p-pc::after { bottom: -7px; width: 16px; height: 16px; }
+  .p-tk { width: 4px; margin-left: -2px; }
+  .p-x { top: calc(var(--bh) + 11px); font-size: .95rem; }
+  .p-x3 { display: block; }
+  .p-kartlar { grid-template-columns: 1fr 1fr 1.25fr; gap: 16px; margin-top: 18px; }
+  .pano.tek .p-kartlar { grid-template-columns: 1fr 1.25fr; }
+  .pano.tek .p-kalan { grid-column: auto; }
+  .p-kart { padding: 20px 20px 18px; border-radius: 24px; }
+  .p-kart h3 { font-size: .8rem; }
+  .p-kart .n { margin: 13px 0 10px; font-size: 2.4rem; }
+  .p-kart .alt { font-size: .95rem; }
+  .p-son { grid-column: auto; display: block; }
+  .p-son .n { margin: 16px 0 11px; font-size: 2.2rem; }
+  .p-son .alt { text-align: left; text-wrap: wrap; }
+  .p-x3 { font-family: var(--cond); font-size: 1.24rem; letter-spacing: .01em; }
+  html:not(.ekran) .brand img { width: 64px; height: 64px; }
+  html:not(.ekran) .brand b { font-size: 1.3rem; }
+  html:not(.ekran) .brand span { font-size: .92rem; }
+  html:not(.ekran) .stage { grid-template-columns: minmax(0, 1fr) minmax(0, 460px); grid-template-areas: "say cta"; column-gap: 56px; align-items: center; margin-top: 44px; }
+  html:not(.ekran) .eyebrow, html:not(.ekran) .lead { display: block; }
+  html:not(.ekran) h1 { font-size: clamp(2.6rem, 4.7vw, 3.9rem); text-align: left; }
+  html:not(.ekran) .more-label { text-align: left; }
+  .p-tick { height: 58px; margin-top: 48px; }
+  .p-tick > b { padding: 0 26px; font-size: 1.05rem; }
+  .p-tick .mv { font-size: 1.3rem; }
+  .p-tick .mv span { margin: 0 30px; }
+  .p-tick .mv em { width: 10px; height: 10px; }
+}
+
+@media (min-width: 1200px) {
+  html:not(.ekran) .wrap { max-width: 1160px; }
+  .pano { --tw: 120px; }
+  .p-kartlar { grid-template-columns: 1fr 1fr 1.25fr 1.6fr; gap: 14px; }
+  .pano.tek .p-kartlar { grid-template-columns: 1fr 1.25fr 1.6fr; }
+  .p-qr { display: flex; align-items: center; gap: 16px; }
+  .p-qr > div { min-width: 0; }
+  .p-qr img { flex: none; width: 108px; height: 108px; padding: 6px; border-radius: 14px; background: #fff; box-shadow: 0 0 0 2px var(--ink); image-rendering: pixelated; }
+  .p-qr .u { margin: 9px 0 7px; font-family: var(--cond); font-weight: 800; font-size: 1.28rem; line-height: 1; white-space: nowrap; }
+  .p-qr .alt { font-size: .74rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .live i, .sum.bump, .drops li.new, .pool::after, .hover, .hover.go, .give.toss .coin, .thanks__in { animation: none; }
   .c3 { animation: none; transform: rotateY(-24deg); }
   .give, .toast, .stick { transition: none; }
+  .canli i, .p-tl, .p-tl b.don, .p-fl i, .p-tick .mv, .pano.kiv .p-kv { animation: none; }
+  .p-fl, .p-pc, .p-lbl, .p-flash { transition: none; }
 }
 </style>
 </head>
@@ -381,11 +533,33 @@ html.tam .tk { display: inline; }
       <b>Mosquée Fatih de Bruxelles<span>Projet 5 bâtiments</span></b>
     </a>
     <div class="days" aria-label="Jours restants avant la fin de la campagne"><b id="days">37</b> jours restants</div>
+    <div class="yayin" aria-hidden="true"><b class="canli"><i></i>EN DIRECT</b><span class="saat"><b id="p-saat"></b><span id="p-tarih"></span></span></div>
   </header>
 
   <p class="preview" id="preview" hidden></p>
 
   <main>
+    <section class="pano tek" id="pano" aria-label="Compteur des dons en direct">
+      <div class="p-ust">
+        <p class="p-lbl">DÉJÀ DANS LA CAGNOTTE</p>
+        <p class="p-flash" aria-hidden="true"><b>NOUVEAU DON · QU'ALLAH VOUS EN RÉCOMPENSE</b></p>
+      </div>
+      <div class="p-cnt" id="p-cnt" role="img"></div>
+      <div class="p-bar" aria-hidden="true">
+        <div class="p-tr"><div class="p-fl" id="p-fl"><i></i></div></div>
+        <b class="p-pc" id="p-pc"></b>
+        <i class="p-tk" id="p-t1"></i><i class="p-tk" id="p-t2"></i>
+        <span class="p-x p-x3" id="p-x3"></span>
+        <span class="p-x p-xh">OBJECTIF <b id="p-goal">4.000.000 €</b></span>
+      </div>
+      <div class="p-kartlar">
+        <div class="p-kart p-kalan"><h3>RESTE À RÉUNIR</h3><p class="n"><span id="p-left">1.350.000</span> <small>€</small></p><p class="alt">≈ <b id="p-hisse">1.350</b> parts × 1.000 €</p></div>
+        <div class="p-kart p-bugun" id="p-bugunk" hidden><h3 id="p-bugunb"></h3><p class="n">+<span id="p-bugun">0</span> <small>€</small></p><p class="alt">mise à jour <b id="p-gunc"></b></p></div>
+        <div class="p-kart p-son"><h3>JUSQU'AU 31 DÉCEMBRE</h3><p class="n"><span id="p-g"></span> <small id="p-gb"></small> <span id="p-s"></span></p><p class="alt">Le délai du vendeur expire ce jour-là.</p></div>
+        <div class="p-kart p-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhAQAAAAB/n//CAAAAzUlEQVR42mP8z8DA0MjEwMDAwMB0MC2FiYFF/uViKQamT9InTjAwMQhLMTAwMVz5wMDAxKfrYMHA9PBGUAsDw//3S/83MF0rkbnDwBz599tGLsavap9S+Jn9hX4xCTPxHD/Gx8A8hfPyIy3G19oXD11n+n1/thMD03cbNzsGJo5yFhsGll8bf6ceZ3z4U+31VKavxTkmDEyafQ83MTAcSDrp2cAkL7unjYHp0510PwYmBr7PWxiYGG7w7WFg4jOL8WNgevj4wDoGRiSXAwA1xUJOu6j0hgAAAABJRU5ErkJggg==" alt="" width="116" height="116"><div><h3>SCANNEZ LE CODE</h3><p class="u">bxlfatih.com/cagnotte</p><p class="alt">10 € · 20 € · 50 € · 100 € · 1.000 €</p></div></div>
+      </div>
+    </section>
+
     <section class="stage">
       <div class="say">
         <p class="eyebrow">Cagnotte du projet 5 bâtiments</p>
@@ -409,7 +583,6 @@ html.tam .tk { display: inline; }
           <div><dt>Objectif</dt><dd id="goal">4.000.000 €</dd></div>
           <div><dt>Atteint</dt><dd id="pct">%66,3</dd></div>
         </dl>
-        <p class="basenote" id="basenote">Point de départ&nbsp;: 2.650.000 € au 24 novembre 2026. Ensuite, les dons faits via nos liens en ligne sont ajoutés environ toutes les 5 minutes ; les virements bancaires et les dons remis en main propre, une fois par jour.</p>
       </div>
 
       <div class="ekranyan" aria-hidden="true">
@@ -430,8 +603,11 @@ html.tam .tk { display: inline; }
           <a data-amt="1000" role="button" tabindex="0">1.000 €</a>
         </div>
         <p class="fine">Vous confirmez avec Bancontact dans votre application bancaire, cela prend environ 10 secondes. <a id="other" href="#">Donner un autre montant</a></p>
+        <p class="basenote" id="basenote">Point de départ&nbsp;: 2.650.000 € au 24 novembre 2026. Ensuite, les dons faits via nos liens en ligne sont ajoutés environ toutes les 5 minutes ; les virements bancaires et les dons remis en main propre, une fois par jour.</p>
       </div>
     </section>
+
+    <div class="p-tick" aria-hidden="true"><b>EN DIRECT</b><div class="mv" id="p-mv"></div></div>
 
     <section class="below">
       <div class="card">
@@ -542,19 +718,25 @@ var TXT = {
         ago: ["az önce", function (n) { return n + " dk önce"; }, function (n) { return n + " sa önce"; }, function (n) { return n + " gün önce"; }],
         pct: function (n) { return "%" + n; },
         shareTitle: "5 Ek Bina Bağış Havuzu · Brüksel Fatih Camii",
-        shareText: "Brüksel Fatih Camii 5 Ek Bina kampanyasında bağış havuzu açıldı. Ben attım, sıra sende. " },
+        shareText: "Brüksel Fatih Camii 5 Ek Bina kampanyasında bağış havuzu açıldı. Ben attım, sıra sende. ",
+        gun: function (n) { return "GÜN"; }, bugun: "BUGÜN GELEN", dun: "DÜN GELEN",
+        kayan: ["SEN DE AT, HAVUZ DOLSUN", "SON GÜN 31 ARALIK", "10 € DE OLUR, 1.000 € DE", "BANCONTACT İLE TELEFONDAN", "FAITES UN DON", "DOE EEN GIFT", "ALLAH RAZI OLSUN"] },
   fr: { gecildi: " € dépassés", ibanOk: "IBAN copié", linkOk: "Lien copié",
         qrAlt: function (a) { return "QR code pour un virement de " + a + " €"; },
         ago: ["à l'instant", function (n) { return "il y a " + n + " min"; }, function (n) { return "il y a " + n + " h"; }, function (n) { return "il y a " + n + " j"; }],
         pct: function (n) { return n + "\u00a0%"; },
         shareTitle: "Cagnotte du projet 5 bâtiments · Mosquée Fatih de Bruxelles",
-        shareText: "La Mosquée Fatih de Bruxelles a ouvert une cagnotte pour son projet 5 bâtiments. J'ai donné, à vous maintenant. " },
+        shareText: "La Mosquée Fatih de Bruxelles a ouvert une cagnotte pour son projet 5 bâtiments. J'ai donné, à vous maintenant. ",
+        gun: function (n) { return n === 1 ? "JOUR" : "JOURS"; }, bugun: "AUJOURD'HUI", dun: "HIER",
+        kayan: ["VERSEZ VOTRE PART, REMPLISSONS LA CAGNOTTE", "DERNIER JOUR\u00a0: 31 DÉCEMBRE", "10 € OU 1.000 €, CHAQUE DON COMPTE", "PAR BANCONTACT, DEPUIS VOTRE TÉLÉPHONE", "SEN DE AT, HAVUZ DOLSUN", "DOE OOK MEE", "QU'ALLAH VOUS EN RÉCOMPENSE"] },
   nl: { gecildi: " € overschreden", ibanOk: "IBAN gekopieerd", linkOk: "Link gekopieerd",
         qrAlt: function (a) { return "QR-code voor een overschrijving van " + a + " €"; },
         ago: ["zonet", function (n) { return n + " min geleden"; }, function (n) { return n + " u geleden"; }, function (n) { return n + " d geleden"; }],
         pct: function (n) { return n + "%"; },
         shareTitle: "Donatiepot project 5 gebouwen · Fatih Moskee Brussel",
-        shareText: "De Fatih Moskee Brussel heeft een donatiepot geopend voor het project 5 gebouwen. Ik heb gegeven, nu jij. " }
+        shareText: "De Fatih Moskee Brussel heeft een donatiepot geopend voor het project 5 gebouwen. Ik heb gegeven, nu jij. ",
+        gun: function (n) { return n === 1 ? "DAG" : "DAGEN"; }, bugun: "VANDAAG", dun: "GISTEREN",
+        kayan: ["DOE OOK MEE, SAMEN VULLEN WE DE POT", "LAATSTE DAG: 31 DECEMBER", "10 € OF 1.000 €, ELKE GIFT TELT", "MET BANCONTACT, VANOP UW TELEFOON", "SEN DE AT, HAVUZ DOLSUN", "FAITES UN DON", "MOGE ALLAH U BELONEN"] }
 }[DIL];
 
 /* Cami ekranı görünümü: adres ?ekran=1 (yarım alan, 960×1080) ya da ?ekran=2 (tam ekran, 1920×1080) ile biterse
@@ -587,6 +769,125 @@ if (EKRAN) {
 var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 var fmt = function (n) { return Math.round(n).toLocaleString(LOC); };
 
+/* ---------- Canlı pano: cami ekranı görünümlerinde çalışmaz ---------- */
+var PANO = !EKRAN;
+var BRU = "Europe/Brussels";
+var LOCD = { tr: "tr-TR", fr: "fr-BE", nl: "nl-BE" }[DIL] || "tr-TR";
+function bruParca(d, yer, o) {   // Brüksel saatine göre tarih parçaları
+  o.timeZone = BRU;
+  try { var r = {}; new Intl.DateTimeFormat(yer, o).formatToParts(d).forEach(function (x) { r[x.type] = x.value; }); return r; }
+  catch (e) { return null; }
+}
+function bruSaat(d) { var x = bruParca(d, "en-GB", { hour: "2-digit", minute: "2-digit", hour12: false }); return x ? (x.hour === "24" ? "00" : x.hour) + ":" + x.minute : ""; }
+function bruGun(d) { var x = bruParca(d, "en-GB", { year: "numeric", month: "2-digit", day: "2-digit" }); return x ? x.year + "-" + x.month + "-" + x.day : ""; }
+var pano = PANO ? (function () {
+  var kok = $("pano"), cnt = $("p-cnt"), hane = [], yazi = "", zf, zk, cizildi = false;
+  function rakam(c) { return c >= "0" && c <= "9"; }
+  function kur(s) {
+    var i, el, b, sira = 0, a, r, boy;
+    cnt.textContent = ""; hane = [];
+    for (i = 0; i < s.length; i++) {
+      if (!rakam(s.charAt(i))) { el = document.createElement("i"); el.className = "p-sp"; cnt.appendChild(el); continue; }
+      el = document.createElement("span"); el.className = "p-tl"; el.style.animationDelay = (sira * 0.05) + "s";
+      b = document.createElement("b"); b.textContent = s.charAt(i); b.setAttribute("data-d", s.charAt(i));
+      el.appendChild(b); cnt.appendChild(el); hane.push(b); sira++;
+    }
+    el = document.createElement("span"); el.className = "p-eu"; el.textContent = "€"; cnt.appendChild(el);
+    for (i = 0; i < 18; i++) {   // yeni bağışta saçılan kıvılcımlar
+      a = (i / 18) * Math.PI * 2 + (i % 3) * 0.21; r = 0.55 + ((i * 37) % 10) / 14; boy = 5 + (i * 13) % 8;
+      el = document.createElement("i"); el.className = "p-kv";
+      el.style.setProperty("--s", boy + "px");
+      el.style.setProperty("--dx", "calc(var(--tw) * " + (Math.cos(a) * r * 4.6).toFixed(2) + ")");
+      el.style.setProperty("--dy", "calc(var(--tw) * " + (Math.sin(a) * r * 1.5).toFixed(2) + ")");
+      cnt.appendChild(el);
+    }
+  }
+  function cevir(b, c, sira, canli) {
+    b.setAttribute("data-d", c);
+    if (!canli) { b.textContent = c; return; }
+    setTimeout(function () {
+      b.classList.remove("don"); void b.offsetWidth; b.classList.add("don");
+      setTimeout(function () { b.textContent = b.getAttribute("data-d"); }, 170);
+    }, sira * 45);
+  }
+  function yaz(v, canli) {
+    var s = fmt(v), i, k = 0, c;
+    if (s.length !== yazi.length) { kur(s); canli = false; }
+    for (i = 0; i < s.length; i++) {
+      c = s.charAt(i); if (!rakam(c)) continue;
+      if (hane[k].getAttribute("data-d") !== c) cevir(hane[k], c, k, canli && !reduce);
+      k++;
+    }
+    yazi = s; cnt.setAttribute("aria-label", s + " €");
+  }
+  function cubuk() {
+    var y = Math.max(0, Math.min(100, state.total / CONFIG.goal * 100));
+    $("p-fl").style.width = y + "%";
+    $("p-pc").style.left = Math.max(8, Math.min(92, y)) + "%";
+    $("p-pc").textContent = TXT.pct(y.toLocaleString(LOC, { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
+  }
+  function toplam() {
+    var kalan = Math.max(0, CONFIG.goal - state.total);
+    $("p-left").textContent = fmt(kalan);
+    $("p-hisse").textContent = fmt(Math.ceil(kalan / 1000));
+    $("p-goal").textContent = fmt(CONFIG.goal) + " €";
+    $("p-x3").textContent = fmt(3000000) + " €";
+    $("p-x3").style.left = $("p-t1").style.left = (3000000 / CONFIG.goal * 100) + "%";
+    $("p-t2").style.left = (3500000 / CONFIG.goal * 100) + "%";
+    // ilk çizimde çubuk sıfırdan dolsun
+    if (cizildi || reduce) cubuk();
+    else { cizildi = true; requestAnimationFrame(function () { requestAnimationFrame(cubuk); }); }
+  }
+  /* "Bugün gelen": veri/havuz.json içindeki gun { tarih, basi, dun: { gelen } }. Bugün henüz bağış yoksa dünün toplamı gösterilir;
+     veri yoksa ya da eskiyse kart gizlenir. */
+  function gunluk(d) {
+    var g = d && d.gun, tutar = 0, dun = false, bugun = bruGun(new Date()), dunku = bruGun(new Date(Date.now() - 864e5));
+    if (g && typeof g.basi === "number" && bugun) {
+      if (g.tarih === bugun) {
+        tutar = state.total - g.basi;
+        if (!(tutar > 0) && g.dun && g.dun.gelen > 0) { tutar = g.dun.gelen; dun = true; }
+      } else if (g.tarih === dunku) { tutar = state.total - g.basi; dun = true; }
+    }
+    var varMi = tutar > 0;
+    $("p-bugunk").hidden = !varMi; kok.classList.toggle("tek", !varMi);
+    if (!varMi) return;
+    $("p-bugunb").textContent = dun ? TXT.dun : TXT.bugun;
+    $("p-bugun").textContent = fmt(tutar);
+    $("p-gunc").textContent = d.guncelleme ? bruSaat(new Date(d.guncelleme)) : "";
+  }
+  function kivilcim() {
+    if (reduce) return;
+    kok.classList.remove("kiv"); void kok.offsetWidth; kok.classList.add("kiv");
+    clearTimeout(zk); zk = setTimeout(function () { kok.classList.remove("kiv"); }, 1100);
+  }
+  function yeniBagis() {
+    kok.classList.add("yeni"); kivilcim();
+    clearTimeout(zf); zf = setTimeout(function () { kok.classList.remove("yeni"); }, 3800);
+  }
+  /* Saat ve geri sayım: 31 Aralık 23:59:59 (Brüksel, UTC+1) */
+  var BITIS = Date.UTC(CONFIG.deadline[0], CONFIG.deadline[1], CONFIG.deadline[2], 22, 59, 59);
+  function iki(n) { return (n < 10 ? "0" : "") + n; }
+  function saniye() {
+    var simdi = new Date(), k = Math.max(0, Math.floor((BITIS - simdi.getTime()) / 1000)), g = Math.floor(k / 86400);
+    $("p-g").textContent = g; $("p-gb").textContent = TXT.gun(g);
+    $("p-s").textContent = iki(Math.floor(k % 86400 / 3600)) + ":" + iki(Math.floor(k % 3600 / 60)) + ":" + iki(k % 60);
+    var sa = bruSaat(simdi); if (sa) $("p-saat").textContent = sa;
+    var x = bruParca(simdi, LOCD, { day: "numeric", month: "long", weekday: "long" });
+    if (x) $("p-tarih").textContent = (x.day + " " + x.month + " · " + x.weekday).toLocaleUpperCase(LOCD);
+  }
+  saniye(); setInterval(saniye, 1000);
+  /* Kayan yazı: iki kez yazılır, yarısı kadar kayar; hız yazının uzunluğuna göre sabit kalır */
+  (function () {
+    var mv = $("p-mv"), i, r, sp;
+    for (r = 0; r < 2; r++) for (i = 0; i < TXT.kayan.length; i++) {
+      sp = document.createElement("span"); sp.textContent = TXT.kayan[i]; mv.appendChild(sp); mv.appendChild(document.createElement("em"));
+    }
+    var hiz = function () { var w = mv.scrollWidth / 2; if (w > 0) mv.style.animationDuration = Math.round(w / 62) + "s"; };
+    hiz(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(hiz);
+  })();
+  return { yaz: yaz, toplam: toplam, gunluk: gunluk, yeniBagis: yeniBagis, kivilcim: kivilcim };
+})() : null;
+
 /* Geri sayım: takvim günü farkı */
 (function () {
   var n = new Date();
@@ -605,6 +906,7 @@ function applyTotals() {
   $("pct").textContent = TXT.pct((ratio * 100).toLocaleString(LOC, { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
   $("left").textContent = fmt(Math.max(0, CONFIG.goal - state.total)) + " €";
   $("e-goal").textContent = $("goal").textContent; $("e-pct").textContent = $("pct").textContent; $("e-left").textContent = $("left").textContent;
+  if (pano) pano.toplam();
 }
 function ago(ts) {
   var s = Math.max(0, (Date.now() - ts) / 1000);
@@ -629,7 +931,9 @@ function addDonation(amount, at, quiet) {
   state.recent.unshift({ amount: amount, at: at || Date.now() });
   state.recent.length = Math.min(state.recent.length, 8);
   applyTotals();
+  if (pano) pano.yaz(state.total, !quiet);
   if (quiet) return;
+  if (pano) pano.yeniBagis();
   renderDrops(true);
   dropCoins(Math.max(1, Math.min(6, Math.round(amount / 10))));
   var hv = $("hover"); hv.classList.remove("go"); void hv.offsetWidth; hv.classList.add("go");
@@ -666,12 +970,14 @@ function seedRest(n) {
   for (var i = 0; i < n; i++) rest.push({ x: V.l + 26 + Math.random() * (V.r - V.l - 52), y: V.bot - 12 - Math.random() * 24, a: Math.random() * 0.5 - 0.25 });
 }
 function dropCoins(n) {
+  if (PANO) return;
   if (reduce) { seedRest(n); if (rest.length > 80) rest.splice(0, rest.length - 80); draw(0); return; }
   for (var i = 0; i < n; i++) {
     coins.push({ x: 110 + Math.random() * 140, y: -22 - i * 46 - Math.random() * 10, vy: 60, st: "air", spin: Math.random() * 6, ry: V.bot - 12 - Math.random() * 24 });
   }
 }
 function burst() {
+  if (PANO) { pano.kivilcim(); return; }
   if (reduce) return;
   for (var i = 0; i < 40; i++) {
     var a = Math.random() * Math.PI * 2, s = 60 + Math.random() * 190;
@@ -742,6 +1048,7 @@ function coinFace(x, y, r, squash) {
 }
 var last = 0;
 function draw(ts) {
+  if (PANO) return;   // pano görünümünde kubbe havuz yok
   var t = ts / 1000, dt = Math.min(0.04, (ts - last) / 1000 || 0); last = ts;
   state.fill += (state.fillTo - state.fill) * Math.min(1, dt * 2.2 + (reduce ? 1 : 0));
   state.shown += (state.total - state.shown) * Math.min(1, dt * 5 + (reduce ? 1 : 0));
@@ -957,6 +1264,7 @@ function startDemo() {
   state.total = CONFIG.base; state.count = 0;
   state.recent = [{ amount: 10, at: now - 40e3 }, { amount: 20, at: now - 130e3 }, { amount: 10, at: now - 200e3 }, { amount: 50, at: now - 330e3 }, { amount: 10, at: now - 560e3 }];
   applyTotals(); state.fill = state.fillTo; state.shown = state.total;
+  if (pano) pano.yaz(state.total, false);
   seedRest(48); renderDrops(false);
   if (reduce) return;
   (function tick() {
@@ -969,6 +1277,7 @@ function startLive() {
   // Gerçek sayım: veri/havuz.json { baslangic, hedef, online: { toplam, adet }, toplam }
   $("preview").hidden = true; $("th-demo").hidden = true; $("dropsCard").hidden = true;
   state.total = CONFIG.base; applyTotals(); state.fill = state.fillTo; state.shown = state.total; seedRest(48);
+  if (pano) pano.yaz(state.total, false);
   var first = true;
   function pull() {
     var u = CONFIG.api + (CONFIG.api.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now();
@@ -979,6 +1288,7 @@ function startLive() {
       var diff = t - state.total;
       state.total = t; state.count = on.adet || 0;
       applyTotals();
+      if (pano) { pano.yaz(state.total, true); pano.gunluk(d); if (!first && diff > 0) pano.yeniBagis(); }
       if (first) { state.fill = state.fillTo; state.shown = state.total; }
       else if (diff > 0) {
         dropCoins(Math.max(1, Math.min(8, Math.round(diff / 10))));
