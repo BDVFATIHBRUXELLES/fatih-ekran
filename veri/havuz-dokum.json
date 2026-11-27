@@ -1,5 +1,5 @@
 {
-  "kip": "dokum",
+  "kip": "say",
   "baslangicAni": "2026-11-24T17:25:00Z",
   "dahil": {
     "link": 23,
@@ -275,5 +275,10 @@
       "neden": "üyelik"
     }
   ],
-  "guncelleme": "2026-11-27T05:12:43.966Z"
+  "linksiz": {
+    "kip": "dokum",
+    "durum": "izin yok",
+    "http": 403
+  },
+  "guncelleme": "2026-11-27T05:15:29.632Z"
 }
