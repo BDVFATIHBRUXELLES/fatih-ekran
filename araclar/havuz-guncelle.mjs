@@ -35,7 +35,11 @@ const ACIK_LINKLER = [
 // eklenir, açıklamasında üyelik ya da eğitim sözcüğü geçen linkler hariç tutulur.
 // DIGER_LINKLER: "say" = toplamı havuza ekle; "dokum" = yalnızca veri/havuz-dokum.json dosyasına yaz, toplama ekleme.
 // Jeton yalnızca payment-links.read izinlidir: link olmadan yapılan ödemeler (ör. Odoo üzerinden kurs kaydı) okunamaz, sayılmaz.
-const DIGER_LINKLER = "dokum";
+const DIGER_LINKLER = "say";
+// Link olmadan yapılan Mollie ödemeleri (ör. site üzerinden ya da kart cihazıyla): jetonda payments.read izni varsa okunur.
+// LINKSIZ_ODEMELER: "dokum" = yalnızca döküme yaz (toplama ekleme); "say" = BASLANGIC_ANI'ndan sonra ödenenleri,
+// açıklamasında üyelik ya da eğitim geçenler hariç, havuza ekle. İzin yoksa bu bölüm atlanır, döküme "izin yok" yazılır.
+const LINKSIZ_ODEMELER = "dokum";
 const DOKUM = process.env.HAVUZ_DOKUM_DOSYA || new URL("../veri/havuz-dokum.json", import.meta.url);
 const duz = (t) => String(t ?? "").toLocaleLowerCase("tr")
   .replace(/[ğ]/g, "g").replace(/[üûù]/g, "u").replace(/[ş]/g, "s").replace(/[ıîï]/g, "i").replace(/[öô]/g, "o")
@@ -89,6 +93,7 @@ async function bankaOku() {
 const sent = (v) => Math.round(parseFloat(v ?? "0") * 100);
 
 // sonra verilirse yalnızca o andan sonra ödenen bağışlar sayılır
+const linkOdemeleri = new Set(); // linkler üzerinden gelen bütün ödemelerin kimlikleri (linksiz ödemelerle çift sayılmasın diye)
 async function linkToplami(id, sonra = null) {
   const esik = sonra ? Date.parse(sonra) : null;
   if (sonra && !Number.isFinite(esik)) throw new Error("başlangıç anı okunamadı: " + sonra);
@@ -100,6 +105,7 @@ async function linkToplami(id, sonra = null) {
     if (!r.ok) throw new Error(`Mollie ${r.status} (${id})`);
     const j = await r.json();
     for (const p of j?._embedded?.payments ?? []) {
+      if (p.id) linkOdemeleri.add(p.id);
       if (p.status !== "paid" || p.mode === "test") continue;
       if (p.amount?.currency !== "EUR") continue;
       if (esik !== null && !(Date.parse(p.paidAt || p.createdAt || "") >= esik)) continue;
@@ -126,7 +132,7 @@ try {
     if (l.mode === "test") { test += 1; continue; }
     const neden = haricMi(l.description);
     const sabit = l.amount?.value ? Number(l.amount.value) : null;
-    if (neden) { haricLink += 1; satirlar.push({ ad: maskele(l.description), tutar: sabit, durum: "hariç", neden }); continue; }
+    if (neden) { haricLink += 1; await linkToplami(l.id, BASLANGIC_ANI); /* yalnızca kimlikler için */ satirlar.push({ ad: maskele(l.description), tutar: sabit, durum: "hariç", neden }); continue; }
     const t = await linkToplami(l.id, BASLANGIC_ANI);
     dahilLink += 1; dKurus += t.kurus; dAdet += t.adet;
     satirlar.push({ ad: maskele(l.description), tutar: sabit, durum: "dahil", adet: t.adet, toplam: t.kurus / 100 });
@@ -137,6 +143,46 @@ try {
   // "say" kipinde eksik bir toplam yayımlamaktansa dur; "dokum" kipinde yalnızca hatayı kaydet
   if (DIGER_LINKLER === "say") throw e;
   dokum = { kip: DIGER_LINKLER, hata: String(e.message || e) };
+}
+// Linksiz ödemeler: en yeniden eskiye sayfalanır, BASLANGIC_ANI'ndan eskiye gelince durulur.
+if (dokum && !dokum.hata) {
+  const o = { kip: LINKSIZ_ODEMELER };
+  try {
+    const esik = Date.parse(BASLANGIC_ANI);
+    let url = `${API}/payments?limit=250`, sayfa = 0, bitti = false, lKurus = 0, lAdet = 0, haricAdet = 0;
+    const grup = new Map();
+    while (url && !bitti) {
+      if (++sayfa > 40) throw new Error("çok fazla ödeme sayfası");
+      const r = await fetch(url, { headers: { Authorization: `Bearer ${TOKEN}` } });
+      if (r.status === 401 || r.status === 403) { o.durum = "izin yok"; o.http = r.status; break; }
+      if (!r.ok) { let ayr = ""; try { ayr = String((await r.json())?.detail || "").slice(0, 200); } catch {} throw new Error(`Mollie ${r.status} (ödeme listesi) ${ayr}`); }
+      const j = await r.json();
+      const liste = j?._embedded?.payments ?? [];
+      for (const p of liste) {
+        const an = Date.parse(p.paidAt || p.createdAt || "");
+        if (Date.parse(p.createdAt || "") < esik) { bitti = true; }
+        if (p.status !== "paid" || p.mode === "test" || p.amount?.currency !== "EUR") continue;
+        if (!(an >= esik) || linkOdemeleri.has(p.id)) continue;
+        const net = sent(p.amount.value) - sent(p.amountRefunded?.value) - sent(p.amountChargedBack?.value);
+        if (net <= 0) continue;
+        const neden = haricMi(p.description);
+        if (neden) { haricAdet += 1; continue; }
+        lKurus += net; lAdet += 1;
+        const anahtar = maskele(p.description) + " | " + (p.method || "?");
+        const g = grup.get(anahtar) || { ad: maskele(p.description), yontem: p.method || null, adet: 0, toplam: 0 };
+        g.adet += 1; g.toplam = Math.round((g.toplam + net / 100) * 100) / 100; grup.set(anahtar, g);
+      }
+      url = j?._links?.next?.href || null;
+    }
+    if (!o.durum) {
+      o.durum = "tamam"; o.dahil = { adet: lAdet, toplam: lKurus / 100 }; o.haric = { adet: haricAdet }; o.gruplar = [...grup.values()];
+      if (LINKSIZ_ODEMELER === "say") { kurus += lKurus; adet += lAdet; }
+    }
+  } catch (e) {
+    if (LINKSIZ_ODEMELER === "say") throw e;
+    o.durum = "hata"; o.ayrinti = String(e.message || e);
+  }
+  dokum.linksiz = o;
 }
 {
   let eskiDokum = null;
