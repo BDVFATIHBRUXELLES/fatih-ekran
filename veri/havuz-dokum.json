@@ -308,13 +308,13 @@
     ],
     "cihaz": {
       "kip": "say",
-      "adet": 1,
-      "toplam": 6,
+      "adet": 2,
+      "toplam": 21,
       "cihazlar": [
         {
           "cihaz": "…ESMJ",
-          "adet": 1,
-          "toplam": 6
+          "adet": 2,
+          "toplam": 21
         }
       ]
     }
