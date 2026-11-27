@@ -6,11 +6,15 @@
     "toplam": 1232,
     "adet": 46
   },
+  "cihaz": {
+    "toplam": 6,
+    "adet": 1
+  },
   "banka": {
     "toplam": 4615,
     "adet": null,
     "tarih": "2026-11-27"
   },
-  "toplam": 2655847,
-  "guncelleme": "2026-11-27T09:18:34.094Z"
+  "toplam": 2655853,
+  "guncelleme": "2026-11-27T10:27:35.008Z"
 }

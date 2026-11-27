@@ -280,8 +280,8 @@
     "kip": "dokum",
     "durum": "tamam",
     "dahil": {
-      "adet": 5,
-      "toplam": 911
+      "adet": 4,
+      "toplam": 905
     },
     "haric": {
       "adet": 0
@@ -292,12 +292,6 @@
         "yontem": "banktransfer",
         "adet": 1,
         "toplam": 750
-      },
-      {
-        "ad": "••• ••• ••• ••• ••• ••• 7",
-        "yontem": "pointofsale",
-        "adet": 1,
-        "toplam": 6
       },
       {
         "ad": "•••",
@@ -311,6 +305,18 @@
         "adet": 2,
         "toplam": 55
       }
-    ]
+    ],
+    "cihaz": {
+      "kip": "say",
+      "adet": 1,
+      "toplam": 6,
+      "cihazlar": [
+        {
+          "cihaz": "…ESMJ",
+          "adet": 1,
+          "toplam": 6
+        }
+      ]
+    }
   }
 }
