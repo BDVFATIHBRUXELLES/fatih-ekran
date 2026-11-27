@@ -11,15 +11,15 @@
     "adet": 17
   },
   "banka": {
-    "toplam": 4615,
+    "toplam": 37184,
     "adet": null,
     "tarih": "2026-11-27"
   },
-  "toplam": 2659531,
+  "toplam": 2692100,
   "gun": {
     "tarih": "2026-11-27",
     "basi": 2654917,
     "dun": null
   },
-  "guncelleme": "2026-11-27T21:19:32.356Z"
+  "guncelleme": "2026-11-27T22:04:40.762Z"
 }
