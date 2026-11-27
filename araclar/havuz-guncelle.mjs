@@ -77,6 +77,17 @@ async function tumLinkler() {
 
 if (!TOKEN) { console.log("MOLLIE_TOKEN tanımlı değil, sayım atlandı."); process.exit(0); }
 
+// Güvenlik: jetonun türü yalnızca ön ekinden anlaşılır (jetonun kendisi hiçbir yere yazılmaz).
+// Test anahtarıyla Mollie hata vermez, boş (test) veri döndürür; bu yüzden sayım durdurulur ve havuz dosyasına dokunulmaz.
+const jetonTuru = TOKEN.startsWith("test_") ? "test API anahtarı" : TOKEN.startsWith("live_") ? "canlı API anahtarı"
+  : TOKEN.startsWith("access_") ? "erişim jetonu" : "bilinmiyor";
+async function durdur(neden) {
+  await writeFile(DOKUM, JSON.stringify({ hata: neden, jeton: jetonTuru }, null, 2) + "\n");
+  console.error("Sayım durduruldu, havuz dosyası değişmedi: " + neden);
+  process.exit(0);
+}
+if (jetonTuru === "test API anahtarı") await durdur("MOLLIE_TOKEN bir test anahtarı; canlı ödemeler okunamaz");
+
 // Banka havaleleri Mollie'den okunamaz. Başkan her akşam yazılı bildirir; toplam veri/havuz-banka.json
 // dosyasına elle işlenir ve buradan havuza eklenir. Dosya yoksa 0 sayılır; bozuksa sayım hata ile durur
 // (yanlış bir toplam yayımlamaktansa son doğru değer kalsın diye).
@@ -137,7 +148,7 @@ try {
     dahilLink += 1; dKurus += t.kurus; dAdet += t.adet;
     satirlar.push({ ad: maskele(l.description), tutar: sabit, durum: "dahil", adet: t.adet, toplam: t.kurus / 100 });
   }
-  dokum = { kip: DIGER_LINKLER, baslangicAni: BASLANGIC_ANI, dahil: { link: dahilLink, adet: dAdet, toplam: dKurus / 100 }, haric: { link: haricLink }, test, linkler: satirlar };
+  dokum = { kip: DIGER_LINKLER, jeton: jetonTuru, baslangicAni: BASLANGIC_ANI, dahil: { link: dahilLink, adet: dAdet, toplam: dKurus / 100 }, haric: { link: haricLink }, test, linkler: satirlar };
   if (DIGER_LINKLER === "say") { kurus += dKurus; adet += dAdet; }
 } catch (e) {
   // "say" kipinde eksik bir toplam yayımlamaktansa dur; "dokum" kipinde yalnızca hatayı kaydet
@@ -202,6 +213,12 @@ const yeni = { baslangic: BASLANGIC, baslangicTarihi: BASLANGIC_TARIHI, hedef: H
 
 let eski = null;
 try { eski = JSON.parse(await readFile(OUT, "utf8")); } catch {}
+// Güvenlik: çevrim içi toplam bir anda belirgin biçimde düşerse (yanlış jeton, yanlış hesap, Mollie'den eksik yanıt) yayımlama.
+// Gerçek bir iade bu eşiği aşarsa eşik burada elle geçici olarak gevşetilir.
+if (eski?.online && Number.isFinite(eski.online.toplam) && eski.online.toplam > 0
+    && (adet < eski.online.adet - 2 || online < eski.online.toplam * 0.8)) {
+  await durdur(`çevrim içi toplam beklenmedik biçimde düştü: ${eski.online.adet} bağış ${eski.online.toplam} € → ${adet} bağış ${online} €`);
+}
 const ayni = eski && ["baslangic", "baslangicTarihi", "hedef", "toplam"].every((k) => eski[k] === yeni[k]) && eski.online?.adet === adet
   && eski.banka?.toplam === banka.toplam && eski.banka?.adet === banka.adet && (eski.banka?.tarih ?? null) === banka.tarih;
 if (ayni) { console.log(`Değişiklik yok: çevrim içi ${adet} bağış, ${online} €; banka ${banka.toplam} €`); process.exit(0); }
