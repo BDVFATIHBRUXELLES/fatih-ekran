@@ -280,13 +280,19 @@
     "kip": "dokum",
     "durum": "tamam",
     "dahil": {
-      "adet": 4,
-      "toplam": 161
+      "adet": 5,
+      "toplam": 911
     },
     "haric": {
       "adet": 0
     },
     "gruplar": [
+      {
+        "ad": "•••",
+        "yontem": "banktransfer",
+        "adet": 1,
+        "toplam": 750
+      },
       {
         "ad": "••• ••• ••• ••• ••• ••• 7",
         "yontem": "pointofsale",
