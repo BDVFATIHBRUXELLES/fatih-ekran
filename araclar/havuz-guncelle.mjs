@@ -45,6 +45,13 @@ const DIGER_LINKLER = "say";
 // 27.11.2026 10:17: başkan 750 €'luk linksiz ödemeyi (Mollie üzerinden havale) de bağış olarak onayladı; o da
 // veri/havuz-banka.json toplamına elle eklendi (elle eklenen linksiz ödemeler: 100 € + 750 € = 850 €). 6 €'luk kart cihazı ödemesi sayılmadı.
 const LINKSIZ_ODEMELER = "dokum";
+// Kart cihazı (Mollie ödeme terminali) ödemeleri. Başkanın isteği (27.11.2026 11:24–11:25): "terminallerden gelen ödemeler de
+// dikkate alınsın, otomatik olarak". KART_CIHAZI: "say" = BASLANGIC_ANI'ndan sonra cihazdan ödenenler (açıklamasında üyelik ya da
+// eğitim geçenler hariç) havuza eklenir ve veri/havuz.json içinde ayrı "cihaz" alanında gösterilir; "dokum" = yalnızca döküm.
+// Cihaz ödemeleri linksiz ödemelerin bir türüdür ama yukarıdaki LINKSIZ_ODEMELER ayarından bağımsızdır; diğer linksiz ödemeler
+// (site formu, Mollie üzerinden havale) elle onay bekler. Sınır: cihaz ödemelerinin açıklaması çoğu zaman boş ya da otomatiktir;
+// cihazdan alınan bir aidat ya da kurs ücreti açıklamasında bu sözcükler yoksa bağış gibi sayılır.
+const KART_CIHAZI = "say";
 const DOKUM = process.env.HAVUZ_DOKUM_DOSYA || new URL("../veri/havuz-dokum.json", import.meta.url);
 const duz = (t) => String(t ?? "").toLocaleLowerCase("tr")
   .replace(/[ğ]/g, "g").replace(/[üûù]/g, "u").replace(/[ş]/g, "s").replace(/[ıîï]/g, "i").replace(/[öô]/g, "o")
@@ -161,16 +168,21 @@ try {
   dokum = { kip: DIGER_LINKLER, hata: String(e.message || e) };
 }
 // Linksiz ödemeler: en yeniden eskiye sayfalanır, BASLANGIC_ANI'ndan eskiye gelince durulur.
+let cihazKurus = 0, cihazAdet = 0;
 if (dokum && !dokum.hata) {
   const o = { kip: LINKSIZ_ODEMELER };
   try {
     const esik = Date.parse(BASLANGIC_ANI);
     let url = `${API}/payments?limit=250`, sayfa = 0, bitti = false, lKurus = 0, lAdet = 0, haricAdet = 0;
-    const grup = new Map();
+    const grup = new Map(), cihazlar = new Map(); let cKurus = 0, cAdet = 0;
     while (url && !bitti) {
       if (++sayfa > 40) throw new Error("çok fazla ödeme sayfası");
       const r = await fetch(url, { headers: { Authorization: `Bearer ${TOKEN}` } });
-      if (r.status === 401 || r.status === 403) { o.durum = "izin yok"; o.http = r.status; break; }
+      if (r.status === 401 || r.status === 403) {
+        // Cihaz ödemeleri sayılıyorken izin kaybolursa eksik toplam yayımlama: dur, son doğru değer kalsın
+        if (KART_CIHAZI === "say") await durdur(`ödeme listesi okunamadı (Mollie ${r.status}); kart cihazı ödemeleri sayılamıyor`);
+        o.durum = "izin yok"; o.http = r.status; break;
+      }
       if (!r.ok) { let ayr = ""; try { ayr = String((await r.json())?.detail || "").slice(0, 200); } catch {} throw new Error(`Mollie ${r.status} (ödeme listesi) ${ayr}`); }
       const j = await r.json();
       const liste = j?._embedded?.payments ?? [];
@@ -183,6 +195,13 @@ if (dokum && !dokum.hata) {
         if (net <= 0) continue;
         const neden = haricMi(p.description);
         if (neden) { haricAdet += 1; continue; }
+        if (p.method === "pointofsale") {
+          // Cihaz kimliğinin yalnızca son dört karakteri yazılır (hangi cihazdan ne kadar geldiği görülsün diye)
+          const tid = String(p.details?.terminalId || ""); const kisa = tid ? "…" + tid.slice(-4) : "bilinmiyor";
+          const c = cihazlar.get(kisa) || { cihaz: kisa, adet: 0, toplam: 0 };
+          c.adet += 1; c.toplam = Math.round((c.toplam + net / 100) * 100) / 100; cihazlar.set(kisa, c);
+          cKurus += net; cAdet += 1; continue;
+        }
         lKurus += net; lAdet += 1;
         const anahtar = maskele(p.description) + " | " + (p.method || "?");
         const g = grup.get(anahtar) || { ad: maskele(p.description), yontem: p.method || null, adet: 0, toplam: 0 };
@@ -192,10 +211,12 @@ if (dokum && !dokum.hata) {
     }
     if (!o.durum) {
       o.durum = "tamam"; o.dahil = { adet: lAdet, toplam: lKurus / 100 }; o.haric = { adet: haricAdet }; o.gruplar = [...grup.values()];
+      o.cihaz = { kip: KART_CIHAZI, adet: cAdet, toplam: cKurus / 100, cihazlar: [...cihazlar.values()] };
       if (LINKSIZ_ODEMELER === "say") { kurus += lKurus; adet += lAdet; }
+      if (KART_CIHAZI === "say") { cihazKurus = cKurus; cihazAdet = cAdet; }
     }
   } catch (e) {
-    if (LINKSIZ_ODEMELER === "say") throw e;
+    if (LINKSIZ_ODEMELER === "say" || KART_CIHAZI === "say") throw e;
     o.durum = "hata"; o.ayrinti = String(e.message || e);
   }
   dokum.linksiz = o;
@@ -212,9 +233,10 @@ if (dokum && !dokum.hata) {
 }
 
 const online = kurus / 100;
+const cihaz = { toplam: cihazKurus / 100, adet: cihazAdet };
 const banka = await bankaOku();
-const toplam = Math.round((BASLANGIC + online + banka.toplam) * 100) / 100;
-const yeni = { baslangic: BASLANGIC, baslangicTarihi: BASLANGIC_TARIHI, hedef: HEDEF, online: { toplam: online, adet }, banka, toplam };
+const toplam = Math.round((BASLANGIC + online + cihaz.toplam + banka.toplam) * 100) / 100;
+const yeni = { baslangic: BASLANGIC, baslangicTarihi: BASLANGIC_TARIHI, hedef: HEDEF, online: { toplam: online, adet }, cihaz, banka, toplam };
 
 let eski = null;
 try { eski = JSON.parse(await readFile(OUT, "utf8")); } catch {}
@@ -224,9 +246,14 @@ if (eski?.online && Number.isFinite(eski.online.toplam) && eski.online.toplam > 
     && (adet < eski.online.adet - 2 || online < eski.online.toplam * 0.8)) {
   await durdur(`çevrim içi toplam beklenmedik biçimde düştü: ${eski.online.adet} bağış ${eski.online.toplam} € → ${adet} bağış ${online} €`);
 }
+if (KART_CIHAZI === "say" && eski?.cihaz && Number.isFinite(eski.cihaz.toplam) && eski.cihaz.toplam > 0
+    && (cihaz.adet < eski.cihaz.adet - 2 || cihaz.toplam < eski.cihaz.toplam * 0.8)) {
+  await durdur(`kart cihazı toplamı beklenmedik biçimde düştü: ${eski.cihaz.adet} ödeme ${eski.cihaz.toplam} € → ${cihaz.adet} ödeme ${cihaz.toplam} €`);
+}
 const ayni = eski && ["baslangic", "baslangicTarihi", "hedef", "toplam"].every((k) => eski[k] === yeni[k]) && eski.online?.adet === adet
+  && (eski.cihaz?.adet ?? null) === cihaz.adet && (eski.cihaz?.toplam ?? null) === cihaz.toplam
   && eski.banka?.toplam === banka.toplam && eski.banka?.adet === banka.adet && (eski.banka?.tarih ?? null) === banka.tarih;
 if (ayni) { console.log(`Değişiklik yok: çevrim içi ${adet} bağış, ${online} €; banka ${banka.toplam} €`); process.exit(0); }
 
 await writeFile(OUT, JSON.stringify({ ...yeni, guncelleme: new Date().toISOString() }, null, 2) + "\n");
-console.log(`Güncellendi: çevrim içi ${adet} bağış, ${online} €; banka ${banka.toplam} €; toplam ${yeni.toplam} €`);
+console.log(`Güncellendi: çevrim içi ${adet} bağış, ${online} €; kart cihazı ${cihaz.adet} ödeme, ${cihaz.toplam} €; banka ${banka.toplam} €; toplam ${yeni.toplam} €`);

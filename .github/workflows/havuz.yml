@@ -3,6 +3,8 @@ name: Bağış havuzu sayımı
 # Mollie'deki beş havuz linkine gelen ödenmiş bağışları 5 dakikada bir sayar.
 # 27.11.2026: hesaptaki diğer ödeme linkleri de sayılır (üyelik ve eğitim hariç); döküm veri/havuz-dokum.json dosyasına yazılır.
 # Jetona payments.read izni eklenirse link olmadan yapılan ödemeler de okunur (önce yalnızca döküm).
+# 27.11.2026 (11:25): kart cihazı (Mollie terminali) ödemeleri de kendiliğinden sayılır; veri/havuz.json içinde ayrı "cihaz" alanında durur.
+# Diğer linksiz ödemeler (site formu, Mollie üzerinden havale) yalnızca döküme yazılır, başkanın onayıyla elle eklenir.
 # Toplam değiştiyse veri/havuz.json dosyasını günceller. Yalnızca toplam ve adet yazılır.
 # Gizli değişkenler: MOLLIE_TOKEN (yalnızca payment-links.read izinli Mollie jetonu);
 # ODOO_HAVUZ_WEBHOOK (isteğe bağlı): Odoo'daki "Havuz sayacı" otomasyon kuralının webhook adresi.
