@@ -1,26 +1,4 @@
 {
-  "kip": "say",
-  "baslangicAni": "2026-11-24T17:25:00Z",
-  "dahil": {
-    "link": 0,
-    "adet": 0,
-    "toplam": 0
-  },
-  "haric": {
-    "link": 0
-  },
-  "test": 4,
-  "linkler": [],
-  "linksiz": {
-    "kip": "dokum",
-    "durum": "tamam",
-    "dahil": {
-      "adet": 0,
-      "toplam": 0
-    },
-    "haric": {
-      "adet": 0
-    },
-    "gruplar": []
-  }
+  "hata": "çevrim içi toplam beklenmedik biçimde düştü: 44 bağış 1172 € → 0 bağış 0 €",
+  "jeton": "erişim jetonu"
 }
