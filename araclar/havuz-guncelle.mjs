@@ -42,6 +42,8 @@ const DIGER_LINKLER = "say";
 // DİKKAT (27.11.2026): "say" YAPILMAZ. İlk dökümde 3 linksiz ödeme çıktı (155 €); başkan yalnızca 100 €'luk olanın bağış
 // olduğunu söyledi, diğer ikisi bağış değil ve açıklamalarından ayırt edilemiyor. Onaylanan 100 € veri/havuz-banka.json
 // toplamına elle eklendi; burası "say" yapılırsa o 100 € iki kez, bağış olmayanlar da yanlışlıkla sayılır.
+// 27.11.2026 10:17: başkan 750 €'luk linksiz ödemeyi (Mollie üzerinden havale) de bağış olarak onayladı; o da
+// veri/havuz-banka.json toplamına elle eklendi (elle eklenen linksiz ödemeler: 100 € + 750 € = 850 €). 6 €'luk kart cihazı ödemesi sayılmadı.
 const LINKSIZ_ODEMELER = "dokum";
 const DOKUM = process.env.HAVUZ_DOKUM_DOSYA || new URL("../veri/havuz-dokum.json", import.meta.url);
 const duz = (t) => String(t ?? "").toLocaleLowerCase("tr")

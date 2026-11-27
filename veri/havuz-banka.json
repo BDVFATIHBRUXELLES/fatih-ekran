@@ -1,6 +1,6 @@
 {
-  "aciklama": "Elle bildirilen bağışların toplamı: banka hesabına doğrudan gelen havaleler ve elden verilen bağışlar, 24.11.2026 18:25'ten sonra. Başkan her akşam yazılı bildirir, buraya yalnızca birikimli toplam ve adet işlenir. Mollie'nin hesaba yaptığı ödemeler yazılmaz; onlar çevrim içi sayımın içindedir. Elden alınan para sonra bankaya yatırılırsa ikinci kez yazılmaz. 27.11.2026: başkanın onayladığı, link olmadan yapılmış tek Mollie ödemesi (100 €) de buraya eklendi; link olmadan yapılan Mollie ödemeleri kendiliğinden sayılmaz.",
-  "toplam": 3865,
+  "aciklama": "Elle bildirilen bağışların toplamı: banka hesabına doğrudan gelen havaleler ve elden verilen bağışlar, 24.11.2026 18:25'ten sonra. Başkan her akşam yazılı bildirir, buraya yalnızca birikimli toplam ve adet işlenir. Mollie'nin hesaba yaptığı ödemeler yazılmaz; onlar çevrim içi sayımın içindedir. Elden alınan para sonra bankaya yatırılırsa ikinci kez yazılmaz. 27.11.2026: başkanın onayladığı, link olmadan yapılmış iki Mollie ödemesi (100 € ve 750 €) de buraya eklendi; link olmadan yapılan Mollie ödemeleri kendiliğinden sayılmaz.",
+  "toplam": 4615,
   "adet": null,
-  "tarih": "2026-11-26"
+  "tarih": "2026-11-27"
 }
