@@ -5,6 +5,7 @@ name: Bağış havuzu sayımı
 # Jetona payments.read izni eklenirse link olmadan yapılan ödemeler de okunur (önce yalnızca döküm).
 # 27.11.2026 (11:25): kart cihazı (Mollie terminali) ödemeleri de kendiliğinden sayılır; veri/havuz.json içinde ayrı "cihaz" alanında durur.
 # Diğer linksiz ödemeler (site formu, Mollie üzerinden havale) yalnızca döküme yazılır, başkanın onayıyla elle eklenir.
+# 27.11.2026 (22:20): veri/havuz.json içine "gun" alanı yazılır (Brüksel gününün başındaki toplam ve dünün geliri); canlı panodaki "bugün gelen" kartı bunu okur.
 # Toplam değiştiyse veri/havuz.json dosyasını günceller. Yalnızca toplam ve adet yazılır.
 # Gizli değişkenler: MOLLIE_TOKEN (yalnızca payment-links.read izinli Mollie jetonu);
 # ODOO_HAVUZ_WEBHOOK (isteğe bağlı): Odoo'daki "Havuz sayacı" otomasyon kuralının webhook adresi.

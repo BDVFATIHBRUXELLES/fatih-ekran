@@ -240,6 +240,21 @@ const yeni = { baslangic: BASLANGIC, baslangicTarihi: BASLANGIC_TARIHI, hedef: H
 
 let eski = null;
 try { eski = JSON.parse(await readFile(OUT, "utf8")); } catch {}
+
+// "Bugün gelen" kartı (canlı pano, 27.11.2026) için gün başı: Brüksel gününün başındaki toplam.
+// Gün değişince bir önceki toplam yeni günün başı olur; biten günün geliri "dun" alanında kalır.
+// Yalnızca toplamlar yazılır; tek tek bağış ya da isim yoktur.
+const BUGUN = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Brussels" }).format(new Date());   // YYYY-AA-GG
+const GUN_TOHUM = { tarih: "2026-11-27", basi: 2654917 };   // 26.11.2026 21:34'teki son toplam (depo geçmişinden)
+const gunFarki = (a, b) => Math.round((Date.parse(b + "T00:00:00Z") - Date.parse(a + "T00:00:00Z")) / 864e5);
+let gun = eski?.gun && typeof eski.gun.tarih === "string" && Number.isFinite(eski.gun.basi) ? eski.gun : null;
+if (!gun && [0, 1].includes(gunFarki(GUN_TOHUM.tarih, BUGUN))) gun = { ...GUN_TOHUM, dun: null };
+const sonToplam = Number.isFinite(eski?.toplam) ? eski.toplam : toplam;
+if (!gun) gun = { tarih: BUGUN, basi: sonToplam, dun: null };
+else if (gun.tarih !== BUGUN) {
+  gun = { tarih: BUGUN, basi: sonToplam, dun: gunFarki(gun.tarih, BUGUN) === 1 ? { tarih: gun.tarih, gelen: Math.round((sonToplam - gun.basi) * 100) / 100 } : null };
+}
+yeni.gun = { tarih: gun.tarih, basi: gun.basi, dun: gun.dun ?? null };
 // Güvenlik: çevrim içi toplam bir anda belirgin biçimde düşerse (yanlış jeton, yanlış hesap, Mollie'den eksik yanıt) yayımlama.
 // Gerçek bir iade bu eşiği aşarsa eşik burada elle geçici olarak gevşetilir.
 if (eski?.online && Number.isFinite(eski.online.toplam) && eski.online.toplam > 0
@@ -252,7 +267,8 @@ if (KART_CIHAZI === "say" && eski?.cihaz && Number.isFinite(eski.cihaz.toplam) &
 }
 const ayni = eski && ["baslangic", "baslangicTarihi", "hedef", "toplam"].every((k) => eski[k] === yeni[k]) && eski.online?.adet === adet
   && (eski.cihaz?.adet ?? null) === cihaz.adet && (eski.cihaz?.toplam ?? null) === cihaz.toplam
-  && eski.banka?.toplam === banka.toplam && eski.banka?.adet === banka.adet && (eski.banka?.tarih ?? null) === banka.tarih;
+  && eski.banka?.toplam === banka.toplam && eski.banka?.adet === banka.adet && (eski.banka?.tarih ?? null) === banka.tarih
+  && eski.gun?.tarih === yeni.gun.tarih;
 if (ayni) { console.log(`Değişiklik yok: çevrim içi ${adet} bağış, ${online} €; banka ${banka.toplam} €`); process.exit(0); }
 
 await writeFile(OUT, JSON.stringify({ ...yeni, guncelleme: new Date().toISOString() }, null, 2) + "\n");
