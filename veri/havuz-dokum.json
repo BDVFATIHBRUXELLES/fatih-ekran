@@ -1,4 +1,304 @@
 {
-  "hata": "çevrim içi toplam beklenmedik biçimde düştü: 44 bağış 1172 € → 0 bağış 0 €",
-  "jeton": "erişim jetonu"
+  "kip": "say",
+  "jeton": "erişim jetonu",
+  "baslangicAni": "2026-11-24T17:25:00Z",
+  "dahil": {
+    "link": 23,
+    "adet": 0,
+    "toplam": 0
+  },
+  "haric": {
+    "link": 17
+  },
+  "test": 0,
+  "linkler": [
+    {
+      "ad": "••• •••",
+      "tutar": 0.01,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 0.01,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• ••• - Eğitim •••",
+      "tutar": 150,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "Fatih Camii Üyelik •••",
+      "tutar": 30,
+      "durum": "hariç",
+      "neden": "üyelik"
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 50,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• ••• eğitim 2627",
+      "tutar": 150,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "••• ••• eğitim 2026 2027",
+      "tutar": 150,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "Üyelik 2027 - ••• membre 2027",
+      "tutar": 30,
+      "durum": "hariç",
+      "neden": "üyelik"
+    },
+    {
+      "ad": "Brüksel Fatih Camii ••• kayit ••• - •••",
+      "tutar": 0.01,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "Brüksel Fatih Camii ••• kayit ••• - •••",
+      "tutar": 0.01,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "Brüksel Fatih Camii ••• Eğitim Kayıt ••• – •••",
+      "tutar": 0.01,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 100,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 100,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• kayıt ••• // Inscription ••• ••• •••",
+      "tutar": 150,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 20,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 20,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "DON / ••• / BAGIS - •••",
+      "tutar": 1000,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "DON / ••• / BAGIS - •••",
+      "tutar": 50,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "DON / ••• / BAGIS - •••",
+      "tutar": 300,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "DON / ••• / BAGIS - •••",
+      "tutar": 200,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "DON / ••• / BAGIS - •••",
+      "tutar": 100,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 200,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 200,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 100,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 50,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• ••• ••• •••",
+      "tutar": 250,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 10,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 10,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 10,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 5,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• •••",
+      "tutar": 15,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "••• kayıt ••• // Inscription ••• ••• •••",
+      "tutar": 150,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "••• kayıt ••• // Inscription ••• ••• •••",
+      "tutar": 1,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "••• kayıt ••• // Inscription ••• ••• •••",
+      "tutar": 1,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "••• kayıt ••• // Inscription ••• ••• •••",
+      "tutar": 150,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "••• kayıt ••• // Inscription ••• ••• •••",
+      "tutar": 150,
+      "durum": "hariç",
+      "neden": "eğitim"
+    },
+    {
+      "ad": "DONS",
+      "tutar": 30,
+      "durum": "dahil",
+      "adet": 0,
+      "toplam": 0
+    },
+    {
+      "ad": "2025 Uyelik ••• Fatih Camii -Cotisation ••• Fatih Camii 2025",
+      "tutar": 30,
+      "durum": "hariç",
+      "neden": "üyelik"
+    },
+    {
+      "ad": "Cotisation ••• Fatih Camii 2025",
+      "tutar": 30,
+      "durum": "hariç",
+      "neden": "üyelik"
+    },
+    {
+      "ad": "••• 2025",
+      "tutar": 30,
+      "durum": "hariç",
+      "neden": "üyelik"
+    }
+  ],
+  "linksiz": {
+    "kip": "dokum",
+    "durum": "tamam",
+    "dahil": {
+      "adet": 3,
+      "toplam": 155
+    },
+    "haric": {
+      "adet": 0
+    },
+    "gruplar": [
+      {
+        "ad": "•••",
+        "yontem": "bancontact",
+        "adet": 1,
+        "toplam": 100
+      },
+      {
+        "ad": "•••",
+        "yontem": "belfius",
+        "adet": 2,
+        "toplam": 55
+      }
+    ]
+  }
 }
