@@ -33,13 +33,14 @@ jobs:
       - name: Değiştiyse kaydet
         id: kaydet
         run: |
-          if [ -z "$(git status --porcelain -- veri/havuz.json)" ]; then
+          if [ -z "$(git status --porcelain -- veri/havuz.json veri/havuz-dokum.json)" ]; then
             echo "Değişiklik yok"
             exit 0
           fi
           git config user.name "fatih-ekran-otomatik"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add veri/havuz.json
+          [ -f veri/havuz-dokum.json ] && git add veri/havuz-dokum.json
           git commit -m "Havuz sayımı güncellendi"
           # GitHub ara sıra geçici "remote rejected" hatası veriyor: 3 kez dene
           ok=0

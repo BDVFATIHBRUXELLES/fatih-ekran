@@ -30,6 +30,47 @@ const ACIK_LINKLER = [
   "pl_NmX4fQidk8KBU9HdegFTH"
 ];
 
+// Diğer Mollie ödeme linkleri (başkanın isteği 27.11.2026: "üyelikler ve eğitim dışındaki bütün Mollie ödemeleri de eklensin").
+// Hesaptaki bütün ödeme linkleri listelenir; yukarıdakiler dışındaki her link için BASLANGIC_ANI'ndan sonra ödenenler
+// eklenir, açıklamasında üyelik ya da eğitim sözcüğü geçen linkler hariç tutulur.
+// DIGER_LINKLER: "say" = toplamı havuza ekle; "dokum" = yalnızca veri/havuz-dokum.json dosyasına yaz, toplama ekleme.
+// Jeton yalnızca payment-links.read izinlidir: link olmadan yapılan ödemeler (ör. Odoo üzerinden kurs kaydı) okunamaz, sayılmaz.
+const DIGER_LINKLER = "dokum";
+const DOKUM = process.env.HAVUZ_DOKUM_DOSYA || new URL("../veri/havuz-dokum.json", import.meta.url);
+const duz = (t) => String(t ?? "").toLocaleLowerCase("tr")
+  .replace(/[ğ]/g, "g").replace(/[üûù]/g, "u").replace(/[ş]/g, "s").replace(/[ıîï]/g, "i").replace(/[öô]/g, "o")
+  .replace(/[ç]/g, "c").replace(/[âà]/g, "a").replace(/[éèêë]/g, "e").replace(/[’'`´]/g, "");
+const HARIC = [
+  ["üyelik", /(uyelik|\buye(ler)?\b|aidat|cotisation|membre|member|lidgeld|lidmaat)/],
+  ["eğitim", /(egitim|kurs|kuran|quran|coran|cours|\bders|okul|ecole|school|education|educatie|inscription|kayit)/]
+];
+function haricMi(aciklama) { const d = duz(aciklama); for (const [ad, re] of HARIC) if (re.test(d)) return ad; return null; }
+// Döküm herkese açık depoya yazılır: açıklamadan yalnızca aşağıdaki genel sözcükler ve kısa sayılar kalır,
+// geri kalan her sözcük (kişi adı olabilir) ••• ile değiştirilir.
+const ACIK_SOZCUK = new Set(("bagis bagisi bagislar havuz havuzu bina binasi ek cami camii fatih uyelik uyelikler uye aidat aidati egitim kurs kursu kuran "
+  + "zekat fitre fidye kurban sadaka hayir yardim iftar genel serbest tutar diger don dons donation cotisation membre cours inscription kayit kaydi "
+  + "eur euro yil yillik aylik bruxelles bruksel proje projesi kampanya kampanyasi icin ve").split(" "));
+function maskele(aciklama) {
+  return String(aciklama ?? "").split(/\s+/).filter(Boolean).map((w) => {
+    const d = duz(w).replace(/[^a-z0-9€]/g, "");
+    if (d === "" || d === "€") return w.replace(/[^€.,:\-–()\/]/g, "") || "•";
+    if (/^[0-9]{1,4}$/.test(d)) return d;
+    return ACIK_SOZCUK.has(d) ? w : "•••";
+  }).join(" ");
+}
+async function tumLinkler() {
+  let url = `${API}/payment-links?limit=250`, sayfa = 0; const hepsi = [];
+  while (url) {
+    if (++sayfa > 50) throw new Error("çok fazla link sayfası");
+    const r = await fetch(url, { headers: { Authorization: `Bearer ${TOKEN}` } });
+    if (!r.ok) throw new Error(`Mollie ${r.status} (link listesi)`);
+    const j = await r.json();
+    for (const l of j?._embedded?.payment_links ?? []) hepsi.push(l);
+    url = j?._links?.next?.href || null;
+  }
+  return hepsi;
+}
+
 if (!TOKEN) { console.log("MOLLIE_TOKEN tanımlı değil, sayım atlandı."); process.exit(0); }
 
 // Banka havaleleri Mollie'den okunamaz. Başkan her akşam yazılı bildirir; toplam veri/havuz-banka.json
@@ -74,6 +115,38 @@ async function linkToplami(id, sonra = null) {
 let kurus = 0, adet = 0;
 for (const id of LINKLER) { const t = await linkToplami(id); kurus += t.kurus; adet += t.adet; }
 for (const id of ACIK_LINKLER) { const t = await linkToplami(id, BASLANGIC_ANI); kurus += t.kurus; adet += t.adet; }
+
+// Diğer linkler: döküm her durumda çıkarılır; toplamaya yalnızca DIGER_LINKLER "say" ise girer.
+let dokum = null;
+try {
+  const bilinen = new Set([...LINKLER, ...ACIK_LINKLER]);
+  const satirlar = []; let dKurus = 0, dAdet = 0, haricLink = 0, dahilLink = 0, test = 0;
+  for (const l of await tumLinkler()) {
+    if (bilinen.has(l.id)) continue;
+    if (l.mode === "test") { test += 1; continue; }
+    const neden = haricMi(l.description);
+    const sabit = l.amount?.value ? Number(l.amount.value) : null;
+    if (neden) { haricLink += 1; satirlar.push({ ad: maskele(l.description), tutar: sabit, durum: "hariç", neden }); continue; }
+    const t = await linkToplami(l.id, BASLANGIC_ANI);
+    dahilLink += 1; dKurus += t.kurus; dAdet += t.adet;
+    satirlar.push({ ad: maskele(l.description), tutar: sabit, durum: "dahil", adet: t.adet, toplam: t.kurus / 100 });
+  }
+  dokum = { kip: DIGER_LINKLER, baslangicAni: BASLANGIC_ANI, dahil: { link: dahilLink, adet: dAdet, toplam: dKurus / 100 }, haric: { link: haricLink }, test, linkler: satirlar };
+  if (DIGER_LINKLER === "say") { kurus += dKurus; adet += dAdet; }
+} catch (e) {
+  // "say" kipinde eksik bir toplam yayımlamaktansa dur; "dokum" kipinde yalnızca hatayı kaydet
+  if (DIGER_LINKLER === "say") throw e;
+  dokum = { kip: DIGER_LINKLER, hata: String(e.message || e) };
+}
+{
+  let eskiDokum = null;
+  try { eskiDokum = JSON.parse(await readFile(DOKUM, "utf8")); } catch {}
+  const { guncelleme: _g, ...eskiOz } = eskiDokum ?? {};
+  if (JSON.stringify(eskiOz) !== JSON.stringify(dokum)) {
+    await writeFile(DOKUM, JSON.stringify({ ...dokum, guncelleme: new Date().toISOString() }, null, 2) + "\n");
+    console.log("Döküm güncellendi: veri/havuz-dokum.json");
+  }
+}
 
 const online = kurus / 100;
 const banka = await bankaOku();
