@@ -39,6 +39,9 @@ const DIGER_LINKLER = "say";
 // Link olmadan yapılan Mollie ödemeleri (ör. site üzerinden ya da kart cihazıyla): jetonda payments.read izni varsa okunur.
 // LINKSIZ_ODEMELER: "dokum" = yalnızca döküme yaz (toplama ekleme); "say" = BASLANGIC_ANI'ndan sonra ödenenleri,
 // açıklamasında üyelik ya da eğitim geçenler hariç, havuza ekle. İzin yoksa bu bölüm atlanır, döküme "izin yok" yazılır.
+// DİKKAT (27.11.2026): "say" YAPILMAZ. İlk dökümde 3 linksiz ödeme çıktı (155 €); başkan yalnızca 100 €'luk olanın bağış
+// olduğunu söyledi, diğer ikisi bağış değil ve açıklamalarından ayırt edilemiyor. Onaylanan 100 € veri/havuz-banka.json
+// toplamına elle eklendi; burası "say" yapılırsa o 100 € iki kez, bağış olmayanlar da yanlışlıkla sayılır.
 const LINKSIZ_ODEMELER = "dokum";
 const DOKUM = process.env.HAVUZ_DOKUM_DOSYA || new URL("../veri/havuz-dokum.json", import.meta.url);
 const duz = (t) => String(t ?? "").toLocaleLowerCase("tr")
