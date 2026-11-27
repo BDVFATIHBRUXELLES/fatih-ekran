@@ -189,7 +189,8 @@ if (dokum && !dokum.hata) {
   try { eskiDokum = JSON.parse(await readFile(DOKUM, "utf8")); } catch {}
   const { guncelleme: _g, ...eskiOz } = eskiDokum ?? {};
   if (JSON.stringify(eskiOz) !== JSON.stringify(dokum)) {
-    await writeFile(DOKUM, JSON.stringify({ ...dokum, guncelleme: new Date().toISOString() }, null, 2) + "\n");
+    // Zaman damgası yazılmaz: aynı anda çalışan iki sayım aynı içeriği üretsin, gönderimde çakışma olmasın
+    await writeFile(DOKUM, JSON.stringify(dokum, null, 2) + "\n");
     console.log("Döküm güncellendi: veri/havuz-dokum.json");
   }
 }
