@@ -7,15 +7,15 @@
     "adet": 88
   },
   "cihaz": {
-    "toplam": 523,
-    "adet": 19
+    "toplam": 524,
+    "adet": 20
   },
   "banka": {
     "toplam": 37184,
     "adet": null,
     "tarih": "2026-11-27"
   },
-  "toplam": 2692323,
+  "toplam": 2692324,
   "gun": {
     "tarih": "2026-11-28",
     "basi": 2692200,
@@ -24,5 +24,5 @@
       "gelen": 37283
     }
   },
-  "guncelleme": "2026-11-28T10:25:50.280Z"
+  "guncelleme": "2026-11-28T10:31:05.361Z"
 }
