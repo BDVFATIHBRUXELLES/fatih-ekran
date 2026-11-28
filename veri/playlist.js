@@ -12,7 +12,7 @@
   dosya  : dosyanın yolu
   sure   : video dışındaki içeriklerde ekranda kalma süresi (saniye)
   tam    : "kampanya" ve "sayfa" için; true ise sırası gelince bütün ekranı kaplar (saat ve geri sayım köşede kalır).
-           Tam ekran sayfa 1920×1080 çizilmelidir (bağış havuzu için adres ?ekran=2; yarım alan için ?ekran=1)
+           Tam ekran sayfa 1920×1080 çizilmelidir (canlı bağış panosu: havuz/ekran.html?duzen=tam; yarım alan için ?duzen=yan)
            Sayfanın kendisi değişince adresin sonundaki v= sayısı artırılır; açık ekranlar sayfayı o zaman yeniden yükler
            "video" için de geçerlidir: video bütün ekranı kaplar. Yatay hazırlanır.
   bant   : tam ekran "video" için; true ise videonun altında 200 px'lik canlı bant durur (kalan gün, havuzda biriken,
@@ -27,7 +27,7 @@
   iki yanı aynı videonun bulanık hâliyle doludur.
 */
 window.FATIH_PLAYLIST = [
-  { tip: "sayfa", dosya: "havuz/index.html?ekran=2&v=3", sure: 120, tam: true, bit: "2026-12-31" },
+  { tip: "sayfa", dosya: "havuz/ekran.html?duzen=tam&v=1", sure: 120, tam: true, bit: "2026-12-31" },
   { tip: "video", dosya: "medya/FATIH_TrenPeronda_EKRAN.mp4", tam: true, bant: "yan", bit: "2026-12-31" },
   { tip: "kampanya", sure: 20 },
   { tip: "video", dosya: "medya/FATIH_Kulliye5EkBina_GENIS.mp4", bit: "2026-12-31" },
