@@ -37,5 +37,6 @@ window.FATIH_PLAYLIST = [
   { tip: "soz", tur: "hadis", sure: 30 },
   { tip: "bilgi", kart: "bdv", sure: 20 },
   { tip: "soz", tur: "dua", sure: 22 },
-  { tip: "pano", sure: 15, dosya: "medya/5ekbina-plan.jpg", baslik: "Camimize bitişik 5 ek bina", aciklama: "Mavi bugünümüz, sarı geleceğimiz.", bit: "2026-12-31" }
+  { tip: "pano", sure: 15, dosya: "medya/5ekbina-plan.jpg", baslik: "Camimize bitişik 5 ek bina", aciklama: "Mavi bugünümüz, sarı geleceğimiz.", bit: "2026-12-31" },
+  { tip: "gorsel", dosya: "medya/anma-panosu-yatay.jpg", sure: 30 }
 ];
