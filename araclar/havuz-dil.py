@@ -72,6 +72,23 @@ PARCALAR = [
     ('<b>Telefonunla okut, <br class="tk">sen de at</b><span>bxlfatih.com/havuz</span>',
      '<b>Scannez avec votre téléphone, <br class="tk">versez votre part</b><span>bxlfatih.com/cagnotte</span>',
      '<b>Scan met uw telefoon <br class="tk">en doe mee</b><span>bxlfatih.com/donatiepot</span>', 1),
+    # --- canlı pano (27.11.2026) ---
+    ('<b class="canli"><i></i>CANLI</b>', '<b class="canli"><i></i>EN DIRECT</b>', '<b class="canli"><i></i>LIVE</b>', 1),
+    ('<b>CANLI</b><div class="mv" id="p-mv">', '<b>EN DIRECT</b><div class="mv" id="p-mv">', '<b>LIVE</b><div class="mv" id="p-mv">', 1),
+    ('aria-label="Canlı bağış panosu"', 'aria-label="Compteur des dons en direct"', 'aria-label="Live donatieteller"', 1),
+    ('<p class="p-lbl">HAVUZDA BİRİKEN</p>', '<p class="p-lbl">DÉJÀ DANS LA CAGNOTTE</p>', '<p class="p-lbl">AL IN DE POT</p>', 1),
+    ('<b>YENİ BAĞIŞ · ALLAH RAZI OLSUN</b>', '<b>NOUVEAU DON · QU\'ALLAH VOUS EN RÉCOMPENSE</b>', '<b>NIEUWE GIFT · MOGE ALLAH U BELONEN</b>', 1),
+    ('HEDEF <b id="p-goal">', 'OBJECTIF <b id="p-goal">', 'DOEL <b id="p-goal">', 1),
+    ('<h3>HEDEFE KALAN</h3>', '<h3>RESTE À RÉUNIR</h3>', '<h3>NOG NODIG</h3>', 1),
+    ('<p class="alt">Kalan oran <b id="p-oran">%33,7</b></p>', '<p class="alt">Soit <b id="p-oran">33,7\u00a0%</b> de l\'objectif</p>', '<p class="alt"><b id="p-oran">33,7%</b> van het doel</p>', 1),
+    ('<h3>SON GÜN 31 ARALIK</h3>', '<h3>JUSQU\'AU 31 DÉCEMBRE</h3>', '<h3>TOT EN MET 31 DECEMBER</h3>', 1),
+    ('<p class="alt">31 Aralık 2026, 23:59’a kadar</p>', '<p class="alt">Le 31 décembre 2026 à 23\u00a0h\u00a059</p>', '<p class="alt">Sluit op 31 december 2026 om 23.59 uur</p>', 1),
+    ('<h3>TELEFONUNLA OKUT</h3>', '<h3>SCANNEZ LE CODE</h3>', '<h3>SCAN DE CODE</h3>', 1),
+    ('<p class="u">bxlfatih.com/havuz</p>', '<p class="u">bxlfatih.com/cagnotte</p>', '<p class="u">bxlfatih.com/donatiepot</p>', 1),
+    # panodaki QR kodu sayfanın kendi adresine gider (resim sayfanın içinde, ayrı dosya yok)
+    ('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhAQAAAAB/n//CAAAAzUlEQVR42mP8z8DA0MjEwMDAwMB00OUFEwNz/R1FcSamT6w7TjCwMNw8o8fAxMBswMDAxMf0yYKB6SGrTAsDk30Dzz8GhrsCLLwNLP9u/pFhYBEylJBhYPmawuK8neG3xpvfDYxXH074bc943235z92Mh29c5mZnvOz6Zf1RJua1r/0YWJTtv59Zzfh1472v7AynYl7wNjD8vxN7t4HhgPtF1wYmeZkZ0xiYPr3fr8fAxKB5ZRMDE8NHLjUGJj4u+wwGpoenT1xiYERyOQD61UOeln9TKAAAAABJRU5ErkJggg==',
+     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhAQAAAAB/n//CAAAAzUlEQVR42mP8z8DA0MjEwMDAwMB0MC2FiYFF/uViKQamT9InTjAwMQhLMTAwMVz5wMDAxKfrYMHA9PBGUAsDw//3S/83MF0rkbnDwBz599tGLsavap9S+Jn9hX4xCTPxHD/Gx8A8hfPyIy3G19oXD11n+n1/thMD03cbNzsGJo5yFhsGll8bf6ceZ3z4U+31VKavxTkmDEyafQ83MTAcSDrp2cAkL7unjYHp0510PwYmBr7PWxiYGG7w7WFg4jOL8WNgevj4wDoGRiSXAwA1xUJOu6j0hgAAAABJRU5ErkJggg==',
+     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhAQAAAAB/n//CAAAAzElEQVR42mP8z8DA0MjEwMDAwMB0MCuFiYFF/uZ6KQamT/onTjAwMXy3YmBgYnh1gYGBiU87wYKB6eENoxYGJvsJBv8YmK61xdxhYLzF9atfmOWduw8LA5Nq+9VXDEwvLh/jY2CewPnikhbL+9mTTl1n4i4/7cTAdKHEzo6B8QXbu05ppm/aE0IYGB5tY3jdwPQt3MeEgUn9iOAmBqaDC3sqGJjkvx5pYWD69O5+AAMTg6rzFgYWhou3LRiY+CTX+DEwPbyXsY6BEcnlAIz7QFf+FQPlAAAAAElFTkSuQmCC', 1),
     # --- çağrı ---
     ('<p class="proof">Hedefe <b id="left">1.350.000 €</b> kaldı. Sıra sende.</p>',
      '<p class="proof">Encore <b id="left">1.350.000 €</b> pour atteindre l\'objectif. À vous de jouer.</p>',
