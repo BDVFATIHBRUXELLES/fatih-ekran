@@ -7,6 +7,9 @@ name: Bağış havuzu sayımı
 # Diğer linksiz ödemeler (site formu, Mollie üzerinden havale) yalnızca döküme yazılır, başkanın onayıyla elle eklenir.
 # 27.11.2026 (22:20): veri/havuz.json içine "gun" alanı yazılır (Brüksel gününün başındaki toplam ve dünün geliri); canlı panodaki "bugün gelen" kartı bunu okur.
 # Toplam değiştiyse veri/havuz.json dosyasını günceller. Yalnızca toplam ve adet yazılır.
+# 28.11.2026 (12:17): bağlantı kapağı (og:image) da toplamla birlikte yenilenir. Toplam ya da gün değiştiyse, en çok
+# saatte bir, araclar/kapak-ciz.mjs üç dildeki kapağı (havuz/media/paylasim*.jpg) yeniden çizer; durum veri/kapak.json'da.
+# Kapak çizilemezse sayım etkilenmez, eski kapak kalır.
 # Gizli değişkenler: MOLLIE_TOKEN (yalnızca payment-links.read izinli Mollie jetonu);
 # ODOO_HAVUZ_WEBHOOK (isteğe bağlı): Odoo'daki "Havuz sayacı" otomasyon kuralının webhook adresi.
 # Bu adres varsa sonuç her çalışmada bxlfatih.com'daki veri ekine de yazılır (bkz. odoo/havuz-webhook.py).
@@ -35,10 +38,20 @@ jobs:
           MOLLIE_TOKEN: ${{ secrets.MOLLIE_TOKEN }}
         run: node araclar/havuz-guncelle.mjs
 
+      - name: Bağlantı kapağını çiz (toplam ya da gün değiştiyse, en çok saatte bir)
+        continue-on-error: true
+        timeout-minutes: 3
+        run: |
+          if node araclar/kapak-ciz.mjs --denetle; then
+            npm install --no-save --no-package-lock --no-audit --no-fund playwright-core@1.65.1
+            node araclar/kapak-ciz.mjs
+          fi
+
       - name: Değiştiyse kaydet
         id: kaydet
         run: |
-          if [ -z "$(git status --porcelain -- veri/havuz.json veri/havuz-dokum.json)" ]; then
+          KAPAK="veri/kapak.json havuz/media/paylasim.jpg havuz/media/paylasim-fr.jpg havuz/media/paylasim-nl.jpg"
+          if [ -z "$(git status --porcelain -- veri/havuz.json veri/havuz-dokum.json $KAPAK)" ]; then
             echo "Değişiklik yok"
             exit 0
           fi
@@ -46,7 +59,21 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add veri/havuz.json
           [ -f veri/havuz-dokum.json ] && git add veri/havuz-dokum.json
-          git commit -m "Havuz sayımı güncellendi"
+          # kapak yalnızca dört dosya birlikte hazırsa eklenir (yarım çizim depoya girmez)
+          if [ -f veri/kapak.json ] && [ -n "$(git status --porcelain -- $KAPAK)" ]; then
+            git add $KAPAK
+          else
+            git checkout -- havuz/media/paylasim.jpg havuz/media/paylasim-fr.jpg havuz/media/paylasim-nl.jpg
+          fi
+          if git diff --cached --quiet; then
+            echo "Kaydedilecek değişiklik yok"
+            exit 0
+          fi
+          if git diff --cached --quiet -- veri/havuz.json veri/havuz-dokum.json; then
+            git commit -m "Bağlantı kapağı güncellendi"
+          else
+            git commit -m "Havuz sayımı güncellendi"
+          fi
           # GitHub ara sıra geçici "remote rejected" hatası veriyor: 3 kez dene
           ok=0
           for i in 1 2 3; do

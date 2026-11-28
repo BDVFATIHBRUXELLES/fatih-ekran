@@ -63,6 +63,10 @@ def uret(dosya, dil, yol):
     s = open(os.path.join(KOK, "havuz", dosya), encoding="utf-8").read()
     # medya
     for ad in EK:
+        if ad.startswith("paylasim"):
+            # 28.11.2026: bağlantı kapağı (og:image) GitHub'daki görselden gelir; onu sayaç işi toplamla birlikte
+            # yeniden çizer (araclar/kapak-ciz.mjs). Odoo'daki 3423–3425 ekleri eski paylaşımlar için durur.
+            continue
         s = s.replace(GH_MEDYA + ad, url(ad, mutlak=True))
     s = degistir(s, 'src="media/drone.mp4"', 'src="%s"' % url("drone.mp4"))
     s = degistir(s, 'poster="media/kusbakisi.jpg"', 'poster="%s"' % url("kusbakisi.jpg"))
@@ -71,7 +75,10 @@ def uret(dosya, dil, yol):
     s = degistir(s, 'src="media/qr-10.png"', 'src="%s"' % url("qr-10.png"))
     s = degistir(s, '"media/drone-ekran.mp4"', '"%s"' % url("drone-ekran.mp4"))
     s = degistir(s, 'img.src = "media/qr-" + a + ".png";', "img.src = QR_URL[a];")
-    if "media/" in s.replace("/web/content/", ""):
+    kalan = s.replace("/web/content/", "")
+    for ad in ("paylasim.jpg", "paylasim-fr.jpg", "paylasim-nl.jpg"):
+        kalan = kalan.replace(GH_MEDYA + ad, "")  # bağlantı kapağı bilerek GitHub adresinde kalır
+    if "media/" in kalan:
         sys.exit("çevrilmemiş medya adresi kaldı: " + dosya)
     # dil düğmeleri
     # Dil düğmeleri tam adresle yazılır; Odoo göreli adreslerin başına site dilini (/fr, /nl) ekliyor.
@@ -88,7 +95,10 @@ def uret(dosya, dil, yol):
     s = degistir(s, 'fetch(u, { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (d) {',
                  "veriAl(u).then(function (d) {")
     s = degistir(s, "\nfunction startLive() {", VERI_AL)
-    if "github.io" in s.replace(GH_VERI, ""):
+    kalan = s.replace(GH_VERI, "")
+    for ad in ("paylasim.jpg", "paylasim-fr.jpg", "paylasim-nl.jpg"):
+        kalan = kalan.replace(GH_MEDYA + ad, "")  # bağlantı kapağı bilerek GitHub adresinde kalır
+    if "github.io" in kalan:
         sys.exit("GitHub adresi kaldı: " + dosya)
 
     # HTML → iyi biçimli XML (QWeb)
