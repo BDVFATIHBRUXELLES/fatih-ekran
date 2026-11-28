@@ -3,15 +3,15 @@
 window.FATIH_GUNUN_SOZU = {
  "tarih": "2026-11-28",
  "ayet": {
-  "metin": "Ölçüyü tam yapın. Eksik verenlerden olmayın.\" \"Doğru terazi ile tartın.\" \"İnsanların mallarını ve haklarını eksiltmeyin. Yeryüzünde bozgunculuk yaparak karışıklık çıkarmayın.",
-  "kaynak": "Şu'arâ, 26/181-183"
+  "metin": "O gün ki ne mal fayda verir ne oğullar! Allah’a arınmış bir kalp ile gelen başka.",
+  "kaynak": "Şu'arâ, 26/88-89"
  },
  "hadis": {
-  "metin": "Kul, bir günah işlediği zaman kalbinde siyah bir leke oluşur. Günahı bırakıp tövbe ederse kalbi arınır",
-  "kaynak": "Müslim, “İman”, 231"
+  "metin": "Kulun Rabbine en yakın olduğu (an) secde hâlidir.Öyleyse (secdede iken) çokça dua ediniz.",
+  "kaynak": "Müslim, \"Salât\", 215"
  },
  "dua": {
-  "metin": "Bir vücudun uzuvları gibi olabilmeyi, kardeşlerimizin acısını da sevincini de yüreğimizde hissedebilmeyi nasip eyle Allah’ım.",
+  "metin": "Mümin kardeşlerimizin halleriyle hallenebilmeyi, dertleriyle dertlenebilmeyi, acılarını acımız, sevinçlerini sevincimiz bilmeyi nasip eyle Allah’ım.",
   "kaynak": ""
  }
 };
