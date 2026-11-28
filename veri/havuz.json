@@ -3,8 +3,8 @@
   "baslangicTarihi": "2026-11-24",
   "hedef": 4000000,
   "online": {
-    "toplam": 5966,
-    "adet": 91
+    "toplam": 5976,
+    "adet": 92
   },
   "cihaz": {
     "toplam": 524,
@@ -15,7 +15,7 @@
     "adet": null,
     "tarih": "2026-11-27"
   },
-  "toplam": 2693674,
+  "toplam": 2693684,
   "gun": {
     "tarih": "2026-11-28",
     "basi": 2692200,
@@ -24,5 +24,5 @@
       "gelen": 37283
     }
   },
-  "guncelleme": "2026-11-28T15:10:59.295Z"
+  "guncelleme": "2026-11-28T17:31:10.945Z"
 }
